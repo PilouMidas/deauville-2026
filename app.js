@@ -1,5 +1,5 @@
-/* Deauville 2026 — V1.7.4
-   V1.7.4 : version stabilisée ; conservation des corrections planning/navigation. pour tout le programme issu du PDF Jury,
+/* Deauville 2026 — V1.8.0
+   V1.8.0 : stabilisation du modèle temporel et du moteur de compatibilité ; conservation des corrections planning/navigation. pour tout le programme issu du PDF Jury,
    sans code couleur rouge ; films Jury estampillés « Compétition ».
 */
 const PROGRAM = [{"date":"2026-09-04","time":"19:00","place":"C.I.D","typ":"Cérémonie","title":"Cérémonie d'ouverture","person":"Ethan Hawke / Sofiane Pamart / Roschdy Zem","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-04","time":"22:00","place":"Casino Barrière - Salon des Ambassadeurs","typ":"Dîner","title":"Dîner d'ouverture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-04","time":"23:30","place":"O² Sofa Bar","typ":"Soirée","title":"Soirée d'ouverture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-05","time":"09:00","place":"Casino","typ":"Film","title":"Before Midnight","person":"Richard Linklater","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-05","time":"10:00","place":"Morny 2","typ":"Film","title":"Zero Dark Thirty","person":"Kathryn Bigelow","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"10:30","place":"C.I.D","typ":"Film","title":"Queen at Sea","person":"Lance Hammer","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-05","time":"11:00","place":"Morny 3","typ":"Film","title":"Harvey Milk","person":"Gus Van Sant","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"11:30","place":"Casino","typ":"Film","title":"Once upon a time in Harlem","person":"David Greaves, William Greaves","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-05","time":"11:30","place":"Autres lieux","typ":"Cérémonie","title":"Inauguration de la cabine de plage | Ethan Hawke","person":"Ethan Hawke","cat":"Cérémonie","stat":"Libre"},{"date":"2026-09-05","time":"14:00","place":"C.I.D","typ":"Film","title":"Everybody Digs Bill Evans","person":"Grant Gee","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-05","time":"14:00","place":"Casino","typ":"Film","title":"Les Contrebandiers de Padraic McKinley","person":"Padraic McKinley","cat":"Premières / DTA Ethan Hawke","stat":"Libre"},{"date":"2026-09-05","time":"15:00","place":"Morny 2","typ":"Film","title":"Docteur Folamour","person":"Stanley Kubrick","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"15:00","place":"Morny 3","typ":"Film","title":"Il était une fois en Amérique","person":"Sergio Leone","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"15:00","place":"Autres lieux","typ":"Cérémonie","title":"Inauguration de la cabine de plage | Brendan Fraser","person":"Brendan Fraser","cat":"Cérémonie","stat":"Libre"},{"date":"2026-09-05","time":"16:30","place":"Casino","typ":"Film","title":"Bucks Harbor","person":"Pete Muller","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-05","time":"17:00","place":"C.I.D","typ":"Cérémonie + film","title":"Deauville Talent Award Brendan Fraser + Pressure","person":"Anthony Maras","cat":"Premières / DTA Brendan Fraser","stat":"FIXE JURY"},{"date":"2026-09-05","time":"17:30","place":"Morny 2","typ":"Film","title":"Here – Les Plus belles années de notre vie","person":"Robert Zemeckis","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"18:00","place":"Morny 3","typ":"Film","title":"La Momie","person":"Stephen Sommers","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-05","time":"18:30","place":"Casino","typ":"Film","title":"High Art","person":"Lisa Cholodenko","cat":"Premières","stat":"Libre"},{"date":"2026-09-05","time":"19:30","place":"C.I.D","typ":"Cérémonie + film","title":"Deauville Rising-Star Award Sophie Thatcher + L'Invitation","person":"Olivia Wilde","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-05","time":"20:00","place":"Morny 2","typ":"Film","title":"Pressure","person":"Anthony Maras","cat":"Premières / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-05","time":"20:00","place":"Morny 3","typ":"Film","title":"La Momie","person":"Stephen Sommers","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-05","time":"20:30","place":"Casino","typ":"Film","title":"L'Invitation","person":"Olivia Wilde","cat":"Premières","stat":"Libre"},{"date":"2026-09-05","time":"22:00","place":"C.I.D","typ":"Film","title":"Her Private Hell","person":"Nicolas Winding Refn","cat":"Premières","stat":"Libre"},{"date":"2026-09-06","time":"10:00","place":"Casino","typ":"Film","title":"Dernsie : The Amazing Life of Bruce Dern","person":"Mike Mendez","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"10:00","place":"Morny 2","typ":"Film","title":"Selma","person":"Ava DuVernay","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"10:00","place":"Morny 3","typ":"Film","title":"La Porte du paradis","person":"Michael Cimino","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"10:30","place":"C.I.D","typ":"Film","title":"Mouse","person":"Kelly O’Sullivan, Alex Thompson","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-06","time":"14:00","place":"C.I.D","typ":"Film","title":"Méli-Mélo","person":"Leah Nelson","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-06","time":"14:30","place":"Morny 3","typ":"Film","title":"Django Unchained","person":"Quentin Tarantino","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"15:00","place":"Casino","typ":"Film","title":"Gremlins, l’Amérique parasitée","person":"Adrien Dénouette","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"15:00","place":"Morny 2","typ":"Film","title":"Once upon a time in Harlem","person":"David Greaves, William Greaves","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"16:30","place":"Casino","typ":"Film","title":"Faye","person":"Laurent Bouzereau","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"17:00","place":"C.I.D","typ":"Film","title":"L’île des souvenirs","person":"Joel Crawford, Januel P. Mercado","cat":"Premières / Jeune public","stat":"Libre"},{"date":"2026-09-06","time":"17:30","place":"Morny 2","typ":"Film","title":"L'Invitation","person":"Olivia Wilde","cat":"Premières","stat":"Libre"},{"date":"2026-09-06","time":"18:00","place":"Morny 3","typ":"Film","title":"La Ruée vers l’Or","person":"Charlie Chaplin","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"18:30","place":"Casino","typ":"Film","title":"Everybody Digs Bill Evans","person":"Grant Gee","cat":"Compétition","stat":"Libre"},{"date":"2026-09-06","time":"20:00","place":"Morny 2","typ":"Film","title":"Les Contrebandiers","person":"Padraic McKinley","cat":"Premières / DTA Ethan Hawke","stat":"Libre"},{"date":"2026-09-06","time":"20:00","place":"Morny 3","typ":"Film","title":"Bienvenue à Gattaca","person":"Andrew Niccol","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-06","time":"20:30","place":"Casino","typ":"Film","title":"Queen at Sea","person":"Lance Hammer","cat":"Compétition","stat":"Libre"},{"date":"2026-09-07","time":"10:30","place":"C.I.D","typ":"Film","title":"If I Go Will They Miss Me","person":"Walter Thompson-Hernández","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-07","time":"10:30","place":"Morny 2","typ":"Film","title":"Faye","person":"Laurent Bouzereau","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-07","time":"11:00","place":"Casino","typ":"Film","title":"Gremlins 2: The New Batch","person":"Joe Dante","cat":"Premières","stat":"Libre"},{"date":"2026-09-07","time":"14:00","place":"C.I.D","typ":"Film","title":"Here I'm Alive","person":"Joshua Z. Weinstein","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-07","time":"15:00","place":"Casino","typ":"Film","title":"Tangles","person":"Leah Nelson","cat":"Compétition","stat":"Libre"},{"date":"2026-09-07","time":"15:00","place":"Morny 2","typ":"Film","title":"The Whale","person":"Darren Aronofsky","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-07","time":"17:30","place":"C.I.D","typ":"Film","title":"The Last Day","person":"Rachel Rose","cat":"Premières","stat":"Libre"},{"date":"2026-09-07","time":"17:30","place":"Casino","typ":"Film","title":"Mouse","person":"Kelly O’Sullivan, Alex Thompson","cat":"Compétition","stat":"Libre"},{"date":"2026-09-07","time":"20:00","place":"C.I.D","typ":"Film","title":"Mother Mary","person":"David Lowery","cat":"Premières","stat":"Libre"},{"date":"2026-09-07","time":"20:00","place":"Morny 2","typ":"Film","title":"Diamond","person":"Andy Garcia","cat":"Premières / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-07","time":"20:30","place":"Casino","typ":"Film","title":"Pressure","person":"Anthony Maras","cat":"Premières / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-08","time":"10:30","place":"C.I.D","typ":"Film","title":"A Prayer for the Dying","person":"Dara Van Dusen","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-08","time":"10:30","place":"Morny 2","typ":"Film","title":"Bucks Harbor","person":"Pete Muller","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-08","time":"11:00","place":"Casino","typ":"Film","title":"Training Day","person":"Antoine Fuqua","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-08","time":"14:00","place":"C.I.D","typ":"Film","title":"I'll Be Gone In June","person":"Katharina Rivilis","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-08","time":"14:30","place":"Morny 2","typ":"Film","title":"She Said","person":"Maria Schrader","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-08","time":"15:00","place":"Casino","typ":"Film","title":"If I Go Will They Miss Me","person":"Walter Thompson-Hernández","cat":"Compétition","stat":"Libre"},{"date":"2026-09-08","time":"17:00","place":"C.I.D","typ":"Film","title":"Butterfly Jam","person":"Kantemir Balagov","cat":"Premières","stat":"Libre"},{"date":"2026-09-08","time":"20:00","place":"C.I.D","typ":"Cérémonie","title":"Deauville Icon Award Faye Dunaway + The Only Living Pickpocket in New York","person":"Noah Segan","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-08","time":"20:00","place":"Morny 2","typ":"Film","title":"Mother Mary","person":"David Lowery","cat":"Premières","stat":"Libre"},{"date":"2026-09-09","time":"10:30","place":"C.I.D","typ":"Film","title":"Test","person":"Sam McConnell","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-09","time":"11:00","place":"Casino","typ":"Film","title":"Before Midnight","person":"Richard Linklater","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-09","time":"14:00","place":"C.I.D","typ":"Film","title":"Party USA","person":"Jared Sprouse","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-09","time":"14:00","place":"Morny 2","typ":"Film","title":"Killers of the Flower Moon","person":"Martin Scorsese","cat":"Once Upon a Time (in) America / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-09","time":"15:00","place":"Casino","typ":"Film","title":"A Prayer for the Dying","person":"Dara Van Dusen","cat":"Compétition","stat":"Libre"},{"date":"2026-09-09","time":"16:00","place":"Autres lieux","typ":"Cérémonie","title":"Rencontre & dédicace | Siri Hustvedt","person":"Siri Hustvedt","cat":"Rencontre","stat":"Libre"},{"date":"2026-09-09","time":"17:00","place":"C.I.D","typ":"Film","title":"Only What We Carry","person":"Jaime Adams","cat":"Premières","stat":"Libre"},{"date":"2026-09-09","time":"17:30","place":"Casino","typ":"Film","title":"I'll Be Gone In June","person":"Katharina Rivilis","cat":"Compétition","stat":"Libre"},{"date":"2026-09-09","time":"18:00","place":"Morny 2","typ":"Film","title":"Gremlins, l’Amérique parasitée","person":"Adrien Dénouette","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-09","time":"19:30","place":"C.I.D","typ":"Cérémonie","title":"Prix du roman américain Lucien-Barrière + The Man I Love","person":"Ira Sachs","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-10","time":"10:30","place":"C.I.D","typ":"Film","title":"The Liberation","person":"Guy Nattiv","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-10","time":"11:00","place":"Casino","typ":"Film","title":"The Whale","person":"Darren Aronofsky","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-10","time":"11:00","place":"Morny 2","typ":"Film","title":"Gremlins, l’Amérique parasitée","person":"Adrien Dénouette","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-10","time":"14:00","place":"C.I.D","typ":"Film","title":"Company","person":"Casey Affleck","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-10","time":"14:30","place":"Morny 2","typ":"Film","title":"Once Upon a Time in Harlem","person":"David Greaves, William Greaves","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-10","time":"15:00","place":"Casino","typ":"Film","title":"Test","person":"Sam McConnell","cat":"Compétition","stat":"Libre"},{"date":"2026-09-10","time":"20:00","place":"C.I.D","typ":"Cérémonie","title":"Deauville Icon Award Susan Sarandon + The Accompanist","person":"Zach Woods","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-11","time":"10:30","place":"C.I.D","typ":"Film","title":"Club Kid","person":"Jordan Firstman","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-11","time":"11:00","place":"Casino","typ":"Film","title":"I'll Be Gone In June","person":"Katharina Rivilis","cat":"Compétition","stat":"Libre"},{"date":"2026-09-11","time":"11:00","place":"Morny 2","typ":"Film","title":"If I Go Will They Miss Me","person":"Walter Thompson-Hernández","cat":"Compétition","stat":"Libre"},{"date":"2026-09-11","time":"11:00","place":"Morny 3","typ":"Film","title":"The Accompanist","person":"Zach Woods","cat":"Premières","stat":"Libre"},{"date":"2026-09-11","time":"14:00","place":"C.I.D","typ":"Film","title":"Teenage Sex and Death at Camp Miasma","person":"Jane Schoenbrun","cat":"Premières","stat":"Libre"},{"date":"2026-09-11","time":"16:00","place":"Hôtel Barrière Le Royal - Salon Cannes","typ":"Cérémonie","title":"Délibérations du Jury Canal+","person":"Jérôme Lasserre présent","cat":"Jury Canal+","stat":"FIXE JURY"},{"date":"2026-09-11","time":"17:00","place":"C.I.D","typ":"Film","title":"Where to Land","person":"Hal Hartley","cat":"Premières","stat":"Libre"},{"date":"2026-09-12","time":"10:00","place":"C.I.D","typ":"Film","title":"La Gradiva","person":"Marine Atlan","cat":"Prix d'Ornano-Valenti","stat":"Libre"},{"date":"2026-09-12","time":"11:00","place":"Casino","typ":"Film","title":"Company","person":"Casey Affleck","cat":"Compétition","stat":"Libre"},{"date":"2026-09-12","time":"14:30","place":"Autres lieux","typ":"Cérémonie","title":"Carte Blanche à Catherine Deneuve « Mon cinéma Américain »","person":"Catherine Deneuve","cat":"Rencontre","stat":"Libre"},{"date":"2026-09-12","time":"19:00","place":"C.I.D","typ":"Cérémonie","title":"Cérémonie du palmarès + Burgundy","person":"Michael Dweck, Gregory Kershaw","cat":"American Doc Stories / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-12","time":"22:00","place":"Casino Barrière - Salon des Ambassadeurs","typ":"Film","title":"Dîner de clôture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-12","time":"23:30","place":"Villa Le Cercle","typ":"Film","title":"Soirée de clôture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-13","time":"09:00","place":"Casino","typ":"Film","title":"Queen at Sea","person":"Lance Hammer","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"09:00","place":"Morny 2","typ":"Film","title":"Mouse","person":"Kelly O’Sullivan, Alex Thompson","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"11:30","place":"Casino","typ":"Cérémonie","title":"Prix de la Révélation 2026","person":"—","cat":"Palmarès","stat":"Libre"},{"date":"2026-09-13","time":"14:00","place":"Casino","typ":"Cérémonie","title":"Grand Prix 2026","person":"—","cat":"Palmarès","stat":"Libre"},{"date":"2026-09-13","time":"14:00","place":"Morny 2","typ":"Film","title":"Company","person":"Casey Affleck","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"17:30","place":"Morny 2","typ":"Film","title":"Club Kid","person":"Jordan Firstman","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"20:30","place":"Casino","typ":"Cérémonie","title":"Prix du Public de la ville de Deauville 2026","person":"—","cat":"Palmarès","stat":"Libre"},{"date":"2026-09-13","time":"12:12","end":"14:29","place":"Gare de Deauville → Paris Saint-Lazare","typ":"Trajet retour","title":"Trajet retour","person":"Transport","cat":"Transport","stat":"FIXE JURY"}];
@@ -144,15 +144,44 @@ function defaultDay(){
   return Math.max(0,Math.min(DAYS.length-1,n.getDate()-4));
 }
 function show(t){const x=document.getElementById("toast");if(!x)return;x.textContent=t;x.style.display="block";clearTimeout(window.__t);window.__t=setTimeout(()=>x.style.display="none",1800)}
-function juryDay(){return JURY.filter(x=>x.date===DAYS[day])}
-function plannedDay(){return planned.filter(x=>x.date===DAYS[day]).map(x=>({...x,_end: x.e?tm(x.e):calcEnd(x)}))}
-function fixedDay(){return [...juryDay(),...plannedDay()].sort((a,b)=>tm(a.s)-tm(b.s))}
-function programDay(){return PROGRAM.filter(x=>x.date===DAYS[day]).sort((a,b)=>tm(a.time)-tm(b.time))}
+function startTime(p){return p?.s||p?.time||null}
+function endTime(p){return p?.e||p?.end||null}
+function durationOf(p){if(Number.isFinite(Number(p?.duration)))return Number(p.duration);const md=filmMeta(p);return md?.duration||null}
+function calcEnd(p){const st=startTime(p);if(!st)return null;const explicit=endTime(p);if(explicit)return tm(explicit);const d=durationOf(p);return d==null?null:tm(st)+d}
+function juryDayFor(date){return JURY.filter(x=>x.date===date)}
+function plannedDayFor(date){return planned.filter(x=>x.date===date).map(x=>({...x,_end:calcEnd(x)}))}
+function juryDay(){return juryDayFor(DAYS[day])}
+function plannedDay(){return plannedDayFor(DAYS[day])}
+function fixedDay(){return [...juryDay(),...plannedDay()].sort((a,b)=>tm(startTime(a))-tm(startTime(b)))}
+function programDay(){return PROGRAM.filter(x=>x.date===DAYS[day]).sort((a,b)=>tm(startTime(a))-tm(startTime(b)))}
 function fmt(n){return n>=60?`${Math.floor(n/60)}h${n%60?String(n%60).padStart(2,"0"):""}`:`${n} min`}
-function calcEnd(p){if(p.end)return tm(p.end);if(p.duration)return tm(p.time)+p.duration;return null}
+function sameSession(a,b){return !!(a&&b&&a.date===b.date&&startTime(a)===startTime(b)&&a.place===b.place&&sameWork(a.title,b.title))}
 function compatible(p,w){
-  const s=tm(p.time),e=calcEnd(p);if(e===null)return false;
-  return s>=tm(w.s)&&e<=tm(w.e)&&!juryDay().some(j=>s<tm(j.e)&&e>tm(j.s))&&!plannedDay().some(j=>sameWork(j.title,p.title)|| (s<tm(j._end?displayTime(j._end):j.e||j.s)&&e>tm(j.s)));
+  const s=tm(startTime(p)),e=calcEnd(p), ws=tm(w.s),we=tm(w.e);
+  if(e===null||Number.isNaN(s)||Number.isNaN(e)||Number.isNaN(ws)||Number.isNaN(we))return false;
+  if(w.date && p.date!==w.date)return false;
+  if(s<ws||e>we)return false;
+  if(juryDayFor(p.date||DAYS[day]).some(j=>s<tm(j.e)&&e>tm(j.s)))return false;
+  if(plannedDayFor(p.date||DAYS[day]).some(j=>!sameSession(j,p)&&s<calcEnd(j)&&e>tm(startTime(j))))return false;
+  return true;
+}
+function sessionKey(p){return [p.date,startTime(p),p.place,normalizeTitle(p.title)].join('|')}
+function compatibleSessionsForWindow(w){
+  const seen=new Set();
+  return PROGRAM.filter(p=>{
+    if(w.date&&p.date!==w.date)return false;
+    if(!compatible(p,w))return false;
+    const k=sessionKey(p);
+    if(seen.has(k))return false;
+    seen.add(k);
+    return true;
+  }).sort((a,b)=>a.date.localeCompare(b.date)||tm(startTime(a))-tm(startTime(b))||String(a.place).localeCompare(String(b.place),'fr'));
+}
+function toPlannedEntry(p,i=null){
+  const s=startTime(p);
+  const e=endTime(p);
+  const d=durationOf(p);
+  return {date:p.date,s,e:e||null,place:p.place,typ:p.typ,title:p.title,person:p.person||"",cat:p.cat,stat:p.stat,pid:i==null?undefined:workIndex(i),duration:d==null?undefined:d,filmId:p.filmId||null,source:p.source||"Festival du Cinéma Américain de Deauville"};
 }
 function canonicalList(list){return [...new Set(list.map(x=>typeof x==="number"?workIndex(x):x))]}
 const HOTEL_CHECKIN={date:"2026-09-04",s:"15:00",e:"15:30",place:"Hôtel",typ:"Hôtel",title:"Check-in hôtel",person:"",cat:"Hôtel",stat:"Personnel"};
@@ -161,7 +190,7 @@ wishes=canonicalList(wishes);seen=canonicalList(seen);
 
 function render(){
  document.getElementById("app").innerHTML=`<div class="app"><header>
- <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.7.4</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
+ <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.8.0</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
  <div class="datebar"><button class="arrow" aria-label="Jour précédent" onclick="move(-1)" ${day===0?"disabled":""}>‹</button><div class="date" onclick="pickDate()"><b>${dateLabel(DAYS[day])}</b><small>4—13 septembre · toucher pour choisir</small></div><button class="arrow" aria-label="Jour suivant" onclick="move(1)" ${day===DAYS.length-1?"disabled":""}>›</button></div>
  <nav><button class="${view==="planning"?"on":""}" onclick="setView('planning')">🗓️ MON PLANNING</button><button class="${view==="explore"?"on":""}" onclick="setView('explore')">🔎 EXPLORER</button></nav>
  </header><main>${view==="planning"?planningHtml():exploreHtml()}</main><div class="bottom"><button onclick="showLists()">⭐ ${wishes.length} ${wishes.length===1?"envie":"envies"} · 👀 ${seen.length} ${seen.length===1?"vu":"vus"}</button></div></div>
@@ -186,7 +215,7 @@ function planningHtml(){
  }).join("");
 }
 function freeRow(w){
- const opts=PROGRAM.filter(p=>compatible(p,w));
+ const opts=compatibleSessionsForWindow({...w,date:DAYS[day]});
  return `<div class="free" onclick='openFree(${JSON.stringify(w.s)},${JSON.stringify(w.e)})'><div class="time">${w.s}–${w.e}</div><div class="content"><div class="title">🟢 ${fmt(tm(w.e)-tm(w.s))} libres</div><div class="meta">${opts.length?opts.length+" séance"+(opts.length>1?"s":"")+" compatible"+(opts.length>1?"s":""):"Aucune séance compatible détectée"}<span class="tag green">Libre</span></div></div></div>`;
 }
 function displayTime(s){if(!s)return "";let n=tm(s);if(n>=1440)n-=1440;return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
@@ -234,23 +263,19 @@ function openRoute(place,from="Gare de Deauville"){
  open(`<div class="section">ITINÉRAIRE</div><h2>Vers ${place}</h2><div class="info">🚶 Départ : <b>${from}</b><br>📍 Arrivée : <b>${place}</b><br><small>Les applications de cartographie calculeront le parcours piéton au moment de l’ouverture.</small></div><a class="btn primary routeLink" href="${r.google}" target="_blank" rel="noopener">🗺️ Ouvrir dans Google Maps</a><a class="btn routeLink" href="${r.apple}" target="_blank" rel="noopener">🍎 Ouvrir dans Plans</a>`);
 }
 function plannedSameSession(p, x){
- return planned.some(q => q.date===p.date && q.s===p.time && q.place===p.place && sameWork(q.title,p.title));
+ return planned.some(q => q.date===p.date && startTime(q)===startTime(p) && q.place===p.place && sameWork(q.title,p.title));
 }
 function plannedWork(p){
  return planned.filter(q => sameWork(q.title,p.title));
 }
 function samePlannedSession(a,p){
- return a && p && a.date===p.date && a.s===p.time && a.place===p.place && sameWork(a.title,p.title);
+ return a && p && a.date===p.date && startTime(a)===startTime(p) && a.place===p.place && sameWork(a.title,p.title);
 }
 function sessionConflict(p){
- const e=calcEnd(p);
- if(e===null)return null;
- const jury=JURY.filter(j=>j.date===p.date && tm(p.time)<tm(j.e) && e>tm(j.s) && !(j.title===p.title&&j.place===p.place&&j.s===p.time));
- const own=planned.filter(j=>{
-   if(!j || j.date!==p.date || samePlannedSession(j,p))return false;
-   const je=j.e?tm(j.e):calcEnd(j);
-   return je!==null && tm(p.time)<je && e>tm(j.s);
- });
+ const s=tm(startTime(p)),e=calcEnd(p);
+ if(e===null||Number.isNaN(s)||Number.isNaN(e))return null;
+ const jury=juryDayFor(p.date).filter(j=>s<tm(j.e)&&e>tm(j.s)&&!sameSession(j,p));
+ const own=plannedDayFor(p.date).filter(j=>!sameSession(j,p)).filter(j=>{const je=calcEnd(j);return je!==null&&s<je&&e>tm(startTime(j));});
  return jury.length||own.length ? {jury,own} : null;
 }
 function conflictHtml(p){
@@ -270,7 +295,7 @@ function relatedFilmForEvent(x){
  return null;
 }
 function openFixed(x){
- const isPlanned=planned.includes(x)||planned.some(p=>p===x||(p.date===x.date&&p.s===x.s&&p.title===x.title&&p.place===x.place));
+ const isPlanned=planned.includes(x)||planned.some(p=>p===x||(p.date===x.date&&startTime(p)===startTime(x)&&p.title===x.title&&p.place===x.place));
  const actions=isPlanned
    ? `<button class="btn" onclick='removePlanned(${JSON.stringify(x).replace(/'/g,"&#39;")})'>🗑️ Retirer du planning</button>`
    : `<button class="btn" onclick='show("🔒 Planning Jury verrouillé")'>🔒 Planning Jury verrouillé</button>`;
@@ -280,8 +305,8 @@ function openFixed(x){
 }
 function openFree(s,e){
  const freeDate=DAYS[day];
- const opts=PROGRAM.filter(p=>p.date===freeDate&&compatible(p,{s,e}));
- open(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${s} → ${e}</h2><p><b>${fmt(tm(e)-tm(s))} disponibles</b></p><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.time} · ${p.place} · ${p.cat}</small></div>`).join(""):'<div class="info">Aucune séance dont la durée est actuellement vérifiée ne rentre entièrement dans cette fenêtre.</div>'}<button class="btn" onclick='show("Les incompatibles restent masquées par défaut")'>Voir les séances incompatibles</button>`);
+ const opts=compatibleSessionsForWindow({s,e,date:freeDate});
+ open(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${s} → ${e}</h2><p><b>${fmt(tm(e)-tm(s))} disponibles</b></p><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${startTime(p)} · ${p.place} · ${p.cat}</small></div>`).join(""):'<div class="info">Aucune séance dont la durée est actuellement vérifiée ne rentre entièrement dans cette fenêtre.</div>'}<button class="btn" onclick='show("Les incompatibles restent masquées par défaut")'>Voir les séances incompatibles</button>`);
 }
 function agendaSessionsForWork(title){
  const base=PROGRAM.find(p=>sameWork(p.title,title)); const id=base?.filmId; const rows=PROGRAM.filter(p=>p.filmId===id || sameWork(p.title,title)).sort((a,b)=>a.date.localeCompare(b.date)||tm(a.time)-tm(b.time));
@@ -290,7 +315,7 @@ function agendaSessionsForWork(title){
 function sessionCard(p, cls=""){
  const i=PROGRAM.indexOf(p), status=p.knownEnd?(p.agendaCompatible?"compatible":"incompatible"):"unknown", already=plannedSameSession(p);
  const badge=already?'<span class="sessionStatus planned">Déjà au planning</span>':status==="compatible"?'<span class="sessionStatus good">Compatible</span>':status==="incompatible"?'<span class="sessionStatus bad">Conflit</span>':'<span class="sessionStatus unknown">À vérifier</span>';
- return `<button class="sessionChoice ${status} ${already?"already":""} ${cls}" onclick="openProgramById(${i})"><span><b>${dateLabel(p.date)}</b><small>${p.time} · ${p.place}</small></span>${badge}</button>`;
+ return `<button class="sessionChoice ${status} ${already?"already":""} ${cls}" onclick="openProgramById(${i})"><span><b>${dateLabel(p.date)}</b><small>${startTime(p)} · ${p.place}</small></span>${badge}</button>`;
 }
 function openProgramById(i){
  const p=PROGRAM[i];if(!p)return;const key=workIndex(i),w=wishes.includes(key),v=seen.includes(key),pl=plannedSameSession(p);
@@ -308,29 +333,29 @@ function addPlan(i){
  const p=PROGRAM[i];
  if(planned.some(x=>x.date===p.date&&x.s===p.time&&x.place===p.place&&sameWork(x.title,p.title))){show("📅 Déjà dans ton planning");return}
  if(p.stat.toLowerCase().includes("jury")){show("🔒 Impossible : obligation Jury");return}
- planned.push({...p,pid:workIndex(i)});
+ planned.push(toPlannedEntry(p,i));
  // Une œuvre ajoutée au planning quitte automatiquement les envies.
  const k=workIndex(i); wishes=wishes.filter(x=>x!==k);
  save("planned",planned);save("wishes",wishes);show("📅 Ajouté au planning · retiré des envies");closeM();render();setTimeout(()=>openProgramById(i),0)
 }
 function alternativeSlots(x){
- const rows=PROGRAM.filter(p=>sameWork(p.title,x.title)&&!(p.date===x.date&&p.time===x.s&&p.place===x.place));
+ const rows=PROGRAM.filter(p=>sameWork(p.title,x.title)&&!sameSession(p,x));
  return rows.filter(p=>{
-   const e=calcEnd(p); if(e===null)return true;
-   const savedDay=day; day=DAYS.indexOf(p.date); if(day<0){day=savedDay;return false}
-   const conflict=juryDay().some(j=>tm(p.time)<tm(j.e)&&e>tm(j.s))||plannedDay().some(j=>tm(p.time)<tm(j.e)&&e>tm(j.s));
-   day=savedDay; return !conflict;
- }).sort((a,b)=>a.date.localeCompare(b.date)||tm(a.time)-tm(b.time));
+   const e=calcEnd(p);
+   if(e===null)return false;
+   const w={s:startTime(p),e:displayTime(e)};
+   return compatible(p,w) && !plannedSameSession(p) && !plannedWork(p).some(q=>!sameSession(q,p));
+ }).sort((a,b)=>a.date.localeCompare(b.date)||tm(startTime(a))-tm(startTime(b)));
 }
 function removePlanned(x){
- const idx=planned.findIndex(p=>p===x||(p.date===x.date&&p.s===x.s&&p.title===x.title&&p.place===x.place));
+ const idx=planned.findIndex(p=>p===x||(p.date===x.date&&startTime(p)===startTime(x)&&p.title===x.title&&p.place===x.place));
  if(idx<0){show("Événement introuvable");return}
  const item=planned[idx],k=workIndex(PROGRAM.findIndex(p=>sameWork(p.title,item.title)));
  const wasWish=Number.isInteger(k)&&wishes.includes(k);
  const alternatives=alternativeSlots(item);
  open(`<div class="section">RETIRER DU PLANNING</div><h2>${item.title}</h2><div class="info">Cette séance avait été ajoutée depuis tes envies. Que veux-tu faire maintenant ?</div>
    <button class="btn primary" onclick="removeAndWish(${idx})">⭐ Remettre dans mes envies</button>
-   ${alternatives.length?`<div class="section altTitle">AUTRES DATES COMPATIBLES</div>${alternatives.slice(0,8).map(p=>`<button class="altSlot" onclick="replacePlannedWith(${idx},${PROGRAM.indexOf(p)})"><b>${dateLabel(p.date)}</b><br><span>${p.time} · ${p.place}</span></button>`).join("")}`:`<div class="info">Aucune autre date sans conflit n’a été trouvée pour cette œuvre.</div>`}
+   ${alternatives.length?`<div class="section altTitle">AUTRES DATES COMPATIBLES</div>${alternatives.slice(0,8).map(p=>`<button class="altSlot" onclick="replacePlannedWith(${idx},${PROGRAM.indexOf(p)})"><b>${dateLabel(p.date)}</b><br><span>${startTime(p)} · ${p.place}</span></button>`).join("")}`:`<div class="info">Aucune autre date sans conflit n’a été trouvée pour cette œuvre.</div>`}
    <button class="btn" onclick="removePlannedOnly(${idx})">Retirer sans remettre dans les envies</button>`);
 }
 function removeAndWish(idx){
@@ -339,18 +364,18 @@ function removeAndWish(idx){
 function removePlannedOnly(idx){if(idx<0||!planned[idx])return;planned.splice(idx,1);save("planned",planned);closeM();show("🗑️ Retiré du planning");render()}
 function replacePlannedWith(idx,i){
  const old=planned[idx],p=PROGRAM[i]; if(!old||!p)return;
- planned[idx]={...p,pid:workIndex(i)}; const k=workIndex(i); wishes=wishes.filter(x=>x!==k); save("planned",planned);save("wishes",wishes);closeM();show("📅 Planning déplacé à une autre date");render()
+ planned[idx]=toPlannedEntry(p,i); const k=workIndex(i); wishes=wishes.filter(x=>x!==k); save("planned",planned);save("wishes",wishes);closeM();show("📅 Planning déplacé à une autre date");render()
 }
 function markSeen(i){const k=workIndex(i);if(!seen.includes(k))seen.push(k);wishes=wishes.filter(x=>!sameWork(PROGRAM[x]?.title,PROGRAM[i]?.title));save("seen",seen);save("wishes",wishes);show("👀 Marqué comme vu");closeM();render()}
 function addNote(i){open(`<div class="section">NOTE PERSONNELLE</div><h2>${PROGRAM[i].title}</h2><textarea id="note" class="note">${notes[workIndex(i)]||""}</textarea><button class="btn primary" onclick="saveNote(${workIndex(i)})">Enregistrer</button>`)}
 function saveNote(i){notes[i]=document.getElementById("note").value;save("notes",notes);show("📝 Note enregistrée");closeM()}
 function showLists(){
- const wishRows=wishes.map(i=>PROGRAM[i]).filter(Boolean).map(p=>`<button class="wishRow" onclick="openProgramById(${PROGRAM.indexOf(p)})"><span>⭐</span><span><b>${p.title}</b><small>${p.typ} · ${dateLabel(p.date)} · ${p.time} · ${p.place}</small></span><span>›</span></button>`).join("");
- const seenRows=seen.map(i=>PROGRAM[i]).filter(Boolean).map(p=>`<button class="wishRow seenRow" onclick="openProgramById(${PROGRAM.indexOf(p)})"><span>👀</span><span><b>${p.title}</b><small>${p.typ} · ${dateLabel(p.date)} · ${p.time} · ${p.place}</small></span><span>›</span></button>`).join("");
+ const wishRows=wishes.map(i=>PROGRAM[i]).filter(Boolean).map(p=>`<button class="wishRow" onclick="openProgramById(${PROGRAM.indexOf(p)})"><span>⭐</span><span><b>${p.title}</b><small>${p.typ} · ${dateLabel(p.date)} · ${startTime(p)} · ${p.place}</small></span><span>›</span></button>`).join("");
+ const seenRows=seen.map(i=>PROGRAM[i]).filter(Boolean).map(p=>`<button class="wishRow seenRow" onclick="openProgramById(${PROGRAM.indexOf(p)})"><span>👀</span><span><b>${p.title}</b><small>${p.typ} · ${dateLabel(p.date)} · ${startTime(p)} · ${p.place}</small></span><span>›</span></button>`).join("");
  open(`<div class="section">PERSONNEL</div><h2>Mes envies & vus</h2><div class="section">⭐ MES ${wishes.length===1?"ENVIE":"ENVIES"}</div>${wishRows||'<div class="info">Aucune envie pour le moment.</div>'}<div class="section listGap">👀 MES ${seen.length===1?"VU":"VUS"}</div>${seenRows||'<div class="info">Aucun film marqué comme vu.</div>'}`)
 }
 function openSearch(){open(`<div class="section">EXPLORER</div><h2>Rechercher</h2><input id="q" class="search" placeholder="Film, réalisateur, invité, salle…" oninput="doSearch()" autofocus><div id="results" class="searchResults"></div>`);doSearch()}
-function doSearch(){const q=(document.getElementById("q")?.value||"").toLowerCase().trim(),r=document.getElementById("results");if(!r)return;const a=q?PROGRAM.filter(p=>[p.title,p.person,p.place,p.cat,""].join(" ").toLowerCase().includes(q)).slice(0,30):[];r.innerHTML=q?(a.length?a.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.date.slice(8)} septembre · ${p.time} · ${p.place}</small></div>`).join(""):'<div class="info">Aucun résultat.</div>'):'<div class="info">Recherche dans les '+PROGRAM.length+" entrées du programme.</div>"}
+function doSearch(){const q=(document.getElementById("q")?.value||"").toLowerCase().trim(),r=document.getElementById("results");if(!r)return;const a=q?PROGRAM.filter(p=>[p.title,p.person,p.place,p.cat,""].join(" ").toLowerCase().includes(q)).slice(0,30):[];r.innerHTML=q?(a.length?a.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.date.slice(8)} septembre · ${startTime(p)} · ${p.place}</small></div>`).join(""):'<div class="info">Aucun résultat.</div>'):'<div class="info">Recherche dans les '+PROGRAM.length+" entrées du programme.</div>"}
 function open(h){document.getElementById("modal").style.display="flex";document.getElementById("sheet").innerHTML=h}
 function closeM(){document.getElementById("modal").style.display="none"}
 if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
