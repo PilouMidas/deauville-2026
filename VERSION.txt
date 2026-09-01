@@ -1,4 +1,1 @@
-Deauville 2026 — V1.5
-Itinéraires fonctionnels via Google Maps / Plans.
-Activités Jury mises en valeur en doré avec badge « Petits Lauriers ».
-Compteur « 1 envie » au singulier.
+V1.6.1
