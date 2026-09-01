@@ -1,0 +1,2612 @@
+{
+  "version": "2.0.0",
+  "days": [
+    "2026-09-04",
+    "2026-09-05",
+    "2026-09-06",
+    "2026-09-07",
+    "2026-09-08",
+    "2026-09-09",
+    "2026-09-10",
+    "2026-09-11",
+    "2026-09-12",
+    "2026-09-13"
+  ],
+  "works": [
+    {
+      "id": "a-prayer-for-the-dying",
+      "title": "A Prayer for the Dying",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Dara Van Dusen",
+      "duration": 95,
+      "year": 2026,
+      "synopsis": "Au lendemain de la guerre de Sécession dans le Wisconsin, Jacob Hansen, vétéran, entretient l’espoir d’une nouvelle vie dans la bourgade de Friendship. Mais une épidémie sème soudainement le chaos et transforme l’espoir en cauchemar. Jacob, à la fois shérif, croque-mort et pasteur de la ville, doit se battre pour sauver la communauté, sa famille et son âme.",
+      "cast": "Johnny Flynn, John C. Reilly, Kristine Kujath Thorp",
+      "country": "Norvège, Royaume-Uni, Suède",
+      "url": "https://www.festival-deauville.com/films/a-prayer-for-the-dying/"
+    },
+    {
+      "id": "club-kid",
+      "title": "Club Kid",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Jordan Firstman",
+      "duration": 126,
+      "year": 2026,
+      "synopsis": "Peter, un organisateur de soirées branchées à New York au mode de vie aussi effréné qu’insouciant, voit son existence bouleversée lorsqu’Arlo, le fils de 10 ans dont il ignorait l’existence, frappe un jour à sa porte. Dépassé par ce rôle de père qu’il n’avait jamais envisagé, il tisse peu à peu avec lui un lien inattendu et profond.",
+      "cast": "Jordan Firstman, Reggie Absolom, Diego Calva, Cara Delevingne",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/club-kid/"
+    },
+    {
+      "id": "company",
+      "title": "Company",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Casey Affleck",
+      "duration": 95,
+      "year": 2026,
+      "synopsis": "Par une nuit d’hiver, une mystérieuse voyageuse conte une histoire qui traverse les générations et unit les destins de trois âmes meurtries, déchirées entre le désir de vengeance et le pardon.",
+      "cast": "Nick Nolte, Ben Mendelsohn, Adelaide Clemens, Scoot Mcnairy, Emily Alyn Lind, Caylee Cowan, Atticus Affleck, Indiana Affleck",
+      "country": "Canada, États-Unis d’Amérique, Émirats arabes unis",
+      "url": "https://www.festival-deauville.com/films/company/"
+    },
+    {
+      "id": "everybody-digs-bill-evans",
+      "title": "Everybody Digs Bill Evans",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Grant Gee",
+      "duration": 102,
+      "year": 2026,
+      "synopsis": "Juin 1961, New York : le légendaire pianiste de jazz Bill Evans a trouvé sa voix musicale et créé le trio parfait. Une résidence au Village Vanguard culmine avec l’enregistrement en direct de deux grands disques. Dix jours plus tard, Scott LaFaro meurt dans un accident de voiture.",
+      "cast": "Anders Danielsen Lie, Bill Pullman, Laurie Metcalf, Barry Ward, Valene Kane, Katie Mcgrath",
+      "country": "États-Unis d’Amérique, Royaume-Uni, Irlande",
+      "url": "https://www.festival-deauville.com/films/everybody-digs-bill-evans/"
+    },
+    {
+      "id": "here-im-alive",
+      "title": "Here I’m Alive",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Joshua Z. Weinstein",
+      "duration": 81,
+      "year": 2026,
+      "synopsis": "Le temps d’une nuit à New York, migrants, travailleuses du sexe, idéalistes et laissés-pour-compte errent dans les bas-fonds numériques de la ville, en quête d’une connexion humaine dans un monde où ils n’ont pas droit de cité.",
+      "cast": "Cheyenne Gallagher, Eddie Torrenegra, Caleb Zuzga, Krystaly Figueroa, Emira D’spain",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/here-im-alive/"
+    },
+    {
+      "id": "i-ll-be-gone-in-june",
+      "title": "I’ll Be Gone in June",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Katharina Rivilis",
+      "duration": 125,
+      "year": 2026,
+      "synopsis": "Une étudiante allemande débarque dans le désert du Nouveau-Mexique pour une année d’échange. Elle pensait trouver l’Amérique de ses rêves. À la place, elle découvre un pays inquiet, un amour fragile et cette vérité que chaque génération finit par rencontrer : le monde que l’on nous promet n’est jamais celui qu’on trouve.",
+      "cast": "Naomi Cosma, David Flores, Bianca Dumais, Rebecca Schulz",
+      "country": "États-Unis d’Amérique, Allemagne",
+      "url": "https://www.festival-deauville.com/films/ill-be-gone-in-june/"
+    },
+    {
+      "id": "if-i-go-will-they-miss-me",
+      "title": "If I Go Will They Miss Me",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Walter Thompson-Hernández",
+      "duration": 91,
+      "year": 2026,
+      "synopsis": "Du haut de ses douze ans, Lil Ant transforme son quartier populaire, situé sous un couloir aérien de l’aéroport de Los Angeles, en une mythologie vivante où les siens deviennent des dieux et le ciel un ballet incessant de départs. En quête d’un lien avec son père, il trouve auprès de sa communauté de quoi réconcilier mythe et réalité.",
+      "cast": "Danielle Brooks, J. Alphonse Nicholson",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/if-i-go-will-they-miss-me/"
+    },
+    {
+      "id": "meli-melo",
+      "title": "Méli-Mélo",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Leah Nelson",
+      "duration": 103,
+      "year": 2026,
+      "synopsis": "San Francisco, années 90. Sarah a une vie bien à elle. Mais quand sa mère commence à perdre la mémoire, elle revient dans la maison de son enfance.",
+      "cast": "Julia Louis-Dreyfus, Abbi Jacobson, Bryan Cranston, Beanie Feldstein, Seth Rogen, Samira Wiley",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/meli-melo/"
+    },
+    {
+      "id": "mouse",
+      "title": "Mouse",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Kelly O’Sullivan & Alex Thompson",
+      "duration": 120,
+      "year": 2026,
+      "synopsis": "Inséparables depuis l’enfance, Callie et Minnie profitent de l’été avant d’entamer leur dernière année de lycée. Mais un drame inattendu vient bouleverser leur destin et pousse Minnie à se rapprocher de la mère de Callie.",
+      "cast": "Sophie Okonedo, Katherine Mallen-Kupferer, Tara Mallen, Chloe Coleman, Iman Vellani, David Hyde Pierce",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/mouse/"
+    },
+    {
+      "id": "party-usa",
+      "title": "Party USA",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Jared Sprouse",
+      "duration": 89,
+      "year": 2026,
+      "synopsis": "Après la mort de son père, Taylor, employée dans une boutique d’articles de fêtes, n’arrive pas à trouver quelqu’un pour la remplacer à son poste. Elle commet alors une erreur fatale qui enclenche une spirale infernale et sème le chaos au sein de ce petit monde du travail aux couleurs du drapeau américain.",
+      "cast": "Ainsley Seiger, Phillip Andre Botello, Ben Weinswig, Sharahya Carter",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/party-usa/"
+    },
+    {
+      "id": "queen-at-sea",
+      "title": "Queen at Sea",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Lance Hammer",
+      "duration": 121,
+      "year": 2026,
+      "synopsis": "Amanda et son beau-père sont confrontés à un dilemme moral qui les divise. Atteinte de démence avancée, la mère d’Amanda est-elle encore capable de prendre seule des décisions éclairées ? Et si ce n’est plus le cas, qui doit décider à sa place : un conjoint, un enfant ou une institution ?",
+      "cast": "Juliette Binoche, Tom Courtenay, Anna Calder-Marshall, Florence Hunt",
+      "country": "États-Unis d’Amérique, Royaume-Uni",
+      "url": "https://www.festival-deauville.com/films/queen-at-sea/"
+    },
+    {
+      "id": "test",
+      "title": "Test",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Sam McConnell",
+      "duration": 113,
+      "year": 2026,
+      "synopsis": "Dans une petite ville de l’Ohio, un culturiste amateur doit affronter sa famille dysfonctionnelle, sa toxicomanie et son éveil à la sexualité tout en poursuivant son rêve de devenir champion.",
+      "cast": "Brock Yurich, Tammy Blanchard, Matthew Morrison, Mike Edward, Paloma Garcia-Lee",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/test/"
+    },
+    {
+      "id": "the-liberation-of-rita-cooper",
+      "title": "The Liberation of Rita Cooper",
+      "aliases": [],
+      "category": "competition",
+      "categoryLabel": "COMPÉTITION",
+      "director": "Guy Nattiv",
+      "duration": 119,
+      "year": 2026,
+      "synopsis": "Années 80, New Jersey. Malmenée par un quotidien épuisant et un passé traumatique, Rita découvre enfin la sérénité en rencontrant la fascinante Ricky, à la tête d’une communauté de femmes. Guidée par leurs croyances sectaires, Rita se laisse doucement séduire. Mais lorsque ses deux filles tentent de la raisonner, Rita doit choisir entre sa liberté retrouvée et la vie qu’elle a laissée derrière elle.",
+      "url": "https://www.festival-deauville.com/films/the-liberation-of-rita-cooper/"
+    },
+    {
+      "id": "bunker",
+      "title": "Bunker",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Florian Zeller",
+      "duration": 126,
+      "year": 2026,
+      "synopsis": "Un architecte de renom se voit proposer de concevoir, dans le plus grand secret, un bunker de survie pour un milliardaire convaincu que la fin du monde est proche. Tandis qu’il se laisse séduire par ce projet moralement ambigu, son épouse commence à remettre en question leur mariage.",
+      "cast": "Javier Bardem, Penélope Cruz, Stephen Graham, Patrick Schwarzenegger, Paul Dano",
+      "country": "France, Espagne",
+      "url": "https://www.festival-deauville.com/films/bunker/"
+    },
+    {
+      "id": "butterfly-jam",
+      "title": "Butterfly Jam",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Kantemir Balagov",
+      "duration": 97,
+      "year": 2026,
+      "synopsis": "Dans le New Jersey, un adolescent de 16 ans surnommé « Pyteh » partage son temps entre les tapis de lutte et le petit restaurant tcherkesse de sa famille, au bord de la faillite. Une décision impulsive de son père vient bouleverser sa trajectoire.",
+      "cast": "Talha Akdogan, Barry Keoghan, Riley Keough, Harry Melling, Jaliyah Richards",
+      "country": "Etats-Unis d’Amérique, France",
+      "url": "https://www.festival-deauville.com/films/butterfly-jam/"
+    },
+    {
+      "id": "diamond",
+      "title": "Diamond",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Andy Garcia",
+      "duration": 118,
+      "year": 2026,
+      "synopsis": "Détective privé venu d’un autre temps, Joe Diamond possède un don que le Los Angeles moderne ne comprend pas : résoudre les affaires qui laissent la police sans réponse. Avec pour seules armes, un flair infaillible, un humour pince-sans-rire et une élégance qui ne se démode pas. Mais derrière le costume impeccable, le passé revient réclamer son dû.",
+      "cast": "Andy Garcia, Vicky Krieps, Brendan Fraser, Rosemarie Dewitt, Dustin Hoffman",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/diamond/"
+    },
+    {
+      "id": "gremlins-2",
+      "title": "Gremlins 2 : La nouvelle génération",
+      "aliases": [
+        "Gremlins 2: The New Batch",
+        "Gremlins 2 : La nouvelle génération"
+      ],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Joe Dante",
+      "duration": 106,
+      "year": 1990,
+      "synopsis": "Billy et Kate habitent New York avec leur mogwai Gizmo. Malencontreusement mouillée, la petite créature donne naissance à une nouvelle génération de gremlins. Les monstres prennent d’assaut un gratte-ciel high-tech…",
+      "cast": "Zach Galligan, Phoebe Cates, Howie Mandel",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/gremlins-2-la-nouvelle-generation/"
+    },
+    {
+      "id": "her-private-hell",
+      "title": "Her Private Hell",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Nicolas Winding Refn",
+      "duration": 109,
+      "year": 2026,
+      "synopsis": "Alors qu’une étrange brume engloutit une métropole futuriste et libère une présence mortelle insaisissable, une jeune femme troublée part à la recherche de son père. Au cours de cette quête, son destin croise celui d’un GI américain engagé dans un voyage désespéré pour arracher sa fille de l’Enfer.",
+      "cast": "Sophie Thatcher, Charles Melton, Havana Rose Liu, Kristine Frøseth",
+      "country": "Etats-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/her-private-hell/"
+    },
+    {
+      "id": "high-art",
+      "title": "High Art",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Lisa Cholodenko",
+      "duration": 102,
+      "year": 1998,
+      "synopsis": "À 24 ans, malgré une récente promotion dans le prestigieux magazine photo où elle travaille, Syd reste préposée aux cafés. Elle fait par hasard la connaissance de sa voisine du dessus, Lucy, célèbre photographe qui a raccroché depuis plus de dix ans et qui va lui faire découvrir un nouveau monde.",
+      "cast": "Ally Sheedy, Radha Mitchell, Patricia Clarkson, Gabriel Mann, Bill Sage",
+      "country": "États-Unis d’Amérique, Canada",
+      "url": "https://www.festival-deauville.com/films/high-art/"
+    },
+    {
+      "id": "l-enfance-d-un-chef",
+      "title": "L’Enfance d’un chef",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Brady Corbet",
+      "duration": 115,
+      "year": 2015,
+      "synopsis": "1919. Alors que son père participe aux négociations du traité de Versailles, le jeune Prescott grandit au cœur des cercles diplomatiques qui façonnent le nouvel ordre mondial. Dans l’intimité de la maison familiale, son comportement devient chaque jour plus troublant, sous le regard impuissant de sa mère.",
+      "cast": "Robert Pattinson, Liam Cunningham, Bérénice Béjo, Stacy Martin, Tom Sweet",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/lenfance-dun-chef/"
+    },
+    {
+      "id": "l-ile-des-souvenirs",
+      "title": "L’Île des souvenirs",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Joel Crawford & Januel P. Mercado",
+      "duration": 98,
+      "year": 2026,
+      "synopsis": "Lors de leur dernière nuit ensemble, Jo et Raissa ouvrent un portail secret vers une île mystérieuse où prennent vie les créatures mythiques des légendes philippines qui ont bercé leur enfance.",
+      "cast": "Manon Bresch, Anaïde Rozam, Xavier Lacaille, Billy Crawford",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/lile-des-souvenirs/"
+    },
+    {
+      "id": "l-invitation",
+      "title": "L’Invitation",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Olivia Wilde",
+      "duration": 107,
+      "year": 2026,
+      "synopsis": "Angela et Joe invitent à dîner leurs mystérieux nouveaux voisins du dessus. La soirée va alors rapidement faire voler en éclats toutes leurs certitudes.",
+      "cast": "Olivia Wilde, Penelope Cruz, Seth Rogen, Edward Norton",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/linvitation/"
+    },
+    {
+      "id": "les-contrebandiers",
+      "title": "Les Contrebandiers",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Padraic McKinley",
+      "duration": 115,
+      "year": 2026,
+      "synopsis": "Oregon, 1933. Après la mort de sa femme, Samuel Murphy est arraché à sa fille et envoyé dans un camp de travail impitoyable. Lorsqu’un surveillant sans scrupule lui promet la liberté contre une périlleuse mission de contrebande d’or, Murphy saisit sa seule chance de rentrer chez lui.",
+      "url": "https://www.festival-deauville.com/films/les-contrebandiers/"
+    },
+    {
+      "id": "mother-mary",
+      "title": "Mother Mary",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "David Lowery",
+      "duration": 112,
+      "year": 2026,
+      "synopsis": "À la veille de son grand retour sur scène, l’icône de la pop Mother Mary retrouve Sam Anselm, son ancienne costumière et amie de longue date dont elle s’est éloignée. De vieilles blessures refont alors surface…",
+      "cast": "Anne Hathaway, Michaela Coel, Hunter Schafer, Sian Clifford, Atheena Frizzell, Fka Twigs",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/mother-mary/"
+    },
+    {
+      "id": "not-a-pretty-picture",
+      "title": "Not a Pretty Picture",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Martha Coolidge",
+      "duration": 82,
+      "year": 1976,
+      "synopsis": "En 1976, la cinéaste américaine Martha Coolidge signe son premier film, consacré à un traumatisme majeur de son adolescence. En mettant en scène avec des comédiens le viol qu’elle a subi à seize ans et en échangeant avec eux sur cette reconstitution, elle éclaire les mécanismes des violences sexuelles et de la domination masculine.",
+      "url": "https://www.festival-deauville.com/films/not-a-pretty-picture/"
+    },
+    {
+      "id": "only-what-we-carry",
+      "title": "Only What We Carry",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Jamie Adams",
+      "duration": 93,
+      "year": 2026,
+      "synopsis": "Des secrets longtemps enfouis et des amours naissantes refont surface et débordent entre une danseuse, sa sœur, son ancien chorégraphe et l’ami de ce dernier, de passage sur la côte normande de Deauville.",
+      "cast": "Simon Pegg, Sofia Boutella, Charlotte Gainsbourg, Quentin Tarantino, Liam Hellmann, Lizzy Mcalpine",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/only-what-we-carry/"
+    },
+    {
+      "id": "pressure",
+      "title": "Pressure",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Anthony Maras",
+      "duration": 100,
+      "year": 2026,
+      "synopsis": "Trois jours avant le Jour J, une seule décision peut changer le cours de l’Histoire. Alors que les Alliés s’apprêtent à lancer le plus grand débarquement jamais organisé, une violente tempête menace de faire échouer l’opération. Le général Eisenhower et le capitaine James Stagg, météorologue, font face à un choix impossible.",
+      "cast": "Brendan Fraser, Andrew Scott, Kerry Condon, Chris Messina, Damian Lewis",
+      "country": "Royaume-Uni, France, États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/pressure/"
+    },
+    {
+      "id": "stop-that-train",
+      "title": "Stop! That! Train!",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Adam Shankman",
+      "duration": 95,
+      "year": 2026,
+      "synopsis": "Amies inséparables et agentes de bord ferroviaires, Tess et Dee-Dee troquent leurs mornes services à bord du Stank Rail contre les paillettes du Glamazonian Express. Lorsqu’une tempête dévastatrice menace de faire dérailler le train, elles sont contraintes de faire équipe avec les passagères de première classe.",
+      "url": "https://www.festival-deauville.com/films/stop-that-train/"
+    },
+    {
+      "id": "teenage-sex-and-death-at-camp-miasma",
+      "title": "Teenage Sex and Death at Camp Miasma",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Jane Schoenbrun",
+      "duration": 112,
+      "year": 2026,
+      "synopsis": "Après des années de suites bâclées et un intérêt déclinant des fans, la franchise du slasher Camp Miasma est confiée à une jeune réalisatrice passionnée bien décidée à la ressusciter. Lorsqu’elle rend visite à la star du film original, les deux femmes basculent dans un monde sanglant de désir, de peur et de délire.",
+      "cast": "Hannah Einbinder, Gillian Anderson, Amanda Fix, Arthur Conti, Eva Victor, Zach Cherry",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/teenage-sex-and-death-at-camp-miasma/"
+    },
+    {
+      "id": "the-accompanist",
+      "title": "The Accompanist",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Zach Woods",
+      "duration": 110,
+      "year": 2026,
+      "synopsis": "Après un accident qui manque de lui coûter la vie, une jeune fille est placée en famille d’accueil, où elle noue un lien hors du commun avec sa nouvelle et mystérieuse tutrice.",
+      "cast": "Susan Sarandon, Everly Carganilla, Kevyn Morrow, Aubrey Plaza",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/the-accompanist/"
+    },
+    {
+      "id": "the-last-day",
+      "title": "The Last Day",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Rachel Rose",
+      "duration": 99,
+      "year": 2026,
+      "synopsis": "Un jour de fête nationale à New York, les trajectoires de deux femmes en quête d’elles-mêmes se croisent brièvement : Julia, une écrivaine qui prépare une importante réception, et Taylor, une jeune mère de trois enfants qui tente tant bien que mal de garder la tête hors de l’eau.",
+      "cast": "Alicia Vikander, Wagner Moura, Victoria Pedretti",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/the-last-day/"
+    },
+    {
+      "id": "the-last-pickpocket-in-new-york",
+      "title": "The Last Pickpocket in New York",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Noah Segan",
+      "duration": 88,
+      "year": 2025,
+      "synopsis": "Harry est le dernier pickpocket de New York. Les temps sont durs, mais un jour la chance tourne : il dérobe une mystérieuse clé USB qu’il revend à prix d’or. Mais ce précieux butin appartient à une organisation criminelle impitoyable prête à tout pour le récupérer.",
+      "cast": "John Turturro, Giancarlo Esposito, Will Price, Tatiana Maslany, Steve Buscemi, Jamie Lee Curtis",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/the-last-pickpocket-in-new-york/"
+    },
+    {
+      "id": "the-man-i-love",
+      "title": "The Man I Love",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Ira Sachs",
+      "duration": 96,
+      "year": 2026,
+      "synopsis": "New York, fin des années 1980. Jimmy George, figure iconique de la scène théâtrale, vit en couple avec le plus tendre et attentionné des amants. Mais devant la mort qui lui est promise, la soif de vivre et de créer, de désirer et d’aimer, une dernière fois, est plus forte que tout…",
+      "cast": "Rami Malek, Rebecca Hall, Ebon Moss-Bachrach, Tom Sturridge, Luther Ford",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/the-man-i-love/"
+    },
+    {
+      "id": "victorian-psycho",
+      "title": "Victorian Psycho",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Zachary Wigon",
+      "duration": 90,
+      "year": 2026,
+      "synopsis": "1858. Une étrange gouvernante nommée Winifred Notty arrive au manoir gothique d’Ensor House. Sa mission consiste à enseigner aux enfants les bonnes manières et à leur transmettre l’histoire de leur famille, tout en cachant soigneusement ses propres tendances psychopathes…",
+      "cast": "Maika Monroe, Thomasin Mckenzie, Jason Isaacs, Ruth Wilson, Evie Templeton, Jacobi Jupe",
+      "country": "Etats-Unis d’Amérique, Royaume-Uni",
+      "url": "https://www.festival-deauville.com/films/victorian-psycho/"
+    },
+    {
+      "id": "where-to-land",
+      "title": "Where to Land",
+      "aliases": [],
+      "category": "premieres",
+      "categoryLabel": "PREMIÈRES",
+      "director": "Hal Hartley",
+      "duration": 74,
+      "year": 2025,
+      "synopsis": "Un réalisateur de comédies romantiques réputé estime qu’il est temps de rédiger son testament. Mais sa petite amie, une comédienne qui surréagit toujours, est convaincue qu’il est mourant et qu’il refuse d’en parler à quiconque.",
+      "cast": "Bill Sage, Robert John Burke, Gia Crovatin, Jennifer Stepanyk, Edie Falco, Kathleen Chakfant",
+      "country": "Etats-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/where-to-land/"
+    },
+    {
+      "id": "once-upon-a-time-in-harlem",
+      "title": "Once Upon a Time in Harlem",
+      "aliases": [
+        "Once Upon a Time (In) Harlem",
+        "Once Upon a Time in Harlem"
+      ],
+      "category": "doc",
+      "categoryLabel": "AMERICAN DOC STORIES",
+      "director": "William & David Greaves",
+      "duration": 100,
+      "year": 2026,
+      "synopsis": "En 1972, William Greaves réunit les grandes figures vivantes du mouvement de la Renaissance de Harlem. À travers cette rencontre exceptionnelle, le documentaire explore la portée de cette remarquable période de création, la manière dont la culture se transmet d’une génération à l’autre et le rôle des artistes dans sa préservation.",
+      "cast": "Aaron Douglas, Richard Bruce Nugent, James Van Der Zee, Eubie Blake, Louise Thompson Patterson, John Henrik Clarke, Romare Bearden, David Levering Lewis",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/once-upon-a-time-in-harlem/"
+    },
+    {
+      "id": "bucks-harbor",
+      "title": "Bucks Harbor",
+      "aliases": [],
+      "category": "doc",
+      "categoryLabel": "AMERICAN DOC STORIES",
+      "director": "Pete Muller",
+      "duration": 98,
+      "year": 2026,
+      "synopsis": "À l’Est du Maine, les côtes escarpées s’étendent entre forêt et océan. Les garçons y grandissent au rythme des hivers sans merci, des récoltes de la mer et des valeurs transmises par leurs pères. Ce documentaire s’attache à la vie intérieure de ces pêcheurs, jeunes comme anciens.",
+      "country": "Etats-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/bucks-harbor/"
+    },
+    {
+      "id": "burgundy",
+      "title": "Burgundy",
+      "aliases": [],
+      "category": "doc",
+      "categoryLabel": "AMERICAN DOC STORIES",
+      "director": "Michael Dweck & Gregory Kershaw",
+      "duration": 88,
+      "year": 2026,
+      "synopsis": "En Bourgogne, les vins les plus renommés au monde ne sont qu’une partie de l’histoire. Derrière chaque bouteille se cache un art de vivre façonné par des générations de traditions, des codes tacites et par ceux qui se consacrent à le préserver ou à le réinventer.",
+      "cast": "Enzo Ferraroli, Céleste Kalis, Eric Goettelmann, Patrick Maniere, Guillaume Baroin, Bertrand Devillard",
+      "country": "Etats-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/burgundy/"
+    },
+    {
+      "id": "dernsie-the-amazing-life-of-bruce-dern",
+      "title": "Dernsie: The Amazing Life of Bruce Dern",
+      "aliases": [],
+      "category": "doc",
+      "categoryLabel": "AMERICAN DOC STORIES",
+      "director": "Mike Mendez",
+      "duration": 111,
+      "year": 2026,
+      "synopsis": "À travers ses propres mots, Bruce Dern revient sur sa vie et sa carrière qui traversent plusieurs générations d’Hollywood. Un portrait intime placé sous le signe de la persévérance, de la réinvention et de l’héritage transmis à sa fille, Laura Dern.",
+      "cast": "Bruce Dern, Laura Dern, Quentin Tarantino, Alexander Payne, Billy Bob Thornton, Walton Goggins, Walter Hills, Patty Jenkins, Will Forte, Joe Dante",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/dernsie-the-amazing-life-of-bruce-dern/"
+    },
+    {
+      "id": "faye",
+      "title": "Faye",
+      "aliases": [],
+      "category": "doc",
+      "categoryLabel": "AMERICAN DOC STORIES",
+      "director": "Laurent Bouzereau",
+      "duration": 91,
+      "year": 2024,
+      "synopsis": "L’icône du cinéma Faye Dunaway parle avec sincérité des triomphes de son illustre carrière. À travers une réflexion nourrie par les témoignages de ses collègues et de ses amis, elle remet sa vie et sa filmographie en perspective et dévoile ses difficultés liées à la santé mentale tout en dénonçant les doubles standards auxquels elle a été confrontée à Hollywood.",
+      "url": "https://www.festival-deauville.com/films/faye/"
+    },
+    {
+      "id": "gremlins-doc",
+      "title": "Gremlins, l’Amérique parasitée",
+      "aliases": [
+        "American Nightmare",
+        "Gremlins, l’Amérique parasitée"
+      ],
+      "category": "doc",
+      "categoryLabel": "AMERICAN DOC STORIES",
+      "director": "Adrien Dénouette",
+      "duration": 52,
+      "year": 2026,
+      "synopsis": "Et si Gremlins n’était pas qu’un simple film de monstres ? À travers extraits, making of et interviews, ce documentaire révèle l’envers grinçant d’un blockbuster bien plus complexe qu’il n’y paraît. Film d’horreur, satire du consumérisme, critique de la société de divertissement et de la machine hollywoodienne…",
+      "cast": "Joe Dante, Rick Baker, John Landis, Heidi Honeycutt",
+      "country": "France",
+      "url": "https://www.festival-deauville.com/films/gremlins-lamerique-parasitee/"
+    },
+    {
+      "id": "la-gradiva",
+      "title": "La Gradiva",
+      "aliases": [],
+      "category": "pov",
+      "categoryLabel": "PRIX D’ORNANO-VALENTI",
+      "director": "Marine Atlan",
+      "duration": 145,
+      "year": 2026,
+      "synopsis": "Un groupe de lycéens français part en voyage scolaire à Naples pour découvrir les ruines de Pompéi et ses corps pétrifiés par le Vésuve. C’est là que le vertige les saisit brutalement. L’un après l’autre, ils se laissent submerger par le désir et la colère jusqu’à s’y abandonner complètement.",
+      "cast": "Antonia Buresi, Colas Quignard, Suzanne Gerin, Mitia Capellier-Audat, Rouge Isaac, Hadya Fofana",
+      "country": "France, Italie",
+      "url": "https://www.festival-deauville.com/films/la-gradiva/"
+    },
+    {
+      "id": "la-ruee-vers-l-or",
+      "title": "La Ruée vers l’Or",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Charlie Chaplin",
+      "duration": 88,
+      "year": 1925,
+      "synopsis": "En 1898, un chercheur d’or solitaire lutte contre les éléments du Grand Nord tout en tentant de conquérir le cœur d’une danseuse.",
+      "cast": "Charlie Chaplin, Mack Swain, Tom Murray",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/la-ruee-vers-lor/"
+    },
+    {
+      "id": "monsieur-smith-au-senat",
+      "title": "Monsieur Smith au Sénat",
+      "aliases": [
+        "Mr Smith au Sénat",
+        "Monsieur Smith au Sénat"
+      ],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Frank Capra",
+      "duration": 129,
+      "year": 1940,
+      "synopsis": "Fraîchement nommé au Sénat américain, un jeune homme idéaliste affronte la corruption politique afin de défendre la démocratie.",
+      "cast": "James Stewart, Jean Arthur, Claude Rains",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/mr-smith-au-senat/"
+    },
+    {
+      "id": "les-raisins-de-la-colere",
+      "title": "Les Raisins de la colère",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "John Ford",
+      "duration": 129,
+      "year": 1947,
+      "synopsis": "Pendant la grande dépression des années 30, une famille de fermiers erre à la recherche de travail, mais ne rencontre que spoliation et injustice.",
+      "cast": "Henry Fonda, Jane Darwell, John Carradine",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/les-raisins-de-la-colere/"
+    },
+    {
+      "id": "docteur-folamour",
+      "title": "Docteur Folamour",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Stanley Kubrick",
+      "duration": 95,
+      "year": 1964,
+      "synopsis": "Lorsqu’un général américain ordonne une attaque nucléaire contre l’URSS sans autorisation, les responsables politiques et militaires réunis au Pentagone tentent d’éviter la catastrophe.",
+      "cast": "Peter Sellers, George C. Scott, Sterling Hayden",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/docteur-folamour/"
+    },
+    {
+      "id": "la-porte-du-paradis",
+      "title": "La Porte du paradis",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Michael Cimino",
+      "duration": 219,
+      "year": 1981,
+      "synopsis": "Wyoming, 1890. Durant la guerre du comté de Johnson, un shérif prend la défense de fermiers immigrés menacés par les puissants éleveurs de la région.",
+      "cast": "Kris Kristofferson, Christopher Walken, John Hurt, Isabelle Huppert",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/la-porte-du-paradis/"
+    },
+    {
+      "id": "il-etait-une-fois-en-amerique",
+      "title": "Il était une fois en Amérique",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Sergio Leone",
+      "duration": 229,
+      "year": 1984,
+      "synopsis": "Après des décennies d’exil, un ancien gangster new-yorkais de la période de la Prohibition replonge dans ses souvenirs marqués par l’amitié, les rêves et les regrets.",
+      "cast": "Robert de Niro, James Woods, Elizabeth McGovern",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/once-upon-a-time-in-america/"
+    },
+    {
+      "id": "full-metal-jacket",
+      "title": "Full Metal Jacket",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Stanley Kubrick",
+      "duration": 116,
+      "year": 1987,
+      "synopsis": "Un marine américain observe les effets déshumanisants de la guerre du Vietnam sur ses compagnons d’armes, de la brutalité de leur formation militaire aux combats sanglants.",
+      "cast": "Matthew Modine, Arliss Howard, Vincent D’Onofrio",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/fullmetal-jacket/"
+    },
+    {
+      "id": "harvey-milk",
+      "title": "Harvey Milk",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Gus Van Sant",
+      "duration": 128,
+      "year": 2009,
+      "synopsis": "Le destin d’Harvey Milk, militant américain pour les droits des homosexuels et premier élu ouvertement gay de Californie.",
+      "cast": "Sean Penn, Josh Brolin, Emile Hirsch",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/harvey-milk/"
+    },
+    {
+      "id": "zero-dark-thirty",
+      "title": "Zero Dark Thirty",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Kathryn Bigelow",
+      "duration": 157,
+      "year": 2013,
+      "synopsis": "Après les attentats du 11 septembre, le renseignement américain traque Oussama Ben Laden. Une analyste de la CIA est dépêchée au Pakistan où elle découvre l’usage de méthodes controversées…",
+      "cast": "Jessica Chastain, Jason Clarke, Joel Edgerton",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/zero-dark-thirty-3/"
+    },
+    {
+      "id": "django-unchained",
+      "title": "Django Unchained",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Quentin Tarantino",
+      "duration": 165,
+      "year": 2013,
+      "synopsis": "Un esclave affranchi s’allie à un chasseur de primes allemand pour sauver sa femme des mains d’un impitoyable propriétaire de plantation dans le Mississippi.",
+      "cast": "Jamie Foxx, Christoph Waltz, Leonardo DiCaprio",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/django-unchained/"
+    },
+    {
+      "id": "selma",
+      "title": "Selma",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Ava DuVernay",
+      "duration": 128,
+      "year": 2015,
+      "synopsis": "En 1965, le pasteur Martin Luther King tente de convaincre le président Lyndon B. Johnson de garantir aux Afro-Américains un accès égalitaire au droit de vote, en organisant une marche historique à travers l’Alabama.",
+      "cast": "David Oyelowo, Tom Wilkinson, Carmen Ejogo",
+      "country": "Royaume-Uni, États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/selma/"
+    },
+    {
+      "id": "the-big-short-le-casse-du-siecle",
+      "title": "The Big Short : Le casse du siècle",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Adam McKay",
+      "duration": 130,
+      "year": 2015,
+      "synopsis": "Wall Street, 2005. Alors que banques, médias et gouvernement ignorent les signes avant-coureurs de la crise, quatre outsiders anticipent l’effondrement de la bulle immobilière et décident d’en tirer profit.",
+      "cast": "Christian Bale, Steve Carell, Ryan Gosling",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/the-big-short-le-casse-du-siecle/"
+    },
+    {
+      "id": "she-said",
+      "title": "She Said",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Maria Schrader",
+      "duration": 129,
+      "year": 2022,
+      "synopsis": "Deux journalistes du New York Times enquêtent sur l’affaire qui contribua à déclencher le mouvement #MeToo et à briser des décennies de silence autour des violences sexuelles à Hollywood.",
+      "cast": "Carey Mulligan, Zoe Kazan, Patricia Clarkson",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/she-said/"
+    },
+    {
+      "id": "here-les-plus-belles-annees-de-notre-vie",
+      "title": "Here – Les Plus belles années de notre vie",
+      "aliases": [],
+      "category": "250",
+      "categoryLabel": "250 ANS D’HISTOIRE AMÉRICAINE",
+      "director": "Robert Zemeckis",
+      "duration": 104,
+      "year": 2024,
+      "synopsis": "L’histoire de familles dont les peines, les joies et les moments de doutes se font écho à travers les générations.",
+      "cast": "Tom Hanks, Robin Wright, Paul Bettany",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/here-les-plus-belles-annees-de-notre-vie/"
+    },
+    {
+      "id": "la-momie",
+      "title": "La Momie",
+      "aliases": [],
+      "category": "brendan",
+      "categoryLabel": "DEAUViLLE TALENT · BRENDAN FRASER",
+      "director": "Stephen Sommers",
+      "duration": 124,
+      "year": 1999,
+      "synopsis": "Lors de fouilles archéologiques, un américain engagé dans la Légion étrangère française réveille accidentellement une momie qui sème le chaos en cherchant la réincarnation de son amour perdu.",
+      "cast": "Brendan Fraser, Rachel Weisz, Jonh Hannah",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/la-momie/"
+    },
+    {
+      "id": "the-whale",
+      "title": "The Whale",
+      "aliases": [],
+      "category": "brendan",
+      "categoryLabel": "DEAUViLLE TALENT · BRENDAN FRASER",
+      "director": "Darren Aronofsky",
+      "duration": 117,
+      "year": 2022,
+      "synopsis": "Vivant reclus et atteint d’obésité sévère, un professeur d’anglais tente de renouer avec sa fille adolescente, dans un ultime espoir de rédemption.",
+      "cast": "Brendan Fraser, Sadie Sink, Ty Simpkins",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/the-whale/"
+    },
+    {
+      "id": "killers-of-the-flower-moon",
+      "title": "Killers of the Flower Moon",
+      "aliases": [],
+      "category": "brendan",
+      "categoryLabel": "DEAUViLLE TALENT · BRENDAN FRASER",
+      "director": "Martin Scorsese",
+      "duration": 206,
+      "year": 2023,
+      "synopsis": "Oklahoma, années 1920. Lorsque du pétrole est découvert dans le sous-sol des terres du peuple osage, ses habitants sont assassinés les uns après les autres, jusqu’à ce que le FBI intervienne pour élucider l’affaire.",
+      "cast": "Leonardo DiCaprio, Robert De Niro, Brendan Fraser, Lily Gladstone",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/killers-of-the-flower-moon/"
+    },
+    {
+      "id": "bienvenue-a-gattaca",
+      "title": "Bienvenue à Gattaca",
+      "aliases": [],
+      "category": "ethan",
+      "categoryLabel": "DEAUVILLE TALENT · ETHAN HAWKE",
+      "director": "Andrew Niccol",
+      "duration": 106,
+      "year": 1998,
+      "synopsis": "Dans une société futuriste fondée sur les principes de l’eugénisme, un « non-valide » usurpe l’identité d’un membre de l’élite génétique afin de partir dans l’espace.",
+      "cast": "Ethan Hawke, Uma Thurman, Jude Law",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/bienvenue-a-gattaca/"
+    },
+    {
+      "id": "training-day",
+      "title": "Training Day",
+      "aliases": [],
+      "category": "ethan",
+      "categoryLabel": "DEAUVILLE TALENT · ETHAN HAWKE",
+      "director": "Antoine Fuqua",
+      "duration": 122,
+      "year": 2001,
+      "synopsis": "Pour son premier jour à la brigade des stupéfiants de Los Angeles, une jeune recrue fait équipe avec un détective aux méthodes douteuses et à l’identité trompeuse.",
+      "cast": "Ethan Hawke, Denzel Washington, Scott Glenn",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/training-day/"
+    },
+    {
+      "id": "before-midnight",
+      "title": "Before Midnight",
+      "aliases": [],
+      "category": "ethan",
+      "categoryLabel": "DEAUVILLE TALENT · ETHAN HAWKE",
+      "director": "Richard Linklater",
+      "duration": 109,
+      "year": 2013,
+      "synopsis": "Dix-huit ans après leur rencontre dans un train pour Vienne, Jesse et Céline sont désormais mariés et parents de jumelles. Le temps d’une soirée romantique en Grèce, ils s’interrogent sur l’avenir de leur couple.",
+      "cast": "Ethan Hawke, Julie Delpy, Seamus Davey-Fitzpatrick",
+      "country": "États-Unis d’Amérique",
+      "url": "https://www.festival-deauville.com/films/before-midnight/"
+    }
+  ],
+  "sessions": [
+    {
+      "date": "2026-09-04",
+      "start": "19:00",
+      "title": "Les Contrebandiers",
+      "place": "C.I.D",
+      "workId": "les-contrebandiers",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "09:00",
+      "title": "Before Midnight",
+      "place": "Casino",
+      "workId": "before-midnight",
+      "category": "ethan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "10:00",
+      "title": "Zero Dark Thirty",
+      "place": "Morny 2",
+      "workId": "zero-dark-thirty",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "10:30",
+      "title": "Queen at Sea",
+      "place": "C.I.D",
+      "workId": "queen-at-sea",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-05",
+      "start": "11:00",
+      "title": "Harvey Milk",
+      "place": "Morny 3",
+      "workId": "harvey-milk",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "11:30",
+      "title": "Once Upon a Time in Harlem",
+      "place": "Casino",
+      "workId": "once-upon-a-time-in-harlem",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "14:00",
+      "title": "Everybody Digs Bill Evans",
+      "place": "C.I.D",
+      "workId": "everybody-digs-bill-evans",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-05",
+      "start": "14:00",
+      "title": "Les Contrebandiers",
+      "place": "Casino",
+      "workId": "les-contrebandiers",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "15:00",
+      "title": "Docteur Folamour",
+      "place": "Morny 2",
+      "workId": "docteur-folamour",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "15:00",
+      "title": "Il était une fois en Amérique",
+      "place": "Morny 3",
+      "workId": "il-etait-une-fois-en-amerique",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "16:30",
+      "title": "Bucks Harbor",
+      "place": "Casino",
+      "workId": "bucks-harbor",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "17:00",
+      "title": "Pressure",
+      "place": "C.I.D",
+      "workId": "pressure",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "17:30",
+      "title": "Here – Les Plus belles années de notre vie",
+      "place": "Morny 2",
+      "workId": "here-les-plus-belles-annees-de-notre-vie",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "18:30",
+      "title": "High Art",
+      "place": "Casino",
+      "workId": "high-art",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "19:30",
+      "title": "L’Invitation",
+      "place": "C.I.D",
+      "workId": "l-invitation",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "20:00",
+      "title": "Pressure",
+      "place": "Morny 2",
+      "workId": "pressure",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "20:00",
+      "title": "La Momie",
+      "place": "Morny 3",
+      "workId": "la-momie",
+      "category": "brendan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "20:30",
+      "title": "L’Invitation",
+      "place": "Casino",
+      "workId": "l-invitation",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-05",
+      "start": "22:00",
+      "title": "Her Private Hell",
+      "place": "C.I.D",
+      "workId": "her-private-hell",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "10:00",
+      "title": "Dernsie: The Amazing Life of Bruce Dern",
+      "place": "Casino",
+      "workId": "dernsie-the-amazing-life-of-bruce-dern",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "10:00",
+      "title": "Selma",
+      "place": "Morny 2",
+      "workId": "selma",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "10:00",
+      "title": "La Porte du paradis",
+      "place": "Morny 3",
+      "workId": "la-porte-du-paradis",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "10:30",
+      "title": "Mouse",
+      "place": "C.I.D",
+      "workId": "mouse",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-06",
+      "start": "14:00",
+      "title": "Méli-Mélo",
+      "place": "C.I.D",
+      "workId": "meli-melo",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-06",
+      "start": "14:30",
+      "title": "Django Unchained",
+      "place": "Morny 3",
+      "workId": "django-unchained",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "15:00",
+      "title": "Gremlins, l’Amérique parasitée",
+      "place": "Casino",
+      "workId": "gremlins-doc",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "15:00",
+      "title": "Once Upon a Time in Harlem",
+      "place": "Morny 2",
+      "workId": "once-upon-a-time-in-harlem",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "16:30",
+      "title": "Faye",
+      "place": "Casino",
+      "workId": "faye",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "17:00",
+      "title": "L’Île des souvenirs",
+      "place": "C.I.D",
+      "workId": "l-ile-des-souvenirs",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "17:30",
+      "title": "L’Invitation",
+      "place": "Morny 2",
+      "workId": "l-invitation",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "18:00",
+      "title": "La Ruée vers l’Or",
+      "place": "Morny 3",
+      "workId": "la-ruee-vers-l-or",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "18:30",
+      "title": "Everybody Digs Bill Evans",
+      "place": "Casino",
+      "workId": "everybody-digs-bill-evans",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-06",
+      "start": "20:00",
+      "title": "Les Contrebandiers",
+      "place": "Morny 2",
+      "workId": "les-contrebandiers",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "20:00",
+      "title": "Bienvenue à Gattaca",
+      "place": "Morny 3",
+      "workId": "bienvenue-a-gattaca",
+      "category": "ethan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-06",
+      "start": "20:30",
+      "title": "Queen at Sea",
+      "place": "Casino",
+      "workId": "queen-at-sea",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-07",
+      "start": "10:30",
+      "title": "If I Go Will They Miss Me",
+      "place": "C.I.D",
+      "workId": "if-i-go-will-they-miss-me",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-07",
+      "start": "10:30",
+      "title": "Faye",
+      "place": "Morny 2",
+      "workId": "faye",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-07",
+      "start": "11:00",
+      "title": "Gremlins 2 : La nouvelle génération",
+      "place": "Casino",
+      "workId": "gremlins-2",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-07",
+      "start": "14:00",
+      "title": "Here I’m Alive",
+      "place": "C.I.D",
+      "workId": "here-im-alive",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-07",
+      "start": "15:00",
+      "title": "Méli-Mélo",
+      "place": "Casino",
+      "workId": "meli-melo",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-07",
+      "start": "15:00",
+      "title": "The Whale",
+      "place": "Morny 2",
+      "workId": "the-whale",
+      "category": "brendan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-07",
+      "start": "17:30",
+      "title": "The Last Day",
+      "place": "C.I.D",
+      "workId": "the-last-day",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-07",
+      "start": "17:30",
+      "title": "Mouse",
+      "place": "Casino",
+      "workId": "mouse",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-07",
+      "start": "17:30",
+      "title": "Bucks Harbor",
+      "place": "Morny 2",
+      "workId": "bucks-harbor",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-07",
+      "start": "20:00",
+      "title": "Mother Mary",
+      "place": "C.I.D",
+      "workId": "mother-mary",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-07",
+      "start": "20:00",
+      "title": "Diamond",
+      "place": "Morny 2",
+      "workId": "diamond",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-07",
+      "start": "20:30",
+      "title": "Pressure",
+      "place": "Casino",
+      "workId": "pressure",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "10:30",
+      "title": "A Prayer for the Dying",
+      "place": "C.I.D",
+      "workId": "a-prayer-for-the-dying",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-08",
+      "start": "10:30",
+      "title": "Bucks Harbor",
+      "place": "Morny 2",
+      "workId": "bucks-harbor",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "11:00",
+      "title": "Training Day",
+      "place": "Casino",
+      "workId": "training-day",
+      "category": "ethan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "14:00",
+      "title": "I’ll Be Gone in June",
+      "place": "C.I.D",
+      "workId": "i-ll-be-gone-in-june",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-08",
+      "start": "14:30",
+      "title": "She Said",
+      "place": "Morny 2",
+      "workId": "she-said",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "15:00",
+      "title": "If I Go Will They Miss Me",
+      "place": "Casino",
+      "workId": "if-i-go-will-they-miss-me",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-08",
+      "start": "17:00",
+      "title": "Butterfly Jam",
+      "place": "C.I.D",
+      "workId": "butterfly-jam",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "17:30",
+      "title": "Here I’m Alive",
+      "place": "Casino",
+      "workId": "here-im-alive",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-08",
+      "start": "17:30",
+      "title": "Dernsie: The Amazing Life of Bruce Dern",
+      "place": "Morny 2",
+      "workId": "dernsie-the-amazing-life-of-bruce-dern",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "20:00",
+      "title": "Mother Mary",
+      "place": "Morny 2",
+      "workId": "mother-mary",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "20:00",
+      "title": "The Last Pickpocket in New York",
+      "place": "C.I.D",
+      "workId": "the-last-pickpocket-in-new-york",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-08",
+      "start": "20:30",
+      "title": "The Last Day",
+      "place": "Casino",
+      "workId": "the-last-day",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-09",
+      "start": "10:00",
+      "title": "Dernsie: The Amazing Life of Bruce Dern",
+      "place": "Morny 2",
+      "workId": "dernsie-the-amazing-life-of-bruce-dern",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-09",
+      "start": "10:30",
+      "title": "Test",
+      "place": "C.I.D",
+      "workId": "test",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-09",
+      "start": "11:00",
+      "title": "Before Midnight",
+      "place": "Casino",
+      "workId": "before-midnight",
+      "category": "ethan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-09",
+      "start": "14:00",
+      "title": "Party USA",
+      "place": "C.I.D",
+      "workId": "party-usa",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-09",
+      "start": "15:00",
+      "title": "A Prayer for the Dying",
+      "place": "Casino",
+      "workId": "a-prayer-for-the-dying",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-09",
+      "start": "17:00",
+      "title": "Only What We Carry",
+      "place": "C.I.D",
+      "workId": "only-what-we-carry",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-09",
+      "start": "17:30",
+      "title": "I’ll Be Gone in June",
+      "place": "Casino",
+      "workId": "i-ll-be-gone-in-june",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-09",
+      "start": "18:00",
+      "title": "Gremlins, l’Amérique parasitée",
+      "place": "Morny 2",
+      "workId": "gremlins-doc",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-09",
+      "start": "19:30",
+      "title": "The Man I Love",
+      "place": "C.I.D",
+      "workId": "the-man-i-love",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-09",
+      "start": "20:00",
+      "title": "Butterfly Jam",
+      "place": "Morny 2",
+      "workId": "butterfly-jam",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-09",
+      "start": "20:30",
+      "title": "The Last Pickpocket in New York",
+      "place": "Casino",
+      "workId": "the-last-pickpocket-in-new-york",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-10",
+      "start": "10:30",
+      "title": "The Liberation of Rita Cooper",
+      "place": "C.I.D",
+      "workId": "the-liberation-of-rita-cooper",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-10",
+      "start": "11:00",
+      "title": "The Whale",
+      "place": "Casino",
+      "workId": "the-whale",
+      "category": "brendan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-10",
+      "start": "11:00",
+      "title": "Gremlins, l’Amérique parasitée",
+      "place": "Morny 2",
+      "workId": "gremlins-doc",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-10",
+      "start": "14:00",
+      "title": "Company",
+      "place": "C.I.D",
+      "workId": "company",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-10",
+      "start": "14:30",
+      "title": "Once Upon a Time in Harlem",
+      "place": "Morny 2",
+      "workId": "once-upon-a-time-in-harlem",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-10",
+      "start": "15:00",
+      "title": "Test",
+      "place": "Casino",
+      "workId": "test",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-10",
+      "start": "17:00",
+      "title": "L’Enfance d’un chef",
+      "place": "C.I.D",
+      "workId": "l-enfance-d-un-chef",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-10",
+      "start": "17:30",
+      "title": "Party USA",
+      "place": "Casino",
+      "workId": "party-usa",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-10",
+      "start": "17:30",
+      "title": "I’ll Be Gone in June",
+      "place": "Morny 2",
+      "workId": "i-ll-be-gone-in-june",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-10",
+      "start": "20:00",
+      "title": "The Accompanist",
+      "place": "C.I.D",
+      "workId": "the-accompanist",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-10",
+      "start": "20:00",
+      "title": "The Man I Love",
+      "place": "Morny 2",
+      "workId": "the-man-i-love",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-10",
+      "start": "20:30",
+      "title": "Only What We Carry",
+      "place": "Casino",
+      "workId": "only-what-we-carry",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "10:30",
+      "title": "Club Kid",
+      "place": "C.I.D",
+      "workId": "club-kid",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "11:00",
+      "title": "I’ll Be Gone in June",
+      "place": "Casino",
+      "workId": "i-ll-be-gone-in-june",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "11:00",
+      "title": "The Accompanist",
+      "place": "Morny 1",
+      "workId": "the-accompanist",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "11:00",
+      "title": "If I Go Will They Miss Me",
+      "place": "Morny 2",
+      "workId": "if-i-go-will-they-miss-me",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "15:00",
+      "title": "A Prayer for the Dying",
+      "place": "Casino",
+      "workId": "a-prayer-for-the-dying",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "15:00",
+      "title": "Killers of the Flower Moon",
+      "place": "Morny 3",
+      "workId": "killers-of-the-flower-moon",
+      "category": "brendan",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "14:00",
+      "title": "Teenage Sex and Death at Camp Miasma",
+      "place": "C.I.D",
+      "workId": "teenage-sex-and-death-at-camp-miasma",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "14:30",
+      "title": "Méli-Mélo",
+      "place": "Morny 2",
+      "workId": "meli-melo",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "17:00",
+      "title": "Where to Land",
+      "place": "C.I.D",
+      "workId": "where-to-land",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "17:00",
+      "title": "The Liberation of Rita Cooper",
+      "place": "Casino",
+      "workId": "the-liberation-of-rita-cooper",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "17:00",
+      "title": "Mouse",
+      "place": "Morny 2",
+      "workId": "mouse",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "19:30",
+      "title": "Bunker",
+      "place": "C.I.D",
+      "workId": "bunker",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "19:30",
+      "title": "Queen at Sea",
+      "place": "Morny 2",
+      "workId": "queen-at-sea",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "20:00",
+      "title": "Bunker",
+      "place": "Casino",
+      "workId": "bunker",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "20:30",
+      "title": "Where to Land",
+      "place": "Morny 3",
+      "workId": "where-to-land",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-11",
+      "start": "22:00",
+      "title": "Everybody Digs Bill Evans",
+      "place": "Morny 2",
+      "workId": "everybody-digs-bill-evans",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-11",
+      "start": "22:30",
+      "title": "Victorian Psycho",
+      "place": "Casino",
+      "workId": "victorian-psycho",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "09:00",
+      "title": "If I Go Will They Miss Me",
+      "place": "Casino",
+      "workId": "if-i-go-will-they-miss-me",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "09:30",
+      "title": "Party USA",
+      "place": "Morny 2",
+      "workId": "party-usa",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "10:00",
+      "title": "La Gradiva",
+      "place": "C.I.D",
+      "workId": "la-gradiva",
+      "category": "pov",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "11:00",
+      "title": "Company",
+      "place": "Casino",
+      "workId": "company",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "11:30",
+      "title": "Everybody Digs Bill Evans",
+      "place": "Morny 2",
+      "workId": "everybody-digs-bill-evans",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "14:00",
+      "title": "Club Kid",
+      "place": "Casino",
+      "workId": "club-kid",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "14:00",
+      "title": "Test",
+      "place": "Morny 2",
+      "workId": "test",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "14:30",
+      "title": "Stop! That! Train!",
+      "place": "C.I.D",
+      "workId": "stop-that-train",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "14:30",
+      "title": "The Big Short : Le casse du siècle",
+      "place": "Morny 3",
+      "workId": "the-big-short-le-casse-du-siecle",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "16:30",
+      "title": "Not a Pretty Picture",
+      "place": "Casino",
+      "workId": "not-a-pretty-picture",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "16:30",
+      "title": "Here I’m Alive",
+      "place": "Morny 2",
+      "workId": "here-im-alive",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "17:30",
+      "title": "Full Metal Jacket",
+      "place": "Morny 3",
+      "workId": "full-metal-jacket",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "19:00",
+      "title": "Burgundy",
+      "place": "C.I.D",
+      "workId": "burgundy",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "19:30",
+      "title": "Burgundy",
+      "place": "Casino",
+      "workId": "burgundy",
+      "category": "doc",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "19:30",
+      "title": "Company",
+      "place": "Morny 2",
+      "workId": "company",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "20:00",
+      "title": "Victorian Psycho",
+      "place": "Morny 3",
+      "workId": "victorian-psycho",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-12",
+      "start": "21:30",
+      "title": "The Liberation of Rita Cooper",
+      "place": "Morny 2",
+      "workId": "the-liberation-of-rita-cooper",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "22:00",
+      "title": "Party USA",
+      "place": "Casino",
+      "workId": "party-usa",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "09:00",
+      "title": "Queen at Sea",
+      "place": "Casino",
+      "workId": "queen-at-sea",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "09:00",
+      "title": "Mouse",
+      "place": "Morny 2",
+      "workId": "mouse",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "11:00",
+      "title": "Les Raisins de la colère",
+      "place": "Morny 3",
+      "workId": "les-raisins-de-la-colere",
+      "category": "250",
+      "qna": false
+    },
+    {
+      "date": "2026-09-13",
+      "start": "11:30",
+      "title": "A Prayer for the Dying",
+      "place": "Morny 2",
+      "workId": "a-prayer-for-the-dying",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "14:00",
+      "title": "Company",
+      "place": "Morny 2",
+      "workId": "company",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "14:00",
+      "title": "La Gradiva",
+      "place": "Morny 3",
+      "workId": "la-gradiva",
+      "category": "pov",
+      "qna": false
+    },
+    {
+      "date": "2026-09-13",
+      "start": "16:30",
+      "title": "Méli-Mélo",
+      "place": "Casino",
+      "workId": "meli-melo",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "17:00",
+      "title": "Stop! That! Train!",
+      "place": "Morny 3",
+      "workId": "stop-that-train",
+      "category": "premieres",
+      "qna": false
+    },
+    {
+      "date": "2026-09-13",
+      "start": "17:30",
+      "title": "Club Kid",
+      "place": "Morny 2",
+      "workId": "club-kid",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "18:30",
+      "title": "Here I’m Alive",
+      "place": "Casino",
+      "workId": "here-im-alive",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "19:30",
+      "title": "The Liberation of Rita Cooper",
+      "place": "Morny 3",
+      "workId": "the-liberation-of-rita-cooper",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-13",
+      "start": "20:00",
+      "title": "Test",
+      "place": "Morny 2",
+      "workId": "test",
+      "category": "competition",
+      "qna": true
+    },
+    {
+      "date": "2026-09-12",
+      "start": "11:00",
+      "title": "Monsieur Smith au Sénat",
+      "place": "Morny 3",
+      "workId": "monsieur-smith-au-senat",
+      "category": "250",
+      "qna": false
+    }
+  ],
+  "jury": [
+    {
+      "id": "2026-09-04-12-29-trajet-paris-deauville",
+      "date": "2026-09-04",
+      "start": "12:29",
+      "end": "14:42",
+      "title": "Trajet Paris → Deauville",
+      "place": "Gare Paris Saint-Lazare → Gare de Deauville",
+      "kind": "transport",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-04-15-00-check-in-hotel",
+      "date": "2026-09-04",
+      "start": "15:00",
+      "end": "15:30",
+      "title": "Check-in hôtel",
+      "place": "Hôtel Barrière Le Royal",
+      "kind": "hotel",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-04-19-00-ceremonie-d-ouverture",
+      "date": "2026-09-04",
+      "start": "19:00",
+      "end": "21:45",
+      "title": "Cérémonie d’ouverture",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "les-contrebandiers",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-04-22-00-diner-d-ouverture",
+      "date": "2026-09-04",
+      "start": "22:00",
+      "end": "23:00",
+      "title": "Dîner d’ouverture",
+      "place": "Casino Barrière Deauville · Salon des Ambassadeurs",
+      "kind": "jury",
+      "workId": null,
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-04-23-30-soiree-d-ouverture",
+      "date": "2026-09-04",
+      "start": "23:30",
+      "end": "04:00",
+      "title": "Soirée d’ouverture",
+      "place": "O² Sofa Bar",
+      "kind": "jury",
+      "workId": null,
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-05-09-30-reunion-d-accueil-du-jury-canal",
+      "date": "2026-09-05",
+      "start": "09:30",
+      "end": "09:50",
+      "title": "Réunion d’accueil du Jury CANAL+",
+      "place": "Hôtel Barrière Le Royal · Salon Cannes",
+      "kind": "jury",
+      "workId": null,
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-05-10-30-projection-queen-at-sea",
+      "date": "2026-09-05",
+      "start": "10:30",
+      "end": "13:01",
+      "title": "Projection : Queen at Sea",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "queen-at-sea",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-05-14-00-projection-everybody-digs-bill-evans",
+      "date": "2026-09-05",
+      "start": "14:00",
+      "end": "15:42",
+      "title": "Projection : Everybody Digs Bill Evans",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "everybody-digs-bill-evans",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-05-17-00-deauville-talent-award-brendan-fraser-pressure",
+      "date": "2026-09-05",
+      "start": "17:00",
+      "end": "18:40",
+      "title": "Deauville Talent Award Brendan Fraser + Pressure",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "pressure",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-05-19-30-deauville-rising-star-award-sophie-thatcher-l-invitation",
+      "date": "2026-09-05",
+      "start": "19:30",
+      "end": "21:17",
+      "title": "Deauville Rising-Star Award Sophie Thatcher + L’Invitation",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "l-invitation",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-06-10-30-projection-mouse",
+      "date": "2026-09-06",
+      "start": "10:30",
+      "end": "12:30",
+      "title": "Projection : Mouse",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "mouse",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-06-14-00-projection-meli-melo",
+      "date": "2026-09-06",
+      "start": "14:00",
+      "end": "15:43",
+      "title": "Projection : Méli-Mélo",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "meli-melo",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-07-10-30-projection-if-i-go-will-they-miss-me",
+      "date": "2026-09-07",
+      "start": "10:30",
+      "end": "12:01",
+      "title": "Projection : If I Go Will They Miss Me",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "if-i-go-will-they-miss-me",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-07-14-00-projection-here-i-m-alive",
+      "date": "2026-09-07",
+      "start": "14:00",
+      "end": "15:21",
+      "title": "Projection : Here I’m Alive",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "here-im-alive",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-08-10-30-projection-a-prayer-for-the-dying",
+      "date": "2026-09-08",
+      "start": "10:30",
+      "end": "12:05",
+      "title": "Projection : A Prayer for the Dying",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "a-prayer-for-the-dying",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-08-14-00-projection-i-ll-be-gone-in-june",
+      "date": "2026-09-08",
+      "start": "14:00",
+      "end": "16:05",
+      "title": "Projection : I’ll Be Gone in June",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "ill-be-gone-in-june",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-08-20-00-deauville-icon-award-faye-dunaway-the-last-pickpocket-in-new-york",
+      "date": "2026-09-08",
+      "start": "20:00",
+      "end": "21:28",
+      "title": "Deauville Icon Award Faye Dunaway + The Last Pickpocket in New York",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "the-last-pickpocket-in-new-york",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-09-10-30-projection-test",
+      "date": "2026-09-09",
+      "start": "10:30",
+      "end": "12:23",
+      "title": "Projection : Test",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "test",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-09-19-30-prix-du-roman-americain-lucien-barriere-2026-the-man-i-love",
+      "date": "2026-09-09",
+      "start": "19:30",
+      "end": "21:06",
+      "title": "Prix du roman américain Lucien-Barrière 2026 + The Man I Love",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "the-man-i-love",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-10-10-30-projection-the-liberation-of-rita-cooper",
+      "date": "2026-09-10",
+      "start": "10:30",
+      "end": "12:29",
+      "title": "Projection : The Liberation of Rita Cooper",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "the-liberation-of-rita-cooper",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-10-14-00-projection-company",
+      "date": "2026-09-10",
+      "start": "14:00",
+      "end": "15:30",
+      "title": "Projection : Company",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "company",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-10-20-00-deauville-icon-award-susan-sarandon-the-accompanist",
+      "date": "2026-09-10",
+      "start": "20:00",
+      "end": "21:50",
+      "title": "Deauville Icon Award Susan Sarandon + The Accompanist",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "the-accompanist",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-11-10-30-projection-club-kid",
+      "date": "2026-09-11",
+      "start": "10:30",
+      "end": "12:36",
+      "title": "Projection : Club Kid",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "club-kid",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-11-16-00-deliberations-du-jury-canal",
+      "date": "2026-09-11",
+      "start": "16:00",
+      "end": "17:30",
+      "title": "Délibérations du Jury CANAL+",
+      "place": "Hôtel Barrière Le Royal · Salon Cannes",
+      "kind": "jury",
+      "workId": null,
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-12-19-00-ceremonie-du-palmares-burgundy",
+      "date": "2026-09-12",
+      "start": "19:00",
+      "end": "21:45",
+      "title": "Cérémonie du palmarès + Burgundy",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "jury",
+      "workId": "burgundy",
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-12-22-00-diner-de-cloture",
+      "date": "2026-09-12",
+      "start": "22:00",
+      "end": "23:00",
+      "title": "Dîner de clôture",
+      "place": "Casino Barrière Deauville · Salon des Ambassadeurs",
+      "kind": "jury",
+      "workId": null,
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-12-23-30-soiree-de-cloture",
+      "date": "2026-09-12",
+      "start": "23:30",
+      "end": "04:00",
+      "title": "Soirée de clôture",
+      "place": "Villa Le Cercle",
+      "kind": "jury",
+      "workId": null,
+      "description": "",
+      "locked": true
+    },
+    {
+      "id": "2026-09-13-12-12-trajet-retour-deauville-paris",
+      "date": "2026-09-13",
+      "start": "12:12",
+      "end": "14:29",
+      "title": "Trajet retour Deauville → Paris",
+      "place": "Gare de Deauville → Gare Paris Saint-Lazare",
+      "kind": "transport",
+      "workId": null,
+      "description": "",
+      "locked": false
+    }
+  ],
+  "events": [
+    {
+      "id": "2026-09-05-11-30-inauguration-de-la-cabine-de-plage-ethan-hawke",
+      "date": "2026-09-05",
+      "start": "11:30",
+      "end": "12:00",
+      "title": "Inauguration de la cabine de plage Ethan Hawke",
+      "place": "Les Planches",
+      "kind": "event",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-05-15-00-inauguration-de-la-cabine-de-plage-brendan-fraser",
+      "date": "2026-09-05",
+      "start": "15:00",
+      "end": "15:30",
+      "title": "Inauguration de la cabine de plage Brendan Fraser",
+      "place": "Les Planches",
+      "kind": "event",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-08-15-30-inauguration-de-la-cabine-de-plage-faye-dunaway",
+      "date": "2026-09-08",
+      "start": "15:30",
+      "end": "16:00",
+      "title": "Inauguration de la cabine de plage Faye Dunaway",
+      "place": "Les Planches",
+      "kind": "event",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-10-15-00-inauguration-de-la-cabine-de-plage-susan-sarandon",
+      "date": "2026-09-10",
+      "start": "15:00",
+      "end": "15:30",
+      "title": "Inauguration de la cabine de plage Susan Sarandon",
+      "place": "Les Planches",
+      "kind": "event",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-09-16-00-rencontre-avec-siri-hustvedt-dedicaces-ghost-stories",
+      "date": "2026-09-09",
+      "start": "16:00",
+      "end": "17:00",
+      "title": "Rencontre avec Siri Hustvedt & dédicaces « Ghost Stories »",
+      "place": "Les Franciscaines",
+      "kind": "event",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-12-14-30-carte-blanche-mon-cinema-americain-a-catherine-deneuve",
+      "date": "2026-09-12",
+      "start": "14:30",
+      "end": "16:00",
+      "title": "Carte blanche « Mon cinéma américain » à Catherine Deneuve",
+      "place": "Les Franciscaines",
+      "kind": "event",
+      "workId": null,
+      "description": "",
+      "locked": false
+    },
+    {
+      "id": "2026-09-13-grand-prix",
+      "date": "2026-09-13",
+      "start": "14:00",
+      "end": "14:30",
+      "title": "Grand Prix 2026",
+      "place": "Casino",
+      "kind": "award",
+      "workId": null,
+      "description": "Remise du Grand Prix 2026.",
+      "locked": false
+    },
+    {
+      "id": "2026-09-13-revelation",
+      "date": "2026-09-13",
+      "start": "11:30",
+      "end": "12:00",
+      "title": "Prix de la Révélation 2026",
+      "place": "Casino",
+      "kind": "award",
+      "workId": null,
+      "description": "Remise du Prix de la Révélation 2026.",
+      "locked": false
+    },
+    {
+      "id": "2026-09-13-public",
+      "date": "2026-09-13",
+      "start": "20:30",
+      "end": "21:00",
+      "title": "Prix du Public de la Ville de Deauville 2026",
+      "place": "Casino",
+      "kind": "award",
+      "workId": null,
+      "description": "Remise du Prix du Public de la Ville de Deauville 2026.",
+      "locked": false
+    },
+    {
+      "id": "2026-09-05-1930-prix-voyageurs",
+      "date": "2026-09-05",
+      "start": "19:30",
+      "end": "19:45",
+      "title": "Remise du Prix des Voyageurs Air France à Rebecca Zlotowski",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "award",
+      "workId": null,
+      "description": "Prix des Voyageurs Air France 2026.",
+      "locked": false
+    },
+    {
+      "id": "2026-09-11-1930-patrick-schwarzenegger",
+      "date": "2026-09-11",
+      "start": "19:30",
+      "end": "20:00",
+      "title": "Remise du Deauville Rising-Star Award à Patrick Schwarzenegger",
+      "place": "C.I.D · Auditorium Michel d’Ornano",
+      "kind": "award",
+      "workId": "bunker",
+      "description": "La cérémonie est suivie de la projection de Bunker.",
+      "locked": false
+    }
+  ],
+  "aliases": {
+    "Gremlins, l’Amérique parasitée": [
+      "American Nightmare",
+      "Gremlins, l’Amérique parasitée"
+    ],
+    "Gremlins 2 : La nouvelle génération": [
+      "Gremlins 2: The New Batch",
+      "Gremlins 2 : La nouvelle génération"
+    ],
+    "Once Upon a Time in Harlem": [
+      "Once Upon a Time (In) Harlem",
+      "Once Upon a Time in Harlem"
+    ],
+    "Monsieur Smith au Sénat": [
+      "Mr Smith au Sénat",
+      "Monsieur Smith au Sénat"
+    ]
+  },
+  "juryPeople": {
+    "jury": [
+      {
+        "name": "Roschdy Zem",
+        "role": "Président",
+        "profile": "Comédien, réalisateur & scénariste"
+      },
+      {
+        "name": "Simon Abkarian",
+        "profile": "Comédien, dramaturge & metteur en scène"
+      },
+      {
+        "name": "Camille Chamoux",
+        "profile": "Comédienne, autrice & scénariste"
+      },
+      {
+        "name": "Cécile de France",
+        "profile": "Comédienne"
+      },
+      {
+        "name": "Euzhan Palcy",
+        "profile": "Réalisatrice, productrice & scénariste"
+      },
+      {
+        "name": "Raphaël Personnaz",
+        "profile": "Comédien"
+      },
+      {
+        "name": "Lola Quivoron",
+        "profile": "Réalisatrice & scénariste"
+      },
+      {
+        "name": "Mohamed Mbougar Sarr",
+        "profile": "Écrivain"
+      },
+      {
+        "name": "Laura Smet",
+        "profile": "Comédienne, réalisatrice & scénariste"
+      }
+    ],
+    "revelation": [
+      {
+        "name": "Lio",
+        "role": "Présidente",
+        "profile": "Chanteuse & comédienne"
+      },
+      {
+        "name": "Noée Abita",
+        "profile": "Comédienne"
+      },
+      {
+        "name": "Marion Barbeau",
+        "profile": "Comédienne & danseuse"
+      },
+      {
+        "name": "Marion Clavel",
+        "profile": "Comédienne"
+      },
+      {
+        "name": "Sayyid El Alami",
+        "profile": "Comédien & réalisateur"
+      }
+    ]
+  }
+}

@@ -1,384 +1,224 @@
-/* Deauville 2026 — V1.8.1
-   V1.8.1 : stabilisation du modèle temporel et du moteur de compatibilité ; conservation des corrections planning/navigation. pour tout le programme issu du PDF Jury,
-   sans code couleur rouge ; films Jury estampillés « Compétition ».
+/* Deauville 2026 — V2.0.0
+   Reconstruction from official Festival Guide + Jury CANAL+ PDF.
+   The data model separates works, sessions, public events and locked Jury items.
 */
-const PROGRAM = [{"date":"2026-09-04","time":"19:00","place":"C.I.D","typ":"Cérémonie","title":"Cérémonie d'ouverture","person":"Ethan Hawke / Sofiane Pamart / Roschdy Zem","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-04","time":"22:00","place":"Casino Barrière - Salon des Ambassadeurs","typ":"Dîner","title":"Dîner d'ouverture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-04","time":"23:30","place":"O² Sofa Bar","typ":"Soirée","title":"Soirée d'ouverture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-05","time":"09:00","place":"Casino","typ":"Film","title":"Before Midnight","person":"Richard Linklater","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-05","time":"10:00","place":"Morny 2","typ":"Film","title":"Zero Dark Thirty","person":"Kathryn Bigelow","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"10:30","place":"C.I.D","typ":"Film","title":"Queen at Sea","person":"Lance Hammer","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-05","time":"11:00","place":"Morny 3","typ":"Film","title":"Harvey Milk","person":"Gus Van Sant","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"11:30","place":"Casino","typ":"Film","title":"Once upon a time in Harlem","person":"David Greaves, William Greaves","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-05","time":"11:30","place":"Autres lieux","typ":"Cérémonie","title":"Inauguration de la cabine de plage | Ethan Hawke","person":"Ethan Hawke","cat":"Cérémonie","stat":"Libre"},{"date":"2026-09-05","time":"14:00","place":"C.I.D","typ":"Film","title":"Everybody Digs Bill Evans","person":"Grant Gee","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-05","time":"14:00","place":"Casino","typ":"Film","title":"Les Contrebandiers de Padraic McKinley","person":"Padraic McKinley","cat":"Premières / DTA Ethan Hawke","stat":"Libre"},{"date":"2026-09-05","time":"15:00","place":"Morny 2","typ":"Film","title":"Docteur Folamour","person":"Stanley Kubrick","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"15:00","place":"Morny 3","typ":"Film","title":"Il était une fois en Amérique","person":"Sergio Leone","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"15:00","place":"Autres lieux","typ":"Cérémonie","title":"Inauguration de la cabine de plage | Brendan Fraser","person":"Brendan Fraser","cat":"Cérémonie","stat":"Libre"},{"date":"2026-09-05","time":"16:30","place":"Casino","typ":"Film","title":"Bucks Harbor","person":"Pete Muller","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-05","time":"17:00","place":"C.I.D","typ":"Cérémonie + film","title":"Deauville Talent Award Brendan Fraser + Pressure","person":"Anthony Maras","cat":"Premières / DTA Brendan Fraser","stat":"FIXE JURY"},{"date":"2026-09-05","time":"17:30","place":"Morny 2","typ":"Film","title":"Here – Les Plus belles années de notre vie","person":"Robert Zemeckis","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-05","time":"18:00","place":"Morny 3","typ":"Film","title":"La Momie","person":"Stephen Sommers","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-05","time":"18:30","place":"Casino","typ":"Film","title":"High Art","person":"Lisa Cholodenko","cat":"Premières","stat":"Libre"},{"date":"2026-09-05","time":"19:30","place":"C.I.D","typ":"Cérémonie + film","title":"Deauville Rising-Star Award Sophie Thatcher + L'Invitation","person":"Olivia Wilde","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-05","time":"20:00","place":"Morny 2","typ":"Film","title":"Pressure","person":"Anthony Maras","cat":"Premières / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-05","time":"20:00","place":"Morny 3","typ":"Film","title":"La Momie","person":"Stephen Sommers","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-05","time":"20:30","place":"Casino","typ":"Film","title":"L'Invitation","person":"Olivia Wilde","cat":"Premières","stat":"Libre"},{"date":"2026-09-05","time":"22:00","place":"C.I.D","typ":"Film","title":"Her Private Hell","person":"Nicolas Winding Refn","cat":"Premières","stat":"Libre"},{"date":"2026-09-06","time":"10:00","place":"Casino","typ":"Film","title":"Dernsie : The Amazing Life of Bruce Dern","person":"Mike Mendez","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"10:00","place":"Morny 2","typ":"Film","title":"Selma","person":"Ava DuVernay","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"10:00","place":"Morny 3","typ":"Film","title":"La Porte du paradis","person":"Michael Cimino","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"10:30","place":"C.I.D","typ":"Film","title":"Mouse","person":"Kelly O’Sullivan, Alex Thompson","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-06","time":"14:00","place":"C.I.D","typ":"Film","title":"Méli-Mélo","person":"Leah Nelson","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-06","time":"14:30","place":"Morny 3","typ":"Film","title":"Django Unchained","person":"Quentin Tarantino","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"15:00","place":"Casino","typ":"Film","title":"Gremlins, l’Amérique parasitée","person":"Adrien Dénouette","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"15:00","place":"Morny 2","typ":"Film","title":"Once upon a time in Harlem","person":"David Greaves, William Greaves","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"16:30","place":"Casino","typ":"Film","title":"Faye","person":"Laurent Bouzereau","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-06","time":"17:00","place":"C.I.D","typ":"Film","title":"L’île des souvenirs","person":"Joel Crawford, Januel P. Mercado","cat":"Premières / Jeune public","stat":"Libre"},{"date":"2026-09-06","time":"17:30","place":"Morny 2","typ":"Film","title":"L'Invitation","person":"Olivia Wilde","cat":"Premières","stat":"Libre"},{"date":"2026-09-06","time":"18:00","place":"Morny 3","typ":"Film","title":"La Ruée vers l’Or","person":"Charlie Chaplin","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-06","time":"18:30","place":"Casino","typ":"Film","title":"Everybody Digs Bill Evans","person":"Grant Gee","cat":"Compétition","stat":"Libre"},{"date":"2026-09-06","time":"20:00","place":"Morny 2","typ":"Film","title":"Les Contrebandiers","person":"Padraic McKinley","cat":"Premières / DTA Ethan Hawke","stat":"Libre"},{"date":"2026-09-06","time":"20:00","place":"Morny 3","typ":"Film","title":"Bienvenue à Gattaca","person":"Andrew Niccol","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-06","time":"20:30","place":"Casino","typ":"Film","title":"Queen at Sea","person":"Lance Hammer","cat":"Compétition","stat":"Libre"},{"date":"2026-09-07","time":"10:30","place":"C.I.D","typ":"Film","title":"If I Go Will They Miss Me","person":"Walter Thompson-Hernández","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-07","time":"10:30","place":"Morny 2","typ":"Film","title":"Faye","person":"Laurent Bouzereau","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-07","time":"11:00","place":"Casino","typ":"Film","title":"Gremlins 2: The New Batch","person":"Joe Dante","cat":"Premières","stat":"Libre"},{"date":"2026-09-07","time":"14:00","place":"C.I.D","typ":"Film","title":"Here I'm Alive","person":"Joshua Z. Weinstein","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-07","time":"15:00","place":"Casino","typ":"Film","title":"Tangles","person":"Leah Nelson","cat":"Compétition","stat":"Libre"},{"date":"2026-09-07","time":"15:00","place":"Morny 2","typ":"Film","title":"The Whale","person":"Darren Aronofsky","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-07","time":"17:30","place":"C.I.D","typ":"Film","title":"The Last Day","person":"Rachel Rose","cat":"Premières","stat":"Libre"},{"date":"2026-09-07","time":"17:30","place":"Casino","typ":"Film","title":"Mouse","person":"Kelly O’Sullivan, Alex Thompson","cat":"Compétition","stat":"Libre"},{"date":"2026-09-07","time":"20:00","place":"C.I.D","typ":"Film","title":"Mother Mary","person":"David Lowery","cat":"Premières","stat":"Libre"},{"date":"2026-09-07","time":"20:00","place":"Morny 2","typ":"Film","title":"Diamond","person":"Andy Garcia","cat":"Premières / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-07","time":"20:30","place":"Casino","typ":"Film","title":"Pressure","person":"Anthony Maras","cat":"Premières / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-08","time":"10:30","place":"C.I.D","typ":"Film","title":"A Prayer for the Dying","person":"Dara Van Dusen","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-08","time":"10:30","place":"Morny 2","typ":"Film","title":"Bucks Harbor","person":"Pete Muller","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-08","time":"11:00","place":"Casino","typ":"Film","title":"Training Day","person":"Antoine Fuqua","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-08","time":"14:00","place":"C.I.D","typ":"Film","title":"I'll Be Gone In June","person":"Katharina Rivilis","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-08","time":"14:30","place":"Morny 2","typ":"Film","title":"She Said","person":"Maria Schrader","cat":"Once Upon a Time (in) America","stat":"Libre"},{"date":"2026-09-08","time":"15:00","place":"Casino","typ":"Film","title":"If I Go Will They Miss Me","person":"Walter Thompson-Hernández","cat":"Compétition","stat":"Libre"},{"date":"2026-09-08","time":"17:00","place":"C.I.D","typ":"Film","title":"Butterfly Jam","person":"Kantemir Balagov","cat":"Premières","stat":"Libre"},{"date":"2026-09-08","time":"20:00","place":"C.I.D","typ":"Cérémonie","title":"Deauville Icon Award Faye Dunaway + The Only Living Pickpocket in New York","person":"Noah Segan","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-08","time":"20:00","place":"Morny 2","typ":"Film","title":"Mother Mary","person":"David Lowery","cat":"Premières","stat":"Libre"},{"date":"2026-09-09","time":"10:30","place":"C.I.D","typ":"Film","title":"Test","person":"Sam McConnell","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-09","time":"11:00","place":"Casino","typ":"Film","title":"Before Midnight","person":"Richard Linklater","cat":"DTA | Ethan Hawke","stat":"Libre"},{"date":"2026-09-09","time":"14:00","place":"C.I.D","typ":"Film","title":"Party USA","person":"Jared Sprouse","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-09","time":"14:00","place":"Morny 2","typ":"Film","title":"Killers of the Flower Moon","person":"Martin Scorsese","cat":"Once Upon a Time (in) America / DTA Brendan Fraser","stat":"Libre"},{"date":"2026-09-09","time":"15:00","place":"Casino","typ":"Film","title":"A Prayer for the Dying","person":"Dara Van Dusen","cat":"Compétition","stat":"Libre"},{"date":"2026-09-09","time":"16:00","place":"Autres lieux","typ":"Cérémonie","title":"Rencontre & dédicace | Siri Hustvedt","person":"Siri Hustvedt","cat":"Rencontre","stat":"Libre"},{"date":"2026-09-09","time":"17:00","place":"C.I.D","typ":"Film","title":"Only What We Carry","person":"Jaime Adams","cat":"Premières","stat":"Libre"},{"date":"2026-09-09","time":"17:30","place":"Casino","typ":"Film","title":"I'll Be Gone In June","person":"Katharina Rivilis","cat":"Compétition","stat":"Libre"},{"date":"2026-09-09","time":"18:00","place":"Morny 2","typ":"Film","title":"Gremlins, l’Amérique parasitée","person":"Adrien Dénouette","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-09","time":"19:30","place":"C.I.D","typ":"Cérémonie","title":"Prix du roman américain Lucien-Barrière + The Man I Love","person":"Ira Sachs","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-10","time":"10:30","place":"C.I.D","typ":"Film","title":"The Liberation","person":"Guy Nattiv","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-10","time":"11:00","place":"Casino","typ":"Film","title":"The Whale","person":"Darren Aronofsky","cat":"DTA | Brendan Fraser","stat":"Libre"},{"date":"2026-09-10","time":"11:00","place":"Morny 2","typ":"Film","title":"Gremlins, l’Amérique parasitée","person":"Adrien Dénouette","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-10","time":"14:00","place":"C.I.D","typ":"Film","title":"Company","person":"Casey Affleck","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-10","time":"14:30","place":"Morny 2","typ":"Film","title":"Once Upon a Time in Harlem","person":"David Greaves, William Greaves","cat":"American Doc Stories","stat":"Libre"},{"date":"2026-09-10","time":"15:00","place":"Casino","typ":"Film","title":"Test","person":"Sam McConnell","cat":"Compétition","stat":"Libre"},{"date":"2026-09-10","time":"20:00","place":"C.I.D","typ":"Cérémonie","title":"Deauville Icon Award Susan Sarandon + The Accompanist","person":"Zach Woods","cat":"Premières / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-11","time":"10:30","place":"C.I.D","typ":"Film","title":"Club Kid","person":"Jordan Firstman","cat":"Compétition","stat":"FIXE JURY"},{"date":"2026-09-11","time":"11:00","place":"Casino","typ":"Film","title":"I'll Be Gone In June","person":"Katharina Rivilis","cat":"Compétition","stat":"Libre"},{"date":"2026-09-11","time":"11:00","place":"Morny 2","typ":"Film","title":"If I Go Will They Miss Me","person":"Walter Thompson-Hernández","cat":"Compétition","stat":"Libre"},{"date":"2026-09-11","time":"11:00","place":"Morny 3","typ":"Film","title":"The Accompanist","person":"Zach Woods","cat":"Premières","stat":"Libre"},{"date":"2026-09-11","time":"14:00","place":"C.I.D","typ":"Film","title":"Teenage Sex and Death at Camp Miasma","person":"Jane Schoenbrun","cat":"Premières","stat":"Libre"},{"date":"2026-09-11","time":"16:00","place":"Hôtel Barrière Le Royal - Salon Cannes","typ":"Cérémonie","title":"Délibérations du Jury Canal+","person":"Jérôme Lasserre présent","cat":"Jury Canal+","stat":"FIXE JURY"},{"date":"2026-09-11","time":"17:00","place":"C.I.D","typ":"Film","title":"Where to Land","person":"Hal Hartley","cat":"Premières","stat":"Libre"},{"date":"2026-09-12","time":"10:00","place":"C.I.D","typ":"Film","title":"La Gradiva","person":"Marine Atlan","cat":"Prix d'Ornano-Valenti","stat":"Libre"},{"date":"2026-09-12","time":"11:00","place":"Casino","typ":"Film","title":"Company","person":"Casey Affleck","cat":"Compétition","stat":"Libre"},{"date":"2026-09-12","time":"14:30","place":"Autres lieux","typ":"Cérémonie","title":"Carte Blanche à Catherine Deneuve « Mon cinéma Américain »","person":"Catherine Deneuve","cat":"Rencontre","stat":"Libre"},{"date":"2026-09-12","time":"19:00","place":"C.I.D","typ":"Cérémonie","title":"Cérémonie du palmarès + Burgundy","person":"Michael Dweck, Gregory Kershaw","cat":"American Doc Stories / Cérémonie","stat":"FIXE JURY"},{"date":"2026-09-12","time":"22:00","place":"Casino Barrière - Salon des Ambassadeurs","typ":"Film","title":"Dîner de clôture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-12","time":"23:30","place":"Villa Le Cercle","typ":"Film","title":"Soirée de clôture","person":"—","cat":"Événement","stat":"FIXE JURY"},{"date":"2026-09-13","time":"09:00","place":"Casino","typ":"Film","title":"Queen at Sea","person":"Lance Hammer","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"09:00","place":"Morny 2","typ":"Film","title":"Mouse","person":"Kelly O’Sullivan, Alex Thompson","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"11:30","place":"Casino","typ":"Cérémonie","title":"Prix de la Révélation 2026","person":"—","cat":"Palmarès","stat":"Libre"},{"date":"2026-09-13","time":"14:00","place":"Casino","typ":"Cérémonie","title":"Grand Prix 2026","person":"—","cat":"Palmarès","stat":"Libre"},{"date":"2026-09-13","time":"14:00","place":"Morny 2","typ":"Film","title":"Company","person":"Casey Affleck","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"17:30","place":"Morny 2","typ":"Film","title":"Club Kid","person":"Jordan Firstman","cat":"Compétition","stat":"Libre"},{"date":"2026-09-13","time":"20:30","place":"Casino","typ":"Cérémonie","title":"Prix du Public de la ville de Deauville 2026","person":"—","cat":"Palmarès","stat":"Libre"},{"date":"2026-09-13","time":"12:12","end":"14:29","place":"Gare de Deauville → Paris Saint-Lazare","typ":"Trajet retour","title":"Trajet retour","person":"Transport","cat":"Transport","stat":"FIXE JURY"}];
-const DURATIONS = {"Queen at Sea":121,"Everybody Digs Bill Evans":99,"Mouse":100,"Méli-Mélo":111,"If I Go Will They Miss Me":110,"I’ll Be Gone In June":125,"A Prayer for the Dying":121,"Company":125,"The Liberation":123,"The Liberation of Rita Cooper":123,"Test":119,"Party USA":119,"Club Kid":131,"The Childhood of a Leader":115,"The Whale":117,"Gremlins, an American Nightmare":90,"Gremlins, l’Amérique parasitée":90,"Once Upon a Time in Harlem":101,"The Man I Love":100,"The Man I love":100,"Only What We Carry":105};
-PROGRAM.forEach(p=>{if(DURATIONS[p.title])p.duration=DURATIONS[p.title]});
-// Les deux rendez-vous de clôture sont des événements, pas des fiches film.
-PROGRAM.forEach(p=>{if(p.title==="Dîner de clôture")p.typ="Dîner";if(p.title==="Soirée de clôture")p.typ="Soirée"});
+(() => {
+  'use strict';
+  const DATA = window.DEAUVILLE_DATA;
+  const DAYS = DATA.days;
+  const WORKS = DATA.works;
+  const SESSIONS = DATA.sessions;
+  const EVENTS = DATA.events;
+  const JURY = DATA.jury;
+  const WORK_BY_ID = new Map(WORKS.map(w => [w.id, w]));
+  const WORK_ALIASES = new Map();
+  WORKS.forEach(w => [w.title, ...(w.aliases || [])].forEach(a => WORK_ALIASES.set(normalize(a), w.id)));
 
-const JURY=[
-{"date":"2026-09-04","s":"19:00","e":"21:45","title":"Cérémonie d'ouverture","place":"C.I.D","cat":"Événement"},
-{"date":"2026-09-04","s":"22:00","e":"23:15","title":"Dîner d'ouverture","place":"Casino Barrière - Salon des Ambassadeurs","cat":"Événement"},
-{"date":"2026-09-04","s":"23:30","e":"24:30","title":"Soirée d'ouverture","place":"O² Sofa Bar","cat":"Événement"},
-{"date":"2026-09-05","s":"09:30","e":"09:50","title":"Réunion d'accueil du jury","place":"Le Royal — Salon Cannes","cat":"Jury"},
-{"date":"2026-09-05","s":"10:30","e":"13:01","title":"Queen at Sea","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-05","s":"14:00","e":"16:12","title":"Everybody Digs Bill Evans","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-05","s":"17:00","e":"19:00","title":"Pressure + événement Brendan Fraser","place":"C.I.D","cat":"Jury"},
-{"date":"2026-09-05","s":"19:30","e":"21:30","title":"L'Invitation + événement Sophie Thatcher","place":"C.I.D","cat":"Jury"},
-{"date":"2026-09-05","s":"22:00","e":"23:00","title":"Dîner d'ouverture","place":"Casino Barrière","cat":"Événement"},
-{"date":"2026-09-06","s":"10:30","e":"13:00","title":"Mouse","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-06","s":"14:00","e":"16:13","title":"Méli-Mélo","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-07","s":"10:30","e":"12:31","title":"If I Go Will They Miss Me","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-07","s":"14:00","e":"15:51","title":"Here I'm Alive","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-08","s":"10:30","e":"12:35","title":"A Prayer for the Dying","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-08","s":"14:00","e":"16:35","title":"I'll Be Gone In June","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-08","s":"20:00","e":"21:50","title":"The Only Living Pickpocket in New York + Deauville Icon Award Faye Dunaway","place":"C.I.D","cat":"Cérémonie"},
-{"date":"2026-09-09","s":"10:30","e":"12:53","title":"Test","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-09","s":"14:00","e":"15:59","title":"Party USA","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-09","s":"19:30","e":"21:20","title":"The Man I Love + Prix du roman américain Lucien-Barrière","place":"C.I.D","cat":"Cérémonie"},
-{"date":"2026-09-10","s":"10:30","e":"12:35","title":"The Liberation","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-10","s":"14:00","e":"16:05","title":"Company","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-10","s":"20:00","e":"22:10","title":"The Accompanist + Deauville Icon Award Susan Sarandon","place":"C.I.D","cat":"Cérémonie"},
-{"date":"2026-09-11","s":"10:30","e":"12:41","title":"Club Kid","place":"C.I.D","cat":"Compétition"},
-{"date":"2026-09-11","s":"16:00","e":"18:00","title":"Délibérations du Jury Canal+","place":"Hôtel Barrière Le Royal - Salon Cannes","cat":"Jury"},
-{"date":"2026-09-12","s":"19:00","e":"21:45","title":"Cérémonie du palmarès + Burgundy","place":"C.I.D","cat":"Cérémonie"},
-{"date":"2026-09-12","s":"22:00","e":"23:00","title":"Dîner de clôture","place":"Casino Barrière - Salon des Ambassadeurs","cat":"Événement"},
-{"date":"2026-09-12","s":"23:30","e":"24:00","title":"Soirée de clôture","place":"Villa Le Cercle","cat":"Événement"},
-{"date":"2026-09-13","s":"12:12","e":"14:29","title":"Trajet retour","place":"Gare de Deauville → Paris Saint-Lazare","cat":"Transport"}
-];
+  const state = {
+    day: defaultDay(),
+    view: 'planning',
+    filter: 'all',
+    search: '',
+    wishes: load('wishes', []),
+    seen: load('seen', []),
+    planned: load('planned', []),
+    notes: load('notes', {}),
+    modalContext: null
+  };
 
-const FILM_DATA={
-"a prayer for the dying":{synopsis:"Au lendemain de la guerre de Sécession dans le Wisconsin, Jacob Hansen, vétéran, entretient l’espoir d’une nouvelle vie dans la bourgade de Friendship. Mais une épidémie sème soudainement le chaos et transforme l’espoir en cauchemar. Jacob, à la fois shérif, croque-mort et pasteur de la ville, doit se battre pour sauver la communauté, sa famille et son âme.",year:2026,duration:95,cast:"Johnny Flynn, John C. Reilly, Kristine Kujath Thorp",country:"Norvège, Royaume-Uni, Suède",url:"https://www.festival-deauville.com/films/a-prayer-for-the-dying/"},
-"club kid":{synopsis:"Peter, un organisateur de soirées branchées à New York au mode de vie aussi effréné qu’insouciant, voit son existence bouleversée lorsqu’Arlo, le fils de 10 ans dont il ignorait l’existence, frappe un jour à sa porte. Dépassé par ce rôle de père qu’il n’avait jamais envisagé, il tisse peu à peu avec lui un lien inattendu et profond.",year:2026,duration:126,cast:"Jordan Firstman, Reggie Absolom, Diego Calva, Cara Delevingne",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/club-kid/"},
-"company":{synopsis:"Par une nuit d’hiver, une mystérieuse voyageuse conte une histoire qui traverse les générations et unit les destins de trois âmes meurtries, déchirées entre le désir de vengeance et le pardon.",year:2026,duration:95,cast:"Nick Nolte, Ben Mendelsohn, Adelaide Clemens, Scoot Mcnairy, Emily Alyn Lind, Caylee Cowan, Atticus Affleck, Indiana Affleck",country:"Canada, États-Unis d’Amérique, Émirats arabes unis",url:"https://www.festival-deauville.com/films/company/"},
-"everybody digs bill evans":{synopsis:"Juin 1961, New York : le légendaire pianiste de jazz Bill Evans a trouvé sa voix musicale et créé le trio parfait. Une résidence au Village Vanguard culmine avec l’enregistrement en direct de deux grands disques. Dix jours plus tard, Scott LaFaro meurt dans un accident de voiture.",year:2026,duration:102,cast:"Anders Danielsen Lie, Bill Pullman, Laurie Metcalf, Barry Ward, Valene Kane, Katie Mcgrath",country:"États-Unis d’Amérique, Royaume-Uni, Irlande",url:"https://www.festival-deauville.com/films/everybody-digs-bill-evans/"},
-"here i’m alive":{synopsis:"Le temps d’une nuit à New York, migrants, travailleuses du sexe, idéalistes et laissés-pour-compte errent dans les bas-fonds numériques de la ville, en quête d’une connexion humaine dans un monde où ils n’ont pas droit de cité.",year:2026,duration:81,cast:"Cheyenne Gallagher, Eddie Torrenegra, Caleb Zuzga, Krystaly Figueroa, Emira D’spain",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/here-im-alive/"},
-"i’ll be gone in june":{synopsis:"Une étudiante allemande débarque dans le désert du Nouveau-Mexique pour une année d’échange. Elle pensait trouver l’Amérique de ses rêves. À la place, elle découvre un pays inquiet, un amour fragile et cette vérité que chaque génération finit par rencontrer : le monde que l’on nous promet n’est jamais celui qu’on trouve.",year:2026,duration:125,cast:"Naomi Cosma, David Flores, Bianca Dumais, Rebecca Schulz",country:"États-Unis d’Amérique, Allemagne",url:"https://www.festival-deauville.com/films/ill-be-gone-in-june/"},
-"if i go will they miss me":{synopsis:"Du haut de ses douze ans, Lil Ant transforme son quartier populaire, situé sous un couloir aérien de l’aéroport de Los Angeles, en une mythologie vivante où les siens deviennent des dieux et le ciel un ballet incessant de départs. En quête d’un lien avec son père, il trouve auprès de sa communauté de quoi réconcilier mythe et réalité.",year:2026,duration:91,cast:"Danielle Brooks, J. Alphonse Nicholson",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/if-i-go-will-they-miss-me/"},
-"méli-mélo":{synopsis:"San Francisco, années 90. Sarah a une vie bien à elle. Mais quand sa mère commence à perdre la mémoire, elle revient dans la maison de son enfance.",year:2026,duration:103,cast:"Julia Louis-Dreyfus, Abbi Jacobson, Bryan Cranston, Beanie Feldstein, Seth Rogen, Samira Wiley",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/meli-melo/"},
-"the liberation of rita cooper":{synopsis:"Années 80, New Jersey. Malmenée par un quotidien épuisant et un passé traumatique, Rita découvre enfin la sérénité en rencontrant la fascinante Ricky, à la tête d’une communauté de femmes. Guidée par leurs croyances sectaires, Rita se laisse doucement séduire. Mais lorsque ses deux filles tentent de la raisonner, Rita doit choisir entre sa liberté retrouvée et la vie qu’elle a laissée derrière elle.",year:2026,url:"https://www.festival-deauville.com/films/the-liberation-of-rita-cooper/"},
-"party usa":{synopsis:"Après la mort de son père, Taylor, employée dans une boutique d’articles de fêtes, n’arrive pas à trouver quelqu’un pour la remplacer à son poste. Elle commet alors une erreur fatale qui enclenche une spirale infernale et sème le chaos au sein de ce petit monde du travail aux couleurs du drapeau américain.",year:2026,duration:89,cast:"Ainsley Seiger, Phillip Andre Botello, Ben Weinswig, Sharahya Carter",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/party-usa/"},
-"mouse":{synopsis:"Inséparables depuis l’enfance, Callie et Minnie profitent de l’été avant d’entamer leur dernière année de lycée. Mais un drame inattendu vient bouleverser leur destin et pousse Minnie à se rapprocher de la mère de Callie.",year:2026,duration:120,cast:"Sophie Okonedo, Katherine Mallen-Kupferer, Tara Mallen, Chloe Coleman, Iman Vellani, David Hyde Pierce",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/mouse/"},
-"queen at sea":{synopsis:"Amanda et son beau-père sont confrontés à un dilemme moral qui les divise. Atteinte de démence avancée, la mère d’Amanda est-elle encore capable de prendre seule des décisions éclairées ? Et si ce n’est plus le cas, qui doit décider à sa place : un conjoint, un enfant ou une institution ?",year:2026,duration:121,cast:"Juliette Binoche, Tom Courtenay, Anna Calder-Marshall, Florence Hunt",country:"États-Unis d’Amérique, Royaume-Uni",url:"https://www.festival-deauville.com/films/queen-at-sea/"},
-"test":{synopsis:"Dans une petite ville de l’Ohio, un culturiste amateur doit affronter sa famille dysfonctionnelle, sa toxicomanie et son éveil à la sexualité tout en poursuivant son rêve de devenir champion.",year:2026,duration:113,cast:"Brock Yurich, Tammy Blanchard, Matthew Morrison, Mike Edward, Paloma Garcia-Lee",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/test/"},
-"pressure":{synopsis:"Trois jours avant le Jour J, une seule décision peut changer le cours de l’Histoire. Alors que les Alliés s’apprêtent à lancer le plus grand débarquement jamais organisé, une violente tempête menace de faire échouer l’opération. Le général Eisenhower et le capitaine James Stagg, météorologue, font face à un choix impossible.",year:2026,duration:100,cast:"Brendan Fraser, Andrew Scott, Kerry Condon, Chris Messina, Damian Lewis",country:"Royaume-Uni, France, États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/pressure/"},
-"bunker":{synopsis:"Un architecte de renom se voit proposer de concevoir, dans le plus grand secret, un bunker de survie pour un milliardaire convaincu que la fin du monde est proche. Tandis qu’il se laisse séduire par ce projet moralement ambigu, son épouse commence à remettre en question leur mariage.",year:2026,duration:126,cast:"Javier Bardem, Penélope Cruz, Stephen Graham, Patrick Schwarzenegger, Paul Dano",country:"France, Espagne",url:"https://www.festival-deauville.com/films/bunker/"},
-"gremlins 2: the new batch":{synopsis:"Billy et Kate habitent New York avec leur mogwai Gizmo. Malencontreusement mouillée, la petite créature donne naissance à une nouvelle génération de gremlins. Les monstres prennent d’assaut un gratte-ciel high-tech…",year:1990,duration:106,cast:"Zach Galligan, Phoebe Cates, Howie Mandel",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/gremlins-2-la-nouvelle-generation/"},
-"gremlins 2 : la nouvelle génération":{synopsis:"Billy et Kate habitent New York avec leur mogwai Gizmo. Malencontreusement mouillée, la petite créature donne naissance à une nouvelle génération de gremlins. Les monstres prennent d’assaut un gratte-ciel high-tech…",year:1990,duration:106,cast:"Zach Galligan, Phoebe Cates, Howie Mandel",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/gremlins-2-la-nouvelle-generation/"},
-"diamond":{synopsis:"Détective privé venu d’un autre temps, Joe Diamond possède un don que le Los Angeles moderne ne comprend pas : résoudre les affaires qui laissent la police sans réponse. Avec pour seules armes, un flair infaillible, un humour pince-sans-rire et une élégance qui ne se démode pas. Mais derrière le costume impeccable, le passé revient réclamer son dû.",year:2026,duration:118,cast:"Andy Garcia, Vicky Krieps, Brendan Fraser, Rosemarie Dewitt, Dustin Hoffman",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/diamond/"},
-"her private hell":{synopsis:"Alors qu’une étrange brume engloutit une métropole futuriste et libère une présence mortelle insaisissable, une jeune femme troublée part à la recherche de son père. Au cours de cette quête, son destin croise celui d’un GI américain engagé dans un voyage désespéré pour arracher sa fille de l’Enfer.",year:2026,duration:109,cast:"Sophie Thatcher, Charles Melton, Havana Rose Liu, Kristine Frøseth",country:"Etats-Unis d’Amérique",url:"https://www.festival-deauville.com/films/her-private-hell/"},
-"high art":{synopsis:"À 24 ans, malgré une récente promotion dans le prestigieux magazine photo où elle travaille, Syd reste préposée aux cafés. Elle fait par hasard la connaissance de sa voisine du dessus, Lucy, célèbre photographe qui a raccroché depuis plus de dix ans et qui va lui faire découvrir un nouveau monde.",year:1998,duration:102,cast:"Ally Sheedy, Radha Mitchell, Patricia Clarkson, Gabriel Mann, Bill Sage",country:"États-Unis d’Amérique, Canada",url:"https://www.festival-deauville.com/films/high-art/"},
-"l’enfance d’un chef":{synopsis:"1919. Alors que son père participe aux négociations du traité de Versailles, le jeune Prescott grandit au cœur des cercles diplomatiques qui façonnent le nouvel ordre mondial. Dans l’intimité de la maison familiale, son comportement devient chaque jour plus troublant, sous le regard impuissant de sa mère.",year:2015,duration:115,cast:"Robert Pattinson, Liam Cunningham, Bérénice Béjo, Stacy Martin, Tom Sweet",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/lenfance-dun-chef/"},
-"l’île des souvenirs":{synopsis:"Lors de leur dernière nuit ensemble, Jo et Raissa ouvrent un portail secret vers une île mystérieuse où prennent vie les créatures mythiques des légendes philippines qui ont bercé leur enfance.",year:2026,duration:98,cast:"Manon Bresch, Anaïde Rozam, Xavier Lacaille, Billy Crawford",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/lile-des-souvenirs/"},
-"l’invitation":{synopsis:"Angela et Joe invitent à dîner leurs mystérieux nouveaux voisins du dessus. La soirée va alors rapidement faire voler en éclats toutes leurs certitudes.",year:2026,duration:107,cast:"Olivia Wilde, Penelope Cruz, Seth Rogen, Edward Norton",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/linvitation/"},
-"mother mary":{synopsis:"À la veille de son grand retour sur scène, l’icône de la pop Mother Mary retrouve Sam Anselm, son ancienne costumière et amie de longue date dont elle s’est éloignée. De vieilles blessures refont alors surface…",year:2026,duration:112,cast:"Anne Hathaway, Michaela Coel, Hunter Schafer, Sian Clifford, Atheena Frizzell, Fka Twigs",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/mother-mary/"},
-"les contrebandiers":{synopsis:"Oregon, 1933. Après la mort de sa femme, Samuel Murphy est arraché à sa fille et envoyé dans un camp de travail impitoyable. Lorsqu’un surveillant sans scrupule lui promet la liberté contre une périlleuse mission de contrebande d’or, Murphy saisit sa seule chance de rentrer chez lui.",year:2026,url:"https://www.festival-deauville.com/films/les-contrebandiers/"},
-"only what we carry":{synopsis:"Des secrets longtemps enfouis et des amours naissantes refont surface et débordent entre une danseuse, sa sœur, son ancien chorégraphe et l’ami de ce dernier, de passage sur la côte normande de Deauville.",year:2026,duration:93,cast:"Simon Pegg, Sofia Boutella, Charlotte Gainsbourg, Quentin Tarantino, Liam Hellmann, Lizzy Mcalpine",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/only-what-we-carry/"},
-"victorian psycho":{synopsis:"1858. Une étrange gouvernante nommée Winifred Notty arrive au manoir gothique d’Ensor House. Sa mission consiste à enseigner aux enfants les bonnes manières et à leur transmettre l’histoire de leur famille, tout en cachant soigneusement ses propres tendances psychopathes…",year:2026,duration:90,cast:"Maika Monroe, Thomasin Mckenzie, Jason Isaacs, Ruth Wilson, Evie Templeton, Jacobi Jupe",country:"Etats-Unis d’Amérique, Royaume-Uni",url:"https://www.festival-deauville.com/films/victorian-psycho/"},
-"butterfly jam":{synopsis:"Dans le New Jersey, un adolescent de 16 ans surnommé « Pyteh » partage son temps entre les tapis de lutte et le petit restaurant tcherkesse de sa famille, au bord de la faillite. Une décision impulsive de son père vient bouleverser sa trajectoire.",year:2026,duration:97,cast:"Talha Akdogan, Barry Keoghan, Riley Keough, Harry Melling, Jaliyah Richards",country:"Etats-Unis d’Amérique, France",url:"https://www.festival-deauville.com/films/butterfly-jam/"},
-"stop ! that ! train !":{synopsis:"Amies inséparables et agentes de bord ferroviaires, Tess et Dee-Dee troquent leurs mornes services à bord du Stank Rail contre les paillettes du Glamazonian Express. Lorsqu’une tempête dévastatrice menace de faire dérailler le train, elles sont contraintes de faire équipe avec les passagères de première classe.",year:2026,url:"https://www.festival-deauville.com/films/stop-that-train/"},
-"teenage sex and death at camp miasma":{synopsis:"Après des années de suites bâclées et un intérêt déclinant des fans, la franchise du slasher Camp Miasma est confiée à une jeune réalisatrice passionnée bien décidée à la ressusciter. Lorsqu’elle rend visite à la star du film original, les deux femmes basculent dans un monde sanglant de désir, de peur et de délire.",year:2026,duration:112,cast:"Hannah Einbinder, Gillian Anderson, Amanda Fix, Arthur Conti, Eva Victor, Zach Cherry",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/teenage-sex-and-death-at-camp-miasma/"},
-"the accompanist":{synopsis:"Après un accident qui manque de lui coûter la vie, une jeune fille est placée en famille d’accueil, où elle noue un lien hors du commun avec sa nouvelle et mystérieuse tutrice.",year:2026,duration:110,cast:"Susan Sarandon, Everly Carganilla, Kevyn Morrow, Aubrey Plaza",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/the-accompanist/"},
-"the last day":{synopsis:"Un jour de fête nationale à New York, les trajectoires de deux femmes en quête d’elles-mêmes se croisent brièvement : Julia, une écrivaine qui prépare une importante réception, et Taylor, une jeune mère de trois enfants qui tente tant bien que mal de garder la tête hors de l’eau.",year:2026,duration:99,cast:"Alicia Vikander, Wagner Moura, Victoria Pedretti",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/the-last-day/"},
-"the last pickpocket in new york":{synopsis:"Harry est le dernier pickpocket de New York. Les temps sont durs, mais un jour la chance tourne : il dérobe une mystérieuse clé USB qu’il revend à prix d’or. Mais ce précieux butin appartient à une organisation criminelle impitoyable prête à tout pour le récupérer.",year:2025,duration:88,cast:"John Turturro, Giancarlo Esposito, Will Price, Tatiana Maslany, Steve Buscemi, Jamie Lee Curtis",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/the-last-pickpocket-in-new-york/"},
-"the man i love":{synopsis:"New York, fin des années 1980. Jimmy George, figure iconique de la scène théâtrale, vit en couple avec le plus tendre et attentionné des amants. Mais devant la mort qui lui est promise, la soif de vivre et de créer, de désirer et d’aimer, une dernière fois, est plus forte que tout…",year:2026,duration:96,cast:"Rami Malek, Rebecca Hall, Ebon Moss-Bachrach, Tom Sturridge, Luther Ford",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/the-man-i-love/"},
-"where to land":{synopsis:"Un réalisateur de comédies romantiques réputé estime qu’il est temps de rédiger son testament. Mais sa petite amie, une comédienne qui surréagit toujours, est convaincue qu’il est mourant et qu’il refuse d’en parler à quiconque.",year:2025,duration:74,cast:"Bill Sage, Robert John Burke, Gia Crovatin, Jennifer Stepanyk, Edie Falco, Kathleen Chakfant",country:"Etats-Unis d’Amérique",url:"https://www.festival-deauville.com/films/where-to-land/"},
-"not a pretty picture":{synopsis:"En 1976, la cinéaste américaine Martha Coolidge signe son premier film, consacré à un traumatisme majeur de son adolescence. En mettant en scène avec des comédiens le viol qu’elle a subi à seize ans et en échangeant avec eux sur cette reconstitution, elle éclaire les mécanismes des violences sexuelles et de la domination masculine.",url:"https://www.festival-deauville.com/films/not-a-pretty-picture/"},
-"once upon a time in harlem":{synopsis:"En 1972, William Greaves réunit les grandes figures vivantes du mouvement de la Renaissance de Harlem. À travers cette rencontre exceptionnelle, le documentaire explore la portée de cette remarquable période de création, la manière dont la culture se transmet d’une génération à l’autre et le rôle des artistes dans sa préservation.",year:2026,duration:100,cast:"Aaron Douglas, Richard Bruce Nugent, James Van Der Zee, Eubie Blake, Louise Thompson Patterson, John Henrik Clarke, Romare Bearden, David Levering Lewis",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/once-upon-a-time-in-harlem/"},
-"gremlins, l’amérique parasitée":{synopsis:"Et si Gremlins n’était pas qu’un simple film de monstres ? À travers extraits, making of et interviews, ce documentaire révèle l’envers grinçant d’un blockbuster bien plus complexe qu’il n’y paraît. Film d’horreur, satire du consumérisme, critique de la société de divertissement et de la machine hollywoodienne…",year:2026,duration:52,cast:"Joe Dante, Rick Baker, John Landis, Heidi Honeycutt",country:"France",url:"https://www.festival-deauville.com/films/gremlins-lamerique-parasitee/"},
-"faye":{synopsis:"L’icône du cinéma Faye Dunaway parle avec sincérité des triomphes de son illustre carrière. À travers une réflexion nourrie par les témoignages de ses collègues et de ses amis, elle remet sa vie et sa filmographie en perspective et dévoile ses difficultés liées à la santé mentale tout en dénonçant les doubles standards auxquels elle a été confrontée à Hollywood.",url:"https://www.festival-deauville.com/films/faye/"},
-"dernsie : the amazing life of bruce dern":{synopsis:"À travers ses propres mots, Bruce Dern revient sur sa vie et sa carrière qui traversent plusieurs générations d’Hollywood. Un portrait intime placé sous le signe de la persévérance, de la réinvention et de l’héritage transmis à sa fille, Laura Dern.",year:2026,duration:111,cast:"Bruce Dern, Laura Dern, Quentin Tarantino, Alexander Payne, Billy Bob Thornton, Walton Goggins, Walter Hills, Patty Jenkins, Will Forte, Joe Dante",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/dernsie-the-amazing-life-of-bruce-dern/"},
-"burgundy":{synopsis:"En Bourgogne, les vins les plus renommés au monde ne sont qu’une partie de l’histoire. Derrière chaque bouteille se cache un art de vivre façonné par des générations de traditions, des codes tacites et par ceux qui se consacrent à le préserver ou à le réinventer.",year:2026,duration:88,cast:"Enzo Ferraroli, Céleste Kalis, Eric Goettelmann, Patrick Maniere, Guillaume Baroin, Bertrand Devillard",country:"Etats-Unis d’Amérique",url:"https://www.festival-deauville.com/films/burgundy/"},
-"bucks harbor":{synopsis:"À l’Est du Maine, les côtes escarpées s’étendent entre forêt et océan. Les garçons y grandissent au rythme des hivers sans merci, des récoltes de la mer et des valeurs transmises par leurs pères. Ce documentaire s’attache à la vie intérieure de ces pêcheurs, jeunes comme anciens.",year:2026,duration:98,cast:"",country:"Etats-Unis d’Amérique",url:"https://www.festival-deauville.com/films/bucks-harbor/"},
-"la gradiva":{synopsis:"Un groupe de lycéens français part en voyage scolaire à Naples pour découvrir les ruines de Pompéi et ses corps pétrifiés par le Vésuve. C’est là que le vertige les saisit brutalement. L’un après l’autre, ils se laissent submerger par le désir et la colère jusqu’à s’y abandonner complètement.",year:2026,duration:145,cast:"Antonia Buresi, Colas Quignard, Suzanne Gerin, Mitia Capellier-Audat, Rouge Isaac, Hadya Fofana",country:"France, Italie",url:"https://www.festival-deauville.com/films/la-gradiva/"},
-"django unchained":{synopsis:"Un esclave affranchi s’allie à un chasseur de primes allemand pour sauver sa femme des mains d’un impitoyable propriétaire de plantation dans le Mississippi.",year:2013,duration:165,cast:"Jamie Foxx, Christoph Waltz, Leonardo DiCaprio",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/django-unchained/"},
-"docteur folamour":{synopsis:"Lorsqu’un général américain ordonne une attaque nucléaire contre l’URSS sans autorisation, les responsables politiques et militaires réunis au Pentagone tentent d’éviter la catastrophe.",year:1964,duration:95,cast:"Peter Sellers, George C. Scott, Sterling Hayden",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/docteur-folamour/"},
-"full metal jacket":{synopsis:"Un marine américain observe les effets déshumanisants de la guerre du Vietnam sur ses compagnons d’armes, de la brutalité de leur formation militaire aux combats sanglants.",year:1987,duration:116,cast:"Matthew Modine, Arliss Howard, Vincent D’Onofrio",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/fullmetal-jacket/"},
-"harvey milk":{synopsis:"Le destin d’Harvey Milk, militant américain pour les droits des homosexuels et premier élu ouvertement gay de Californie.",year:2009,duration:128,cast:"Sean Penn, Josh Brolin, Emile Hirsch",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/harvey-milk/"},
-"here – les plus belles années de notre vie":{synopsis:"L’histoire de familles dont les peines, les joies et les moments de doutes se font écho à travers les générations.",year:2024,duration:104,cast:"Tom Hanks, Robin Wright, Paul Bettany",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/here-les-plus-belles-annees-de-notre-vie/"},
-"il était une fois en amérique":{synopsis:"Après des décennies d’exil, un ancien gangster new-yorkais de la période de la Prohibition replonge dans ses souvenirs marqués par l’amitié, les rêves et les regrets.",year:1984,duration:229,cast:"Robert de Niro, James Woods, Elizabeth McGovern",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/once-upon-a-time-in-america/"},
-"killers of the flower moon":{synopsis:"Oklahoma, années 1920. Lorsque du pétrole est découvert dans le sous-sol des terres du peuple osage, ses habitants sont assassinés les uns après les autres, jusqu’à ce que le FBI intervienne pour élucider l’affaire.",year:2023,duration:206,cast:"Leonardo DiCaprio, Robert De Niro, Brendan Fraser, Lily Gladstone",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/killers-of-the-flower-moon/"},
-"la porte du paradis":{synopsis:"Wyoming, 1890. Durant la guerre du comté de Johnson, un shérif prend la défense de fermiers immigrés menacés par les puissants éleveurs de la région.",year:1981,duration:219,cast:"Kris Kristofferson, Christopher Walken, John Hurt, Isabelle Huppert",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/la-porte-du-paradis/"},
-"la ruée vers l’or":{synopsis:"En 1898, un chercheur d’or solitaire lutte contre les éléments du Grand Nord tout en tentant de conquérir le cœur d’une danseuse.",year:1925,duration:88,cast:"Charlie Chaplin, Mack Swain, Tom Murray",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/la-ruee-vers-lor/"},
-"les raisins de la colère":{synopsis:"Pendant la grande dépression des années 30, une famille de fermiers erre à la recherche de travail, mais ne rencontre que spoliation et injustice.",year:1947,duration:129,cast:"Henry Fonda, Jane Darwell, John Carradine",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/les-raisins-de-la-colere/"},
-"mr smith au sénat":{synopsis:"Fraîchement nommé au Sénat américain, un jeune homme idéaliste affronte la corruption politique afin de défendre la démocratie.",year:1940,duration:129,cast:"James Stewart, Jean Arthur, Claude Rains",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/mr-smith-au-senat/"},
-"selma":{synopsis:"En 1965, le pasteur Martin Luther King tente de convaincre le président Lyndon B. Johnson de garantir aux Afro-Américains un accès égalitaire au droit de vote, en organisant une marche historique à travers l’Alabama.",year:2015,duration:128,cast:"David Oyelowo, Tom Wilkinson, Carmen Ejogo",country:"Royaume-Uni, États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/selma/"},
-"she said":{synopsis:"Deux journalistes du New York Times enquêtent sur l’affaire qui contribua à déclencher le mouvement #MeToo et à briser des décennies de silence autour des violences sexuelles à Hollywood.",year:2022,duration:129,cast:"Carey Mulligan, Zoe Kazan, Patricia Clarkson",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/she-said/"},
-"the big short : le casse du siècle":{synopsis:"Wall Street, 2005. Alors que banques, médias et gouvernement ignorent les signes avant-coureurs de la crise, quatre outsiders anticipent l’effondrement de la bulle immobilière et décident d’en tirer profit.",year:2015,duration:130,cast:"Christian Bale, Steve Carell, Ryan Gosling",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/the-big-short-le-casse-du-siecle/"},
-"zero dark thirty":{synopsis:"Après les attentats du 11 septembre, le renseignement américain traque Oussama Ben Laden. Une analyste de la CIA est dépêchée au Pakistan où elle découvre l’usage de méthodes controversées…",year:2013,duration:157,cast:"Jessica Chastain, Jason Clarke, Joel Edgerton",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/zero-dark-thirty-3/"},
-"la momie":{synopsis:"Lors de fouilles archéologiques, un américain engagé dans la Légion étrangère française réveille accidentellement une momie qui sème le chaos en cherchant la réincarnation de son amour perdu.",year:1999,duration:124,cast:"Brendan Fraser, Rachel Weisz, Jonh Hannah",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/la-momie/"},
-"the whale":{synopsis:"Vivant reclus et atteint d’obésité sévère, un professeur d’anglais tente de renouer avec sa fille adolescente, dans un ultime espoir de rédemption.",year:2022,duration:117,cast:"Brendan Fraser, Sadie Sink, Ty Simpkins",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/the-whale/"},
-"bienvenue à gattaca":{synopsis:"Dans une société futuriste fondée sur les principes de l’eugénisme, un « non-valide » usurpe l’identité d’un membre de l’élite génétique afin de partir dans l’espace.",year:1998,duration:106,cast:"Ethan Hawke, Uma Thurman, Jude Law",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/bienvenue-a-gattaca/"},
-"before midnight":{synopsis:"Dix-huit ans après leur rencontre dans un train pour Vienne, Jesse et Céline sont désormais mariés et parents de jumelles. Le temps d’une soirée romantique en Grèce, ils s’interrogent sur l’avenir de leur couple.",year:2013,duration:109,cast:"Ethan Hawke, Julie Delpy, Seamus Davey-Fitzpatrick",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/before-midnight/"},
-"training day":{synopsis:"Pour son premier jour à la brigade des stupéfiants de Los Angeles, une jeune recrue fait équipe avec un détective aux méthodes douteuses et à l’identité trompeuse.",year:2001,duration:122,cast:"Ethan Hawke, Denzel Washington, Scott Glenn",country:"États-Unis d’Amérique",url:"https://www.festival-deauville.com/films/training-day/"}
-};
-function filmMeta(p){const n=normalizeTitle(p.title); return FILM_DATA[n]||FILM_DATA[p.title.toLowerCase()]||null}
-function filmSynopsis(p){return filmMeta(p)?.synopsis||""}
+  state.wishes = canonicalIds(state.wishes);
+  state.seen = canonicalIds(state.seen);
+  state.planned = state.planned.filter(validPlanned);
+  persist();
 
-const DAYS=Array.from({length:10},(_,i)=>`2026-09-${String(4+i).padStart(2,"0")}`);
-
-const ALIAS_GROUPS={
-  gremlinsDoc:["gremlins, l’amérique parasitée","gremlins, an american nightmare","american nightmare"],
-  gremlins2:["gremlins 2: the new batch","gremlins 2 : la nouvelle génération"],
-};
-function normalizeTitle(t){
-  const s=(t||"").toLowerCase().trim();
-  for(const [key,vals] of Object.entries(ALIAS_GROUPS)){
-    if(vals.some(v=>s===v||s.includes(v)))return key;
+  function normalize(s) {
+    return String(s || '').toLowerCase().replace(/[’‘]/g,"'").normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
   }
-  return s.replace(/\s+/g," ");
-}
-function sameWork(a,b){return normalizeTitle(a)===normalizeTitle(b)}
-const FILM_ID_OVERRIDES={
-  "gremlins, l’amérique parasitée":"gremlins-doc",
-  "gremlins, an american nightmare":"gremlins-doc",
-  "gremlins 2: the new batch":"gremlins-2",
-  "gremlins 2 : la nouvelle génération":"gremlins-2",
-  "once upon a time in harlem":"once-harlem",
-  "once upon a time in harlem":"once-harlem"
-};
-function filmId(title){const n=normalizeTitle(title); if(FILM_ID_OVERRIDES[n])return FILM_ID_OVERRIDES[n]; return n.replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
-PROGRAM.forEach((p,i)=>{p.filmId=p.typ.includes("Film")?filmId(p.title):null; p.source="Festival du Cinéma Américain de Deauville";});
+  function workIdFromTitle(title) {
+    const n = normalize(title);
+    if (WORK_ALIASES.has(n)) return WORK_ALIASES.get(n);
+    return WORKS.find(w => normalize(w.title) === n)?.id || null;
+  }
+  function canonicalIds(ids) {
+    const out = [];
+    (ids || []).forEach(x => {
+      if (typeof x === 'string' && WORK_BY_ID.has(x) && !out.includes(x)) out.push(x);
+      else if (typeof x === 'number') { const w = WORKS[x]; if (w && !out.includes(w.id)) out.push(w.id); }
+    });
+    return out;
+  }
+  function load(k, fallback) { try { return JSON.parse(localStorage.getItem('deauville-v2-'+k)) ?? fallback; } catch { return fallback; } }
+  function save(k, v) { localStorage.setItem('deauville-v2-'+k, JSON.stringify(v)); }
+  function persist() { save('wishes',state.wishes); save('seen',state.seen); save('planned',state.planned); save('notes',state.notes); }
+  function tm(s) { const [h,m] = String(s || '').split(':').map(Number); return h*60+m; }
+  function fmtMin(n) { if (n == null || Number.isNaN(n)) return '—'; return n < 60 ? `${n} min` : `${Math.floor(n/60)}h${n%60 ? String(n%60).padStart(2,'0') : ''}`; }
+  function fmtTime(n) { n=((n%1440)+1440)%1440; return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
+  function dateLabel(d) { return new Date(`${d}T12:00:00`).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}).toUpperCase(); }
+  function shortDate(d) { return new Date(`${d}T12:00:00`).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'}); }
+  function defaultDay() { const today=new Date(); const d=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0'); const i=DAYS.indexOf(d); return i>=0?i:(d<DAYS[0]?0:DAYS.length-1); }
+  function showToast(msg) { const t=document.getElementById('toast'); if(!t)return; t.textContent=msg; t.hidden=false; clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.hidden=true,1800); }
+  function esc(s) { return String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function currentDate(){ return DAYS[state.day]; }
+  function workSessions(id){ return SESSIONS.filter(s=>s.workId===id); }
+  function workById(id){ return WORK_BY_ID.get(id); }
+  function durationOfSession(s){ const w=workById(s.workId); return w?.duration ?? null; }
+  function sessionEnd(s){ return s.end ? tm(s.end) : (durationOfSession(s) == null ? null : tm(s.start)+durationOfSession(s)); }
+  function itemEnd(x){ if(!x)return null; const st=tm(x.start); if(Number.isNaN(st))return null; if(x.end){ const e=tm(x.end); return e < st ? e+1440 : e; } return x.duration == null ? null : st+Number(x.duration); }
+  function sessionKey(s){ return `${s.date}|${s.start}|${s.place}|${s.workId}`; }
+  function sameSession(a,b){ return !!a && !!b && a.type!=='event' && b.type!=='event' && a.date===b.date && a.start===b.start && a.place===b.place && a.workId===b.workId; }
+  function overlaps(aStart,aEnd,bStart,bEnd){ return aEnd != null && bEnd != null && aStart < bEnd && bStart < aEnd; }
 
-function workIndex(i){const p=PROGRAM[i];return PROGRAM.findIndex(x=>sameWork(x.title,p.title))}
-let day=defaultDay(), view="planning";
-let wishes=load("wishes",[]), planned=load("planned",[]), seen=load("seen",[]), notes=load("notes",{});
-function load(k,f){try{return JSON.parse(localStorage.getItem("deauville-"+k))??f}catch{return f}}
-function save(k,v){localStorage.setItem("deauville-"+k,JSON.stringify(v))}
-function tm(s){let [h,m]=String(s).split(":").map(Number);return h*60+m}
-function dateObj(d){let [y,m,dd]=d.split("-").map(Number);return new Date(y,m-1,dd)}
-function dateLabel(d){return dateObj(d).toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"}).toUpperCase()}
-function defaultDay(){
-  const n=new Date(),a=dateObj(DAYS[0]),b=dateObj(DAYS[DAYS.length-1]);
-  if(n<a)return 0;if(n>b)return DAYS.length-1;
-  return Math.max(0,Math.min(DAYS.length-1,n.getDate()-4));
-}
-function show(t){const x=document.getElementById("toast");if(!x)return;x.textContent=t;x.style.display="block";clearTimeout(window.__t);window.__t=setTimeout(()=>x.style.display="none",1800)}
-function startTime(p){return p?.s||p?.time||null}
-function endTime(p){return p?.e||p?.end||null}
-function durationOf(p){if(Number.isFinite(Number(p?.duration)))return Number(p.duration);const md=filmMeta(p);return md?.duration||null}
-function calcEnd(p){const st=startTime(p);if(!st)return null;const explicit=endTime(p);if(explicit)return tm(explicit);const d=durationOf(p);return d==null?null:tm(st)+d}
-function juryDayFor(date){return JURY.filter(x=>x.date===date)}
-function plannedDayFor(date){return planned.filter(x=>x.date===date).map(x=>({...x,_end:calcEnd(x)}))}
-function juryDay(){return juryDayFor(DAYS[day])}
-function plannedDay(){return plannedDayFor(DAYS[day])}
-function fixedDay(){return [...juryDay(),...plannedDay()].sort((a,b)=>tm(startTime(a))-tm(startTime(b)))}
-function programDay(){return PROGRAM.filter(x=>x.date===DAYS[day]).sort((a,b)=>tm(startTime(a))-tm(startTime(b)))}
-function fmt(n){return n>=60?`${Math.floor(n/60)}h${n%60?String(n%60).padStart(2,"0"):""}`:`${n} min`}
-function sameSession(a,b){return !!(a&&b&&a.date===b.date&&startTime(a)===startTime(b)&&a.place===b.place&&sameWork(a.title,b.title))}
-function compatible(p,w){
-  const s=tm(startTime(p)),e=calcEnd(p), ws=tm(w.s),we=tm(w.e);
-  if(e===null||Number.isNaN(s)||Number.isNaN(e)||Number.isNaN(ws)||Number.isNaN(we))return false;
-  if(w.date && p.date!==w.date)return false;
-  if(s<ws||e>we)return false;
-  if(juryDayFor(p.date||DAYS[day]).some(j=>s<tm(j.e)&&e>tm(j.s)))return false;
-  if(plannedDayFor(p.date||DAYS[day]).some(j=>!sameSession(j,p)&&s<calcEnd(j)&&e>tm(startTime(j))))return false;
-  return true;
-}
-function sessionKey(p){return [p.date,startTime(p),p.place,normalizeTitle(p.title)].join('|')}
-function compatibleSessionsForWindow(w){
-  const seen=new Set();
-  return PROGRAM.filter(p=>{
-    if(w.date&&p.date!==w.date)return false;
-    if(!compatible(p,w))return false;
-    const k=sessionKey(p);
-    if(seen.has(k))return false;
-    seen.add(k);
-    return true;
-  }).sort((a,b)=>a.date.localeCompare(b.date)||tm(startTime(a))-tm(startTime(b))||String(a.place).localeCompare(String(b.place),'fr'));
-}
-function toPlannedEntry(p,i=null){
-  const s=startTime(p);
-  const e=endTime(p);
-  const d=durationOf(p);
-  return {date:p.date,s,e:e||null,place:p.place,typ:p.typ,title:p.title,person:p.person||"",cat:p.cat,stat:p.stat,pid:i==null?undefined:workIndex(i),duration:d==null?undefined:d,filmId:p.filmId||null,source:p.source||"Festival du Cinéma Américain de Deauville"};
-}
-function canonicalList(list){return [...new Set(list.map(x=>typeof x==="number"?workIndex(x):x))]}
-const HOTEL_CHECKIN={date:"2026-09-04",s:"15:00",e:"15:30",place:"Hôtel",typ:"Hôtel",title:"Check-in hôtel",person:"",cat:"Hôtel",stat:"Personnel"};
-if(!planned.some(x=>x.date===HOTEL_CHECKIN.date&&x.s===HOTEL_CHECKIN.s&&x.title===HOTEL_CHECKIN.title)){planned.push(HOTEL_CHECKIN);save("planned",planned)}
-wishes=canonicalList(wishes);seen=canonicalList(seen);
+  function lockedForDate(date) { return JURY.filter(x=>x.date===date).sort((a,b)=>tm(a.start)-tm(b.start)); }
+  function plannedForDate(date) { return state.planned.filter(x=>x.date===date).sort((a,b)=>tm(a.start)-tm(b.start)); }
+  function allBusy(date) { return [...lockedForDate(date),...plannedForDate(date)].sort((a,b)=>tm(a.start)-tm(b.start)); }
+  function plannedEntryFromSession(s) {
+    const w=workById(s.workId);
+    return {type:'session',id:`plan-${sessionKey(s)}`,date:s.date,start:s.start,end:s.end||null,duration:w?.duration??null,place:s.place,workId:s.workId,title:w?.title||s.title,category:w?.category||'session',locked:false};
+  }
+  function plannedEntryFromEvent(e) { return {type:'event',id:`plan-${e.id}`,date:e.date,start:e.start,end:e.end||null,place:e.place,title:e.title,workId:e.workId||null,category:e.kind,locked:false}; }
+  function validPlanned(x){ return x && x.date && x.start && x.title; }
+  function isPlannedSession(s){ return state.planned.some(x=>x.type==='session' && sameSession(x,{date:s.date,start:s.start,place:s.place,workId:s.workId})); }
+  function plannedWork(id){ return state.planned.filter(x=>x.workId===id); }
+  function conflictWithPlanned(s){
+    const se=sessionEnd(s); if(se==null)return [];
+    return state.planned.filter(x=>x.date===s.date && !sameSession(x,s)).filter(x=>overlaps(tm(s.start),se,tm(x.start),itemEnd(x)));
+  }
+  function conflictWithJury(s){
+    const se=sessionEnd(s); if(se==null)return [];
+    return lockedForDate(s.date).filter(x=>overlaps(tm(s.start),se,tm(x.start),itemEnd(x)));
+  }
+  function sessionStatus(s){
+    if(isPlannedSession(s)) return {key:'planned',label:'Déjà au planning'};
+    const conflicts=[...conflictWithJury(s),...conflictWithPlanned(s)];
+    if(conflicts.length) return {key:'bad',label:'Conflit'};
+    return {key:'good',label:'Compatible'};
+  }
+  function compatibleSessions(date,start,end){
+    const ws=tm(start), we=tm(end), seen=new Set();
+    return SESSIONS.filter(s=>s.date===date).filter(s=>{
+      const se=sessionEnd(s); if(se==null || tm(s.start)<ws || se>we) return false;
+      if(conflictWithJury(s).length || conflictWithPlanned(s).length) return false;
+      const k=sessionKey(s); if(seen.has(k)) return false; seen.add(k); return true;
+    }).sort((a,b)=>tm(a.start)-tm(b.start)||a.place.localeCompare(b.place,'fr'));
+  }
+  function freeWindows(date){
+    const busy=allBusy(date).map(x=>({s:tm(x.start),e:itemEnd(x)})).filter(x=>x.e!=null).sort((a,b)=>a.s-b.s);
+    if(!busy.length)return [];
+    const out=[]; let cursor=busy[0].s;
+    // Deliberately no artificial free time before the first fixed item.
+    for(const b of busy){
+      if(b.s>cursor) out.push({date,s:fmtTime(cursor),e:fmtTime(b.s)});
+      cursor=Math.max(cursor,b.e);
+    }
+    // Never invent a post-departure free block on 13 September.
+    if(date!==DAYS[DAYS.length-1] && cursor<1440) out.push({date,s:fmtTime(cursor),e:'23:59'});
+    return out.filter(w=>tm(w.e)-tm(w.s)>=15);
+  }
+  function render(){
+    document.getElementById('app').innerHTML=`<div class="app"><header class="header">
+      <div class="brandRow"><div><div class="brand">DEAUVILLE <span class="version">V2.0.0</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 4—13 SEPTEMBRE 2026</div></div><button class="iconBtn" onclick="app.openSearch()" aria-label="Rechercher">⌕</button></div>
+      <div class="datebar"><button class="arrow" onclick="app.move(-1)" ${state.day===0?'disabled':''}>‹</button><button class="dateBtn" onclick="app.pickDate()"><b>${dateLabel(currentDate())}</b><small>Toucher pour choisir la journée</small></button><button class="arrow" onclick="app.move(1)" ${state.day===DAYS.length-1?'disabled':''}>›</button></div>
+      <nav class="mainnav"><button class="${state.view==='planning'?'on':''}" onclick="app.setView('planning')">🗓 Planning</button><button class="${state.view==='explore'?'on':''}" onclick="app.setView('explore')">🎬 Programme</button><button class="${state.view==='wishes'?'on':''}" onclick="app.setView('wishes')">⭐ Envies</button></nav>
+    </header><main>${state.view==='planning'?planningView():state.view==='explore'?exploreView():wishesView()}</main>
+    <div id="modal" class="modal" hidden onclick="if(event.target===this)app.close()"><div class="sheet"><button class="close" onclick="app.close()">×</button><div class="handle"></div><div id="sheet"></div></div></div><div id="toast" class="toast" hidden></div></div>`;
+    installSwipe();
+  }
+  function planningView(){
+    const date=currentDate(), busy=allBusy(date), free=freeWindows(date);
+    let items=[];
+    busy.forEach(x=>items.push({kind:'busy',x}));
+    free.forEach(w=>items.push({kind:'free',x:w}));
+    items.sort((a,b)=>tm(a.x.start||a.x.s)-tm(b.x.start||b.x.s));
+    return `<div class="sectionHead"><div><div class="eyebrow">MON PLANNING</div><h1>${dateLabel(date)}</h1></div><span class="pill">${busy.length} fixe${busy.length>1?'s':''}</span></div>
+      ${items.length?items.map(i=>i.kind==='free'?freeCard(i.x):busyCard(i.x)).join(''):'<div class="empty">Aucun élément programmé.</div>'}
+      <div class="hint">Les éléments du Jury, les trajets et le check-in sont verrouillés selon le planning officiel fourni.</div>`;
+  }
+  function busyCard(x){
+    const locked=!!x.locked, planned=state.planned.some(p=>p.id===x.id || (p.date===x.date&&p.start===x.start&&p.title===x.title&&p.place===x.place));
+    const label=x.type==='session'?'SÉANCE':(x.kind==='hotel'?'HÔTEL':x.kind==='transport'?'TRANSPORT':locked?'JURY':'ÉVÉNEMENT');
+    const clickable=locked||planned;
+    return `<button class="card busy ${locked?'juryCard':''}" onclick='app.openBusy(${JSON.stringify(x)})'><span class="time">${esc(x.start)}${x.end?`<br>– ${esc(x.end)}`:''}</span><span class="cardBody"><b>${esc(x.title)}</b><small>${esc(x.place)} · ${label}</small>${locked?'<em class="gold">JURY</em>':''}</span><span class="chev">›</span></button>`;
+  }
+  function freeCard(w){ const opts=compatibleSessions(w.date,w.s,w.e); return `<button class="card freeCard" onclick='app.openFree(${JSON.stringify(w)})'><span class="time">${w.s}<br>– ${w.e}</span><span class="cardBody"><b>Temps libre · ${fmtMin(tm(w.e)-tm(w.s))}</b><small>${opts.length?`${opts.length} séance${opts.length>1?'s':''} compatible${opts.length>1?'s':''}`:'Aucune séance compatible'}</small><em class="green">LIBRE</em></span><span class="chev">›</span></button>`; }
+  function exploreView(){
+    const date=currentDate(), ss=SESSIONS.filter(s=>s.date===date).sort((a,b)=>tm(a.start)-tm(b.start));
+    const ev=EVENTS.filter(e=>e.date===date).sort((a,b)=>tm(a.start)-tm(b.start));
+    const combined=[...ss.map(s=>({kind:'session',time:s.start,obj:s})),...ev.map(e=>({kind:'event',time:e.start,obj:e}))].sort((a,b)=>tm(a.time)-tm(b.time));
+    return `<div class="sectionHead"><div><div class="eyebrow">PROGRAMME OFFICIEL</div><h1>${shortDate(date)}</h1></div><button class="pillBtn" onclick="app.openJury()">Jury</button></div>` +
+      `<div class="filterRow"><button class="filter ${state.filter==='all'?'on':''}" onclick="app.filter('all')">Tout</button><button class="filter ${state.filter==='competition'?'on':''}" onclick="app.filter('competition')">Compétition</button><button class="filter ${state.filter==='premieres'?'on':''}" onclick="app.filter('premieres')">Premières</button><button class="filter ${state.filter==='doc'?'on':''}" onclick="app.filter('doc')">Doc</button><button class="filter ${state.filter==='250'?'on':''}" onclick="app.filter('250')">250</button></div>
+      ${combined.filter(x=>state.filter==='all'||x.kind==='event'||workById(x.obj.workId)?.category===state.filter).map(x=>x.kind==='session'?sessionCard(x.obj):eventCard(x.obj)).join('')||'<div class="empty">Aucun rendez-vous dans ce filtre.</div>'}`;
+  }
+  function sessionCard(s){ const w=workById(s.workId), st=sessionStatus(s); return `<button class="card sessionCard ${st.key}" onclick='app.openSession(${JSON.stringify(s)})'><span class="time">${esc(s.start)}<br><small>${w?.duration?fmtMin(w.duration):''}</small></span><span class="cardBody"><b>${esc(w?.title||s.title)}</b><small>${esc(s.place)} · ${esc(w?.categoryLabel||'')}</small>${st.key==='planned'?'<em class="neutral">DÉJÀ AU PLANNING</em>':st.key==='bad'?'<em class="redish">CONFLIT</em>':'<em class="green">COMPATIBLE</em>'}</span><span class="chev">›</span></button>`; }
+  function eventCard(e){ return `<button class="card eventCard" onclick='app.openEvent(${JSON.stringify(e)})'><span class="time">${esc(e.start)}${e.end?`<br>– ${esc(e.end)}`:''}</span><span class="cardBody"><b>${esc(e.title)}</b><small>${esc(e.place)} · ÉVÉNEMENT</small></span><span class="chev">›</span></button>`; }
+  function wishesView(){
+    const wish=state.wishes.map(workById).filter(Boolean), seen=state.seen.map(workById).filter(Boolean);
+    return `<div class="sectionHead"><div><div class="eyebrow">PERSONNEL</div><h1>Mes envies</h1></div><span class="pill">${wish.length}</span></div>
+      <div class="listTitle">⭐ À VOIR</div>${wish.map(w=>workListRow(w,'wish')).join('')||'<div class="empty">Aucune envie pour le moment.</div>'}
+      <div class="listTitle">👀 VUS</div>${seen.map(w=>workListRow(w,'seen')).join('')||'<div class="empty">Aucun film marqué comme vu.</div>'}`;
+  }
+  function workListRow(w,type){ const next=workSessions(w.id)[0]; return `<button class="workRow" onclick="app.openWork('${w.id}')"><span class="miniIcon">${type==='seen'?'👀':'⭐'}</span><span><b>${esc(w.title)}</b><small>${esc(w.director||'')} · ${w.duration?fmtMin(w.duration):''}${next?` · prochaine séance ${next.date.slice(8)} sept. ${next.start}`:''}</small></span><span>›</span></button>`; }
 
-function render(){
- document.getElementById("app").innerHTML=`<div class="app"><header>
- <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.8.1</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
- <div class="datebar"><button class="arrow" aria-label="Jour précédent" onclick="move(-1)" ${day===0?"disabled":""}>‹</button><div class="date" onclick="pickDate()"><b>${dateLabel(DAYS[day])}</b><small>4—13 septembre · toucher pour choisir</small></div><button class="arrow" aria-label="Jour suivant" onclick="move(1)" ${day===DAYS.length-1?"disabled":""}>›</button></div>
- <nav><button class="${view==="planning"?"on":""}" onclick="setView('planning')">🗓️ MON PLANNING</button><button class="${view==="explore"?"on":""}" onclick="setView('explore')">🔎 EXPLORER</button></nav>
- </header><main>${view==="planning"?planningHtml():exploreHtml()}</main><div class="bottom"><button onclick="showLists()">⭐ ${wishes.length} ${wishes.length===1?"envie":"envies"} · 👀 ${seen.length} ${seen.length===1?"vu":"vus"}</button></div></div>
- <div class="modal" id="modal" onclick="if(event.target===this)closeM()"><div class="sheet"><button class="close" onclick="closeM()">×</button><div class="handle"></div><div id="sheet"></div></div></div><div class="toast" id="toast"></div>`;
- installSwipe();
-}
-function planningHtml(){
- let fixed=fixedDay(),items=[],html='<div class="section">MON PLANNING</div>';
- if(!fixed.length)return html+'<div class="empty">Aucun événement planifié pour cette journée.</div>';
- let cur=fixed[0]?.s||"08:00";
- fixed.forEach(x=>{if(tm(x.s)>tm(cur))items.push({type:"free",s:cur,e:x.s});items.push({type:"fixed",x});cur=x.e});
- if(cur&&tm(cur)<1439&&day!==DAYS.length-1)items.push({type:"free",s:cur,e:"23:59"});
- const now=new Date(),today=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`,nowMin=now.getHours()*60+now.getMinutes();
- let markerDone=false;
- return html+items.map(x=>{
-   let marker="";
-   if(!markerDone&&DAYS[day]===today){
-     const start=tm(x.type==="free"?x.s:x.x.s),end=tm(x.type==="free"?x.e:(x.x.e||x.x.s));
-     if((nowMin>=start&&nowMin<=end)||nowMin<start){marker='<div class="nowline"><span>MAINTENANT</span></div>';markerDone=true}
-   }
-   return marker+(x.type==="free"?freeRow(x):fixedRow(x.x));
- }).join("");
-}
-function freeRow(w){
- const opts=compatibleSessionsForWindow({...w,date:DAYS[day]});
- return `<div class="free" onclick='openFree(${JSON.stringify(w.s)},${JSON.stringify(w.e)})'><div class="time">${w.s}–${w.e}</div><div class="content"><div class="title">🟢 ${fmt(tm(w.e)-tm(w.s))} libres</div><div class="meta">${opts.length?opts.length+" séance"+(opts.length>1?"s":"")+" compatible"+(opts.length>1?"s":""):"Aucune séance compatible détectée"}<span class="tag green">Libre</span></div></div></div>`;
-}
-function displayTime(s){if(!s)return "";let n=tm(s);if(n>=1440)n-=1440;return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
-function isJuryItem(x){return JURY.includes(x)}
-function isJuryProgram(p){return (p.stat||"").toLowerCase().includes("jury")}
-function competitionBadge(){return `<span class="laurelBadge" title="Compétition">❦ COMPÉTITION ❦</span>`}
-function juryBadge(){return `<span class="laurelBadge" title="Jury">❦ JURY ❦</span>`}
-function fixedRow(x){const jury=isJuryItem(x);return `<div class="event ${jury?"juryActivity":""}" onclick='openFixed(${JSON.stringify(x)})'><div class="time">${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}</div><div class="content"><div class="title">${jury?"🏆":""} ${x.title}</div><div class="meta"><span>${x.place}</span><span>·</span>${jury?juryBadge():`<span class="tag">${x.cat}</span>`}</div></div></div>`}
-function exploreHtml(){
- const ps=programDay(),rooms=[...new Set(ps.map(p=>p.place))].sort((a,b)=>a.localeCompare(b,"fr"));
- return `<div class="exploreTop"><div><div class="section">PROGRAMME COMPLET</div><div class="count">${ps.length} rendez-vous · ${rooms.length} lieux</div></div><button class="searchMini" onclick="openSearch()">⌕ Rechercher</button></div>
- <div class="exploreTabs"><button class="tabOn" onclick="exploreMode('all')">Toutes</button><button onclick="exploreMode('room')">Par salle</button></div><div id="exploreBody">${allProgrammeHtml(ps)}</div>`;
-}
-function allProgrammeHtml(ps){return ps.map(p=>programmeRow(p)).join("")}
-function programmeRow(p){
- const i=PROGRAM.indexOf(p), alias="", jury=isJuryProgram(p);
- const category=jury?competitionBadge():`<span class="tag">${p.cat}</span>`;
- return `<div class="program ${jury?"juryActivity":""}" onclick="openProgramById(${i})"><div class="time">${p.time}</div><div class="content"><div class="title">${jury?"🏆":"🎬"} ${p.title}</div><div class="meta"><span>${p.place}</span><span>·</span>${category}${alias}</div><div class="person">${p.person&&p.person!=="—"?p.person:""}</div></div></div>`;
-}
-function exploreMode(mode){
- const body=document.getElementById("exploreBody"),tabs=document.querySelectorAll(".exploreTabs button");
- tabs.forEach((bt,i)=>bt.classList.toggle("tabOn",(mode==="all"&&i===0)||(mode==="room"&&i===1)));
- if(mode==="all"){body.innerHTML=allProgrammeHtml(programDay());return}
- const ps=programDay(),rooms=[...new Set(ps.map(p=>p.place))].sort((a,b)=>a.localeCompare(b,"fr"));
- body.innerHTML=`<div class="roomChips">${rooms.map((r,i)=>`<button type="button" class="${i===0?"selected":""}" aria-label="Voir les séances à ${r.replace(/"/g,"&quot;")}" onclick="roomSelect(${JSON.stringify(r)},this)">${r}</button>`).join("")}</div><div id="roomList">${roomProgrammeHtml(ps,rooms[0])}</div>`;
-}
-function roomSelect(room,btn){document.querySelectorAll(".roomChips button").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");document.getElementById("roomList").innerHTML=roomProgrammeHtml(programDay(),room)}
-function roomProgrammeHtml(ps,room){const rows=ps.filter(p=>p.place===room);return `<div class="section roomTitle">${room}</div>`+(rows.length?rows.map(p=>programmeRow(p)).join(""):'<div class="empty">Aucun rendez-vous.</div>')}
+  function openModal(html, context){ state.modalContext=context||null; const m=document.getElementById('modal'); if(!m)return; document.getElementById('sheet').innerHTML=html; m.hidden=false; }
+  function close(){ const m=document.getElementById('modal'); if(m)m.hidden=true; state.modalContext=null; }
+  function route(place){ const dest=encodeURIComponent(`${place}, Deauville, France`); return {g:`https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=walking`,a:`https://maps.apple.com/?daddr=${dest}&dirflg=w`}; }
+  function routeHtml(place){ const r=route(place); return `<div class="routeBtns"><a href="${r.g}" target="_blank" rel="noopener">🗺 Google Maps</a><a href="${r.a}" target="_blank" rel="noopener">🍎 Plans</a></div>`; }
+  function workMeta(w){ return `<div class="facts">${w.year?`<span>📅 ${w.year}</span>`:''}${w.duration?`<span>⏱ ${fmtMin(w.duration)}</span>`:''}${w.country?`<span>🌍 ${esc(w.country)}</span>`:''}</div>`; }
+  function workPage(w){
+    const sessions=workSessions(w.id), planned=plannedWork(w.id), wish=state.wishes.includes(w.id), seen=state.seen.includes(w.id);
+    return `<div class="eyebrow">FICHE FILM · ${esc(w.categoryLabel)}</div><h2>${esc(w.title)}</h2>${w.aliases?.length?`<div class="alias">Titre(s) associé(s) : ${w.aliases.filter(a=>normalize(a)!==normalize(w.title)).map(esc).join(' · ')}</div>`:''}
+      ${workMeta(w)}<p class="director"><b>Réalisation :</b> ${esc(w.director||'—')}</p>${w.synopsis?`<p class="synopsis">${esc(w.synopsis)}</p>`:''}${w.cast?`<p><b>Avec :</b> ${esc(w.cast)}</p>`:''}
+      ${planned.length?`<div class="plannedBox"><b>📅 Film déjà au planning</b>${planned.map(p=>`<button class="innerLink" onclick='app.openBusy(${JSON.stringify(p)})'>${esc(p.date.slice(8))} sept. · ${esc(p.start)} · ${esc(p.place)}</button>`).join('')}</div>`:''}
+      <div class="sectionMini">SÉANCES · ${sessions.length}</div>${sessions.map(s=>sessionDetailRow(s)).join('')||'<div class="info">Aucune séance trouvée dans le programme officiel.</div>'}
+      <div class="actionGrid"><button class="btn" onclick="app.toggleWish('${w.id}')">${wish?'☆ Retirer des envies':'⭐ Ajouter aux envies'}</button><button class="btn" onclick="app.toggleSeen('${w.id}')">${seen?'✓ Vu':'👀 Marquer comme vu'}</button></div><button class="btn" onclick="app.editNote('${w.id}')">📝 ${state.notes[w.id]?'Modifier ma note':'Ajouter une note'}</button>
+      ${w.url?`<a class="btn primary linkBtn" href="${esc(w.url)}" target="_blank" rel="noopener">↗ Fiche officielle du festival</a>`:''}`;
+  }
+  function sessionDetailRow(s){ const w=workById(s.workId), st=sessionStatus(s), p=plannedWork(s.workId); return `<button class="sessionDetail ${st.key}" onclick='app.openSession(${JSON.stringify(s)})'><span><b>${dateLabel(s.date)}</b><small>${esc(s.start)} · ${esc(s.place)}</small></span><em>${st.label}</em></button>`; }
+  function sessionPage(s){
+    const w=workById(s.workId), st=sessionStatus(s), p=plannedWork(s.workId), exact=isPlannedSession(s), conflicts=[...conflictWithJury(s),...conflictWithPlanned(s)];
+    const other=p.filter(x=>x.date!==s.date||x.start!==s.start||x.place!==s.place);
+    return `<div class="eyebrow">SÉANCE · ${esc(w?.categoryLabel||'PROGRAMME')}</div><h2>${esc(w?.title||s.title)}</h2><div class="info"><b>${dateLabel(s.date)}</b><br>🕘 ${esc(s.start)}${s.end?`–${esc(s.end)}`:w?.duration?` · ${fmtMin(w.duration)}`:''}<br>📍 ${esc(s.place)}${w?.director?`<br>🎬 ${esc(w.director)}`:''}</div>
+      ${exact?'<div class="statusBox neutral">📅 Cette séance est déjà dans ton planning.</div>':p.length?`<div class="plannedBox"><b>📅 Ce film est déjà au planning sur une autre séance</b>${other.map(x=>`<button class="innerLink" onclick='app.openBusy(${JSON.stringify(x)})'>${x.date.slice(8)} sept. · ${esc(x.start)} · ${esc(x.place)}</button>`).join('')}</div>`:''}
+      ${conflicts.length?`<div class="conflictBox"><b>⚠️ Cette séance est incompatible</b><p>Elle chevauche :</p>${conflicts.map(x=>conflictLink(x)).join('')}</div>`:'<div class="statusBox good">✓ Cette séance est compatible avec ton planning actuel.</div>'}
+      ${!exact?`<button class="btn primary" onclick="app.addSession(${JSON.stringify(s)})">📅 Ajouter cette séance au planning</button>`:''}
+      ${routeHtml(s.place)}<button class="btn" onclick="app.openWork('${w.id}')">← Fiche du film</button>`;
+  }
+  function conflictLink(x){ return `<button class="conflictLink" onclick='app.openBusy(${JSON.stringify(x)})'><span>${esc(x.start)}${x.end?`–${esc(x.end)}`:''}</span><b>${esc(x.title)}</b><small>${esc(x.place)}</small></button>`; }
+  function eventPage(e){ const related=e.workId?workById(e.workId):null; const planned=state.planned.some(x=>x.id===`plan-${e.id}`); return `<div class="eyebrow">ÉVÉNEMENT OFFICIEL</div><h2>${esc(e.title)}</h2><div class="info"><b>${dateLabel(e.date)}</b><br>🕘 ${esc(e.start)}${e.end?`–${esc(e.end)}`:''}<br>📍 ${esc(e.place)}</div>${e.description?`<p class="synopsis">${esc(e.description)}</p>`:''}${related?`<button class="btn" onclick="app.openWork('${related.id}')">🎬 Voir ${esc(related.title)}</button>`:''}${planned?'<div class="statusBox neutral">📅 Déjà dans ton planning.</div>':`<button class="btn primary" onclick="app.addEvent(${JSON.stringify(e)})">📅 Ajouter au planning</button>`}${routeHtml(e.place)}`; }
+  function busyPage(x){ const planned=x.type?true:state.planned.some(p=>p.id===x.id); return `<div class="eyebrow">${x.locked?'JURY / PLANNING FIXE':'MON PLANNING'}</div><h2>${esc(x.title)}</h2><div class="info"><b>${dateLabel(x.date)}</b><br>🕘 ${esc(x.start)}${x.end?`–${esc(x.end)}`:''}<br>📍 ${esc(x.place)}</div>${x.workId?`<button class="btn" onclick="app.openWork('${x.workId}')">🎬 Voir la fiche du film</button>`:''}${x.locked?'<div class="statusBox neutral">🔒 Élément verrouillé par le planning Jury officiel.</div>':`<button class="btn" onclick="app.removePlan('${esc(x.id)}')">🗑 Retirer du planning</button>`}${routeHtml(x.place)}`; }
+  function freePage(w){ const opts=compatibleSessions(w.date,w.s,w.e); return `<div class="eyebrow">TEMPS LIBRE</div><h2>${esc(w.s)} → ${esc(w.e)}</h2><p><b>${fmtMin(tm(w.e)-tm(w.s))}</b> disponibles</p><div class="sectionMini">SÉANCES COMPATIBLES · ${opts.length}</div>${opts.map(s=>sessionDetailRow(s)).join('')||'<div class="info">Aucune séance compatible sur ce créneau.</div>'}`; }
+  function pickDate(){ const mid=Math.ceil(DAYS.length/2); const cols=[DAYS.slice(0,mid),DAYS.slice(mid)]; openModal(`<div class="eyebrow">CHOISIR UNE JOURNÉE</div><h2>Mon festival</h2><div class="dateGrid">${cols.map(c=>`<div>${c.map(d=>{const i=DAYS.indexOf(d);return `<button class="datePick ${i===state.day?'sel':''}" onclick="app.goDay(${i})">${dateLabel(d)}</button>`}).join('')}</div>`).join('')}</div>`); }
+  function searchModal(){ openModal(`<div class="eyebrow">EXPLORER</div><h2>Rechercher</h2><input id="searchInput" class="search" value="${esc(state.search)}" placeholder="Film, réalisateur, titre alternatif…" oninput="app.search(this.value)"><div id="searchResults"></div>`); search(state.search); setTimeout(()=>document.getElementById('searchInput')?.focus(),30); }
+  function search(q){ state.search=q; const box=document.getElementById('searchResults'); if(!box)return; const n=normalize(q); if(!n){box.innerHTML='<div class="info">Recherche dans les films, titres associés et réalisateurs.</div>';return;} const res=WORKS.filter(w=>normalize([w.title,...(w.aliases||[]),w.director,w.cast||'',w.synopsis||''].join(' ')).includes(n)).slice(0,40); box.innerHTML=res.map(w=>`<button class="searchResult" onclick="app.openWork('${w.id}')"><b>${esc(w.title)}</b><small>${esc(w.director||'')} · ${esc(w.categoryLabel)}</small></button>`).join('')||'<div class="info">Aucun résultat.</div>'; }
+  function installSwipe(){ const main=document.querySelector('main'); if(!main)return; let x0=0,y0=0; main.addEventListener('touchstart',e=>{if(e.touches.length===1){x0=e.touches[0].clientX;y0=e.touches[0].clientY;}},{passive:true}); main.addEventListener('touchend',e=>{if(!x0)return; const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=0;y0=0;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.3)move(dx<0?1:-1);},{passive:true}); }
+  function move(n){ const d=Math.max(0,Math.min(DAYS.length-1,state.day+Number(n))); if(d!==state.day){state.day=d;render();} }
+  function setView(v){state.view=v;render();}
+  function filter(v){state.filter=v;render();}
+  function goDay(i){state.day=Math.max(0,Math.min(DAYS.length-1,Number(i)));close();render();}
+  function addSession(s){ if(isPlannedSession(s)){showToast('Cette séance est déjà au planning');return;} const conflicts=[...conflictWithJury(s),...conflictWithPlanned(s)]; if(conflicts.length){showToast('Séance incompatible');return;} state.planned.push(plannedEntryFromSession(s)); state.wishes=state.wishes.filter(id=>id!==s.workId); persist(); showToast('📅 Séance ajoutée'); close(); setTimeout(()=>openSession(s),0); }
+  function addEvent(e){ if(state.planned.some(x=>x.id===`plan-${e.id}`)){showToast('Déjà au planning');return;} const end=itemEnd(e); const conflicts=allBusy(e.date).filter(x=>overlaps(tm(e.start),end,tm(x.start),itemEnd(x))); if(conflicts.length){showToast('Événement en conflit');return;} state.planned.push(plannedEntryFromEvent(e)); persist(); showToast('📅 Événement ajouté'); close(); setTimeout(()=>openEvent(e),0); }
+  function removePlan(id){ const i=state.planned.findIndex(x=>x.id===id); if(i<0)return; const x=state.planned[i]; if(x.locked)return; const alternatives=x.workId?workSessions(x.workId).filter(s=>!isPlannedSession(s)&&!conflictWithJury(s).length&&!conflictWithPlanned(s).length):[]; openModal(`<div class="eyebrow">RETIRER DU PLANNING</div><h2>${esc(x.title)}</h2><div class="info">Que veux-tu faire de cet élément ?</div><button class="btn primary" onclick="app.removePlanAndWish('${esc(id)}')">⭐ Remettre dans mes envies</button>${alternatives.length?`<div class="sectionMini" style="margin-top:16px">AUTRES SÉANCES COMPATIBLES</div>${alternatives.slice(0,8).map(s=>`<button class="innerLink" onclick="app.replacePlan('${esc(id)}','${esc(s.date)}','${esc(s.start)}','${esc(s.place)}','${esc(s.workId)}')">${esc(shortDate(s.date))} · ${esc(s.start)} · ${esc(s.place)}</button>`).join('')}`:''}<button class="btn" onclick="app.removePlanOnly('${esc(id)}')">Retirer sans remettre dans les envies</button>`); }
+  function removePlanAndWish(id){ const i=state.planned.findIndex(x=>x.id===id); if(i<0)return; const x=state.planned[i]; if(x.workId&&!state.wishes.includes(x.workId))state.wishes.push(x.workId); state.planned.splice(i,1); persist(); close(); render(); showToast('🗑 Retiré · remis dans les envies'); }
+  function removePlanOnly(id){ const i=state.planned.findIndex(x=>x.id===id); if(i<0)return; state.planned.splice(i,1); persist(); close(); render(); showToast('🗑 Retiré du planning'); }
+  function replacePlan(id,date,start,place,workId){ const i=state.planned.findIndex(x=>x.id===id); const s=SESSIONS.find(x=>x.date===date&&x.start===start&&x.place===place&&x.workId===workId); if(i<0||!s)return; state.planned[i]=plannedEntryFromSession(s); state.wishes=state.wishes.filter(x=>x!==workId); persist(); close(); render(); showToast('📅 Séance déplacée'); }
+  function toggleWish(id){ if(state.wishes.includes(id))state.wishes=state.wishes.filter(x=>x!==id); else state.wishes.push(id); persist(); render(); showToast(state.wishes.includes(id)?'⭐ Ajouté aux envies':'☆ Retiré des envies'); }
+  function toggleSeen(id){ if(state.seen.includes(id))state.seen=state.seen.filter(x=>x!==id); else state.seen.push(id); if(state.seen.includes(id))state.wishes=state.wishes.filter(x=>x!==id); persist(); render(); showToast(state.seen.includes(id)?'👀 Marqué comme vu':'Marquage retiré'); }
+  function editNote(id){ const w=workById(id); if(!w)return; openModal(`<div class="eyebrow">NOTE PERSONNELLE</div><h2>${esc(w.title)}</h2><textarea id="noteInput" class="noteArea" placeholder="Ton avis, tes repères…">${esc(state.notes[id]||'')}</textarea><button class="btn primary" onclick="app.saveNote('${id}')">Enregistrer</button>`); }
+  function saveNote(id){ const el=document.getElementById('noteInput'); state.notes[id]=el?.value||''; persist(); close(); showToast('📝 Note enregistrée'); } 
+  function openWork(id){ const w=workById(id); if(w)openModal(workPage(w),{type:'work',id}); }
+  function openSession(s){ openModal(sessionPage(s),{type:'session',session:s}); }
+  function openEvent(e){ openModal(eventPage(e),{type:'event',event:e}); }
+  function openBusy(x){ openModal(busyPage(x),{type:'busy',item:x}); }
+  function openFree(w){ openModal(freePage(w),{type:'free'}); }
+  
+  function openJury(){
+    const groups=DATA.juryPeople||{};
+    const list=(groups.jury||[]).map(p=>`<div class="juryPerson"><b>${esc(p.name)}</b><small>${esc([p.role,p.profile].filter(Boolean).join(' · '))}</small></div>`).join('');
+    const rev=(groups.revelation||[]).map(p=>`<div class="juryPerson"><b>${esc(p.name)}</b><small>${esc([p.role,p.profile].filter(Boolean).join(' · '))}</small></div>`).join('');
+    openModal(`<div class="eyebrow">JURY OFFICIEL</div><h2>Jury du Festival</h2><div class="sectionMini">JURY</div>${list}<div class="sectionMini" style="margin-top:16px">JURY DE LA RÉVÉLATION</div>${rev}<div class="info">Le planning Jury CANAL+ est intégré séparément et verrouillé dans Mon planning.</div>`);
+  }
 
-function move(n){const next=Math.max(0,Math.min(DAYS.length-1,day+Number(n)));if(next===day)return;day=next;render()}
-function installSwipe(){
- const main=document.querySelector("main");if(!main)return;let x0=0,y0=0;
- main.addEventListener("touchstart",e=>{if(e.touches.length!==1)return;x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
- main.addEventListener("touchend",e=>{if(!x0)return;const x1=e.changedTouches[0].clientX,y1=e.changedTouches[0].clientY,dx=x1-x0,dy=y1-y0;x0=0;y0=0;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.35)move(dx<0?1:-1)},{passive:true});
-}
-function setView(v){view=v;render()}
-function pickDate(){const mid=Math.ceil(DAYS.length/2);const cols=[DAYS.slice(0,mid),DAYS.slice(mid)];open(`<div class="section">CHOISIR UNE DATE</div><h2>Mon festival</h2><div class="datepick twoCols">${cols.map(col=>`<div class="dateCol">${col.map(d=>{const i=DAYS.indexOf(d);return `<button class="${i===day?"sel":""}" onclick="goToDay(${i})">${dateLabel(d)}</button>`}).join("")}</div>`).join("")}</div>`)}
-function goToDay(i){day=Math.max(0,Math.min(DAYS.length-1,Number(i)));closeM();render()}
-function mapsRoute(place,from="Gare de Deauville"){
- const destination=encodeURIComponent(`${place}, Deauville, France`), origin=encodeURIComponent(`${from}, Deauville, France`);
- return {google:`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=walking`,apple:`https://maps.apple.com/?saddr=${origin}&daddr=${destination}&dirflg=w`};
-}
-function openRoute(place,from="Gare de Deauville"){
- const r=mapsRoute(place,from);
- open(`<div class="section">ITINÉRAIRE</div><h2>Vers ${place}</h2><div class="info">🚶 Départ : <b>${from}</b><br>📍 Arrivée : <b>${place}</b><br><small>Les applications de cartographie calculeront le parcours piéton au moment de l’ouverture.</small></div><a class="btn primary routeLink" href="${r.google}" target="_blank" rel="noopener">🗺️ Ouvrir dans Google Maps</a><a class="btn routeLink" href="${r.apple}" target="_blank" rel="noopener">🍎 Ouvrir dans Plans</a>`);
-}
-function plannedSameSession(p, x){
- return planned.some(q => q.date===p.date && startTime(q)===startTime(p) && q.place===p.place && sameWork(q.title,p.title));
-}
-function plannedWork(p){
- return planned.filter(q => sameWork(q.title,p.title));
-}
-function samePlannedSession(a,p){
- return a && p && a.date===p.date && startTime(a)===startTime(p) && a.place===p.place && sameWork(a.title,p.title);
-}
-function sessionConflict(p){
- const s=tm(startTime(p)),e=calcEnd(p);
- if(e===null||Number.isNaN(s)||Number.isNaN(e))return null;
- const jury=juryDayFor(p.date).filter(j=>s<tm(j.e)&&e>tm(j.s)&&!sameSession(j,p));
- const own=plannedDayFor(p.date).filter(j=>!sameSession(j,p)).filter(j=>{const je=calcEnd(j);return je!==null&&s<je&&e>tm(startTime(j));});
- return jury.length||own.length ? {jury,own} : null;
-}
-function conflictHtml(p){
- const c=sessionConflict(p);
- if(!c)return '';
- const rows=[...c.jury,...c.own];
- return `<div class="conflictBox"><b>⚠️ Cette séance entre en conflit avec ton planning</b>${rows.map(x=>`<button class="conflictItem" onclick='openFixed(${JSON.stringify(x).replace(/'/g,"&#39;")})'><span>${displayTime(x.s)}${x.e?`–${displayTime(x.e)}`:''}</span><strong>${x.title}</strong><small>${x.place}</small></button>`).join('')}</div>`;
-}
-function relatedFilmForEvent(x){
- const title=x.title||'';
- const candidates=PROGRAM.filter(p=>p.typ==='Film' && p.date===x.date);
- if(/Invitation/i.test(title)){return candidates.find(p=>/L['’]Invitation/i.test(p.title))||null}
- if(/Pressure/i.test(title)){return candidates.find(p=>p.title==='Pressure')||null}
- if(/Her Private Hell/i.test(title)){return candidates.find(p=>p.title==='Her Private Hell')||null}
- if(/Mother Mary/i.test(title)){return candidates.find(p=>p.title==='Mother Mary')||null}
- if(/Gremlins/i.test(title)){return candidates.find(p=>p.filmId==='gremlins-doc'||p.filmId==='gremlins-2')||null}
- return null;
-}
-function openFixed(x){
- const isPlanned=planned.includes(x)||planned.some(p=>p===x||(p.date===x.date&&startTime(p)===startTime(x)&&p.title===x.title&&p.place===x.place));
- const actions=isPlanned
-   ? `<button class="btn" onclick='removePlanned(${JSON.stringify(x).replace(/'/g,"&#39;")})'>🗑️ Retirer du planning</button>`
-   : `<button class="btn" onclick='show("🔒 Planning Jury verrouillé")'>🔒 Planning Jury verrouillé</button>`;
- const related=relatedFilmForEvent(x);
- const relatedBtn=related?`<button class="btn primary" onclick="openProgramById(${PROGRAM.indexOf(related)})">🎬 Voir la fiche de ${related.title}</button>`:'';
- open(`<div class="section">${isPlanned?"MON PLANNING":(isJuryItem(x)?"🏆 JURY":"ÉVÉNEMENT")}</div><h2>${x.title}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}<br>📍 ${x.place}<br>🏷️ ${x.cat}</div>${relatedBtn}${actions}<button class="btn" onclick='openRoute(${JSON.stringify(x.place)})'>🗺️ Itinéraire</button>`)
-}
-function openFree(s,e){
- const freeDate=DAYS[day];
- const opts=compatibleSessionsForWindow({s,e,date:freeDate});
- open(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${s} → ${e}</h2><p><b>${fmt(tm(e)-tm(s))} disponibles</b></p><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${startTime(p)} · ${p.place} · ${p.cat}</small></div>`).join(""):'<div class="info">Aucune séance dont la durée est actuellement vérifiée ne rentre entièrement dans cette fenêtre.</div>'}<button class="btn" onclick='show("Les incompatibles restent masquées par défaut")'>Voir les séances incompatibles</button>`);
-}
-function agendaSessionsForWork(title){
- const base=PROGRAM.find(p=>sameWork(p.title,title)); const id=base?.filmId; const rows=PROGRAM.filter(p=>p.filmId===id || sameWork(p.title,title)).sort((a,b)=>a.date.localeCompare(b.date)||tm(a.time)-tm(b.time));
- return rows.map(p=>{const end=calcEnd(p);const known=end!==null;const conflict=sessionConflict(p);return {...p,agendaCompatible:known&&!conflict,knownEnd:known,conflict};});
-}
-function sessionCard(p, cls=""){
- const i=PROGRAM.indexOf(p), status=p.knownEnd?(p.agendaCompatible?"compatible":"incompatible"):"unknown", already=plannedSameSession(p);
- const badge=already?'<span class="sessionStatus planned">Déjà au planning</span>':status==="compatible"?'<span class="sessionStatus good">Compatible</span>':status==="incompatible"?'<span class="sessionStatus bad">Conflit</span>':'<span class="sessionStatus unknown">À vérifier</span>';
- return `<button class="sessionChoice ${status} ${already?"already":""} ${cls}" onclick="openProgramById(${i})"><span><b>${dateLabel(p.date)}</b><small>${startTime(p)} · ${p.place}</small></span>${badge}</button>`;
-}
-function openProgramById(i){
- const p=PROGRAM[i];if(!p)return;const key=workIndex(i),w=wishes.includes(key),v=seen.includes(key),pl=plannedSameSession(p);
- const plannedFilm=plannedWork(p),sessions=agendaSessionsForWork(p.title),firstCompatible=sessions.find(x=>x.agendaCompatible&&!plannedSameSession(x)),others=sessions.filter(x=>!firstCompatible||x.date!==firstCompatible.date||x.time!==firstCompatible.time||x.place!==firstCompatible.place);
- const sessionBlock=firstCompatible?`<div class="section sessionHead">PROCHAINE SÉANCE COMPATIBLE AVEC TON AGENDA</div>${sessionCard(firstCompatible,"featuredSession")}<button class="btn" onclick="toggleOtherSessions()">Voir les autres séances</button><div id="otherSessions" class="otherSessions" hidden><div class="sessionLegend"><span class="sessionStatus good">Compatible</span><span class="sessionStatus bad">Conflit</span><span class="sessionStatus unknown">À vérifier</span></div>${others.map(x=>sessionCard(x)).join("")}</div>`:`<div class="section sessionHead">SÉANCES</div><div class="info">Aucune séance compatible avec ton agenda n’est disponible pour l’instant.</div><button class="btn" onclick="toggleOtherSessions()">Voir les autres séances</button><div id="otherSessions" class="otherSessions" hidden><div class="sessionLegend"><span class="sessionStatus good">Compatible</span><span class="sessionStatus bad">Conflit</span><span class="sessionStatus unknown">À vérifier</span></div>${sessions.map(x=>sessionCard(x)).join("")}</div>`;
- const jury=isJuryProgram(p),category=jury?(p.typ.includes("Film")?competitionBadge():juryBadge()):`<span class="tag">${p.cat}</span>`;
- const md=p.typ.includes("Film")?filmMeta(p):null;
- const detail=md?`<div class="filmDetails"><div class="section">FICHE FILM</div><p class="synopsis">${md.synopsis||""}</p><div class="filmFacts">${md.year?`<span>📅 ${md.year}</span>`:""}${md.duration?`<span>⏱ ${md.duration} min</span>`:""}${md.country?`<span>🌍 ${md.country}</span>`:""}</div>${md.cast?`<p><b>Avec :</b> ${md.cast}</p>`:""}<a class="btn routeLink" href="${md.url}" target="_blank" rel="noopener">↗ Voir la fiche officielle du festival</a></div>`:`<div class="info">${p.typ.includes("Film")?`<b>Réalisateur :</b> ${p.person||"—"}${p.duration?`<br><b>Durée :</b> ${fmt(p.duration)}`:""}`:"Événement du programme officiel."}</div>`;
- open(`<div class="section">${p.typ.toUpperCase()} · ${p.cat}</div><h2>${p.title}</h2><div class="info">📅 ${dateLabel(p.date)}<br>🕘 ${p.time}${p.end?"–"+p.end:""}<br>📍 ${p.place}<br>${p.person&&p.person!=="—"?"👤 "+p.person+"<br>":""}${category}</div>${detail}${sessionBlock}${plannedFilm.length?`<div class="plannedFilmBox"><b>📅 Ce film est déjà dans ton planning</b>${plannedFilm.map(x=>`<button class="conflictItem plannedFilmItem" onclick='openFixed(${JSON.stringify(x).replace(/'/g,"&#39;")})'><span>${dateLabel(x.date)} · ${displayTime(x.s)}</span><strong>${x.title}</strong><small>${x.place}</small></button>`).join("")}</div>`:""}${conflictHtml(p)}<button class="btn" onclick="toggleWish(${i})">${w?"⭐ Retirer des envies":"⭐ Ajouter aux envies"}</button><button class="btn primary" onclick="addPlan(${i})">${pl?"📅 Cette séance est dans mon planning":(plannedFilm.length?"📅 Choisir cette séance":"📅 Ajouter à mon planning")}</button><button class="btn" onclick="markSeen(${i})">${v?"👀 Déjà marqué comme vu":"👀 Marquer comme vu"}</button><button class="btn" onclick="addNote(${i})">📝 Ajouter une note</button><button class="btn" onclick='openRoute(${JSON.stringify(p.place)})'>🗺️ Itinéraire</button>`);
-}
-function toggleOtherSessions(){const x=document.getElementById("otherSessions");if(x)x.hidden=!x.hidden}
-
-function toggleWish(i){const k=workIndex(i);if(wishes.includes(k))wishes=wishes.filter(x=>x!==k);else wishes.push(k);save("wishes",wishes);show(wishes.includes(k)?"⭐ Ajouté aux envies":"☆ Retiré des envies");openProgramById(i)}
-function addPlan(i){
- const p=PROGRAM[i];
- if(planned.some(x=>x.date===p.date&&x.s===p.time&&x.place===p.place&&sameWork(x.title,p.title))){show("📅 Déjà dans ton planning");return}
- if(p.stat.toLowerCase().includes("jury")){show("🔒 Impossible : obligation Jury");return}
- planned.push(toPlannedEntry(p,i));
- // Une œuvre ajoutée au planning quitte automatiquement les envies.
- const k=workIndex(i); wishes=wishes.filter(x=>x!==k);
- save("planned",planned);save("wishes",wishes);show("📅 Ajouté au planning · retiré des envies");closeM();render();setTimeout(()=>openProgramById(i),0)
-}
-function alternativeSlots(x){
- const rows=PROGRAM.filter(p=>sameWork(p.title,x.title)&&!sameSession(p,x));
- return rows.filter(p=>{
-   const e=calcEnd(p);
-   if(e===null)return false;
-   const w={s:startTime(p),e:displayTime(e)};
-   return compatible(p,w) && !plannedSameSession(p) && !plannedWork(p).some(q=>!sameSession(q,p));
- }).sort((a,b)=>a.date.localeCompare(b.date)||tm(startTime(a))-tm(startTime(b)));
-}
-function removePlanned(x){
- const idx=planned.findIndex(p=>p===x||(p.date===x.date&&startTime(p)===startTime(x)&&p.title===x.title&&p.place===x.place));
- if(idx<0){show("Événement introuvable");return}
- const item=planned[idx],k=workIndex(PROGRAM.findIndex(p=>sameWork(p.title,item.title)));
- const wasWish=Number.isInteger(k)&&wishes.includes(k);
- const alternatives=alternativeSlots(item);
- open(`<div class="section">RETIRER DU PLANNING</div><h2>${item.title}</h2><div class="info">Cette séance avait été ajoutée depuis tes envies. Que veux-tu faire maintenant ?</div>
-   <button class="btn primary" onclick="removeAndWish(${idx})">⭐ Remettre dans mes envies</button>
-   ${alternatives.length?`<div class="section altTitle">AUTRES DATES COMPATIBLES</div>${alternatives.slice(0,8).map(p=>`<button class="altSlot" onclick="replacePlannedWith(${idx},${PROGRAM.indexOf(p)})"><b>${dateLabel(p.date)}</b><br><span>${startTime(p)} · ${p.place}</span></button>`).join("")}`:`<div class="info">Aucune autre date sans conflit n’a été trouvée pour cette œuvre.</div>`}
-   <button class="btn" onclick="removePlannedOnly(${idx})">Retirer sans remettre dans les envies</button>`);
-}
-function removeAndWish(idx){
- const item=planned[idx]; if(!item)return; const i=PROGRAM.findIndex(p=>sameWork(p.title,item.title)); if(i>=0&&!wishes.includes(workIndex(i)))wishes.push(workIndex(i)); planned.splice(idx,1); save("planned",planned);save("wishes",canonicalList(wishes));closeM();show("⭐ Remis dans tes envies");render()
-}
-function removePlannedOnly(idx){if(idx<0||!planned[idx])return;planned.splice(idx,1);save("planned",planned);closeM();show("🗑️ Retiré du planning");render()}
-function replacePlannedWith(idx,i){
- const old=planned[idx],p=PROGRAM[i]; if(!old||!p)return;
- planned[idx]=toPlannedEntry(p,i); const k=workIndex(i); wishes=wishes.filter(x=>x!==k); save("planned",planned);save("wishes",wishes);closeM();show("📅 Planning déplacé à une autre date");render()
-}
-function markSeen(i){const k=workIndex(i);if(!seen.includes(k))seen.push(k);wishes=wishes.filter(x=>!sameWork(PROGRAM[x]?.title,PROGRAM[i]?.title));save("seen",seen);save("wishes",wishes);show("👀 Marqué comme vu");closeM();render()}
-function addNote(i){open(`<div class="section">NOTE PERSONNELLE</div><h2>${PROGRAM[i].title}</h2><textarea id="note" class="note">${notes[workIndex(i)]||""}</textarea><button class="btn primary" onclick="saveNote(${workIndex(i)})">Enregistrer</button>`)}
-function saveNote(i){notes[i]=document.getElementById("note").value;save("notes",notes);show("📝 Note enregistrée");closeM()}
-function showLists(){
- const wishRows=wishes.map(i=>PROGRAM[i]).filter(Boolean).map(p=>`<button class="wishRow" onclick="openProgramById(${PROGRAM.indexOf(p)})"><span>⭐</span><span><b>${p.title}</b><small>${p.typ} · ${dateLabel(p.date)} · ${startTime(p)} · ${p.place}</small></span><span>›</span></button>`).join("");
- const seenRows=seen.map(i=>PROGRAM[i]).filter(Boolean).map(p=>`<button class="wishRow seenRow" onclick="openProgramById(${PROGRAM.indexOf(p)})"><span>👀</span><span><b>${p.title}</b><small>${p.typ} · ${dateLabel(p.date)} · ${startTime(p)} · ${p.place}</small></span><span>›</span></button>`).join("");
- open(`<div class="section">PERSONNEL</div><h2>Mes envies & vus</h2><div class="section">⭐ MES ${wishes.length===1?"ENVIE":"ENVIES"}</div>${wishRows||'<div class="info">Aucune envie pour le moment.</div>'}<div class="section listGap">👀 MES ${seen.length===1?"VU":"VUS"}</div>${seenRows||'<div class="info">Aucun film marqué comme vu.</div>'}`)
-}
-function openSearch(){open(`<div class="section">EXPLORER</div><h2>Rechercher</h2><input id="q" class="search" placeholder="Film, réalisateur, invité, salle…" oninput="doSearch()" autofocus><div id="results" class="searchResults"></div>`);doSearch()}
-function doSearch(){const q=(document.getElementById("q")?.value||"").toLowerCase().trim(),r=document.getElementById("results");if(!r)return;const a=q?PROGRAM.filter(p=>[p.title,p.person,p.place,p.cat,""].join(" ").toLowerCase().includes(q)).slice(0,30):[];r.innerHTML=q?(a.length?a.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.date.slice(8)} septembre · ${startTime(p)} · ${p.place}</small></div>`).join(""):'<div class="info">Aucun résultat.</div>'):'<div class="info">Recherche dans les '+PROGRAM.length+" entrées du programme.</div>"}
-function open(h){document.getElementById("modal").style.display="flex";document.getElementById("sheet").innerHTML=h}
-function closeM(){document.getElementById("modal").style.display="none"}
-if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-render();
+  function openSearch(){ searchModal(); }
+  window.app={move,setView,filter,pickDate,goDay,openWork,openSession,openEvent,openBusy,openFree,openSearch,openJury,search,close,addSession,addEvent,removePlan,removePlanAndWish,removePlanOnly,replacePlan,toggleWish,toggleSeen,editNote,saveNote};
+  window.addEventListener('load',()=>{ const v=document.querySelector('meta[name="app-version"]'); if(v)v.content='2.0.0'; });
+  render();
+})();
