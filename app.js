@@ -21,7 +21,7 @@ function compatible(p,w){if(!p.end)return false;const s=tm(p.time),e=tm(p.end);r
 
 function render(){
  document.getElementById("app").innerHTML=`<div class="app"><header>
- <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.2.1</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><button class="searchBtn" onclick="openSearch()">⌕</button></div>
+ <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.3</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
  <div class="datebar"><button class="arrow" onclick="move(-1)">‹</button><div class="date" onclick="pickDate()"><b>${dateLabel(DAYS[day])}</b><small>4—13 septembre · toucher pour choisir</small></div><button class="arrow" onclick="move(1)">›</button></div>
  <nav><button class="${view==="planning"?"on":""}" onclick="setView("planning")">🗓️ MON PLANNING</button><button class="${view==="explore"?"on":""}" onclick="setView("explore")">🔎 EXPLORER</button></nav>
  </header><main>${view==="planning"?planningHtml():exploreHtml()}</main><div class="bottom"><button onclick="showLists()">⭐ ${wishes.length} envies · 👀 ${seen.length} vus</button></div></div>
@@ -58,12 +58,31 @@ function freeRow(w){
 }
 function displayTime(s){if(!s)return "";let n=tm(s);if(n>=1440)n-=1440;return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
 function fixedRow(x){
- return `<div class="event" onclick='openFixed(${JSON.stringify(x)})'><div class="time">${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}</div><div class="content"><div class="title">🔴 ${x.title}</div><div class="meta"><span>${x.place}</span><span>·</span><span class="tag red">${x.cat}</span></div></div></div>`;
+ return `<div class="event" onclick='openFixed(${JSON.stringify(x)})'><div class="time">${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}</div><div class="content"><div class="title">JURY · ${x.title}</div><div class="meta"><span>${x.place}</span><span>·</span><span class="tag juryTag">${x.cat}</span></div></div></div>`;
 }
 function exploreHtml(){
- const ps=programDay();
- return `<div class="exploreHead"><div class="section">PROGRAMME COMPLET</div><div class="count">${ps.length} rendez-vous</div></div>`+
- ps.map((p,i)=>`<div class="program" onclick="openProgram(${i})"><div class="time">${p.time}</div><div class="content"><div class="title">🎬 ${p.title}</div><div class="meta"><span>${p.place}</span><span>·</span><span class="tag">${p.cat}</span>${p.stat.toLowerCase().includes("jury")?'<span class="tag red">Jury</span>':""}</div><div class="person">${p.person&&p.person!=="—"?p.person:""}</div></div></div>`).join("");
+ const ps=programDay(), rooms=[...new Set(ps.map(p=>p.place))].sort((a,b)=>a.localeCompare(b,"fr"));
+ return `<div class="exploreTop"><div><div class="section">PROGRAMME COMPLET</div><div class="count">${ps.length} rendez-vous · ${rooms.length} lieux</div></div><button class="searchMini" onclick="openSearch()">⌕ Rechercher</button></div>
+ <div class="exploreTabs"><button class="tabOn" onclick="exploreMode('all')">Toutes</button><button onclick="exploreMode('room')">Par salle</button></div>
+ <div id="exploreBody">${allProgrammeHtml(ps)}</div>`;
+}
+function allProgrammeHtml(ps){return ps.map(p=>programmeRow(p)).join("")}
+function programmeRow(p){return `<div class="program" onclick="openProgramById(${PROGRAM.indexOf(p)})"><div class="time">${p.time}</div><div class="content"><div class="title">🎬 ${p.title}</div><div class="meta"><span>${p.place}</span><span>·</span><span class="tag">${p.cat}</span>${p.stat.toLowerCase().includes("jury")?'<span class="tag juryTag">Jury</span>':""}</div><div class="person">${p.person&&p.person!=="—"?p.person:""}</div></div></div>`}
+function exploreMode(mode){
+ const body=document.getElementById("exploreBody"),tabs=document.querySelectorAll(".exploreTabs button");
+ tabs.forEach((bt,i)=>bt.classList.toggle("tabOn",(mode==="all"&&i===0)||(mode==="room"&&i===1)));
+ if(mode==="all"){body.innerHTML=allProgrammeHtml(programDay());return}
+ const ps=programDay(),rooms=[...new Set(ps.map(p=>p.place))].sort((a,b)=>a.localeCompare(b,"fr"));
+ body.innerHTML=`<div class="roomChips">${rooms.map((r,i)=>`<button class="${i===0?"selected":""}" onclick="roomSelect(${JSON.stringify(r)},this)">${r}</button>`).join("")}</div><div id="roomList">${roomProgrammeHtml(ps,rooms[0])}</div>`;
+}
+function roomSelect(room,btn){
+ document.querySelectorAll(".roomChips button").forEach(b=>b.classList.remove("selected"));
+ btn.classList.add("selected");
+ document.getElementById("roomList").innerHTML=roomProgrammeHtml(programDay(),room);
+}
+function roomProgrammeHtml(ps,room){
+ const rows=ps.filter(p=>p.place===room);
+ return `<div class="section roomTitle">${room}</div>`+(rows.length?rows.map(p=>programmeRow(p)).join(""):'<div class="empty">Aucun rendez-vous.</div>');
 }
 function move(n){day=Math.max(0,Math.min(9,day+n));render()}
 function installSwipe(){
@@ -79,7 +98,7 @@ function installSwipe(){
 }
 function setView(v){view=v;render()}
 function pickDate(){open(`<div class="section">CHOISIR UNE DATE</div><h2>Mon festival</h2><div class="datepick">${DAYS.map((d,i)=>`<button class="${i===day?"sel":""}" onclick="day=${i};closeM();render()">${dateLabel(d)}</button>`).join("")}</div>`)}
-function openFixed(x){open(`<div class="section">🔴 JURY · OBLIGATOIRE</div><h2>${x.title}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}<br>📍 ${x.place}<br>🏷️ ${x.cat}</div><button class="btn" onclick="show("🔒 Planning Jury verrouillé")">🔒 Planning Jury verrouillé</button><button class="btn" onclick="show("🗺️ Itinéraire — bientôt disponible")">🗺️ Itinéraire</button>`)}
+function openFixed(x){open(`<div class="section">JURY · OBLIGATOIRE</div><h2>${x.title}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}<br>📍 ${x.place}<br>🏷️ ${x.cat}</div><button class="btn" onclick="show("🔒 Planning Jury verrouillé")">🔒 Planning Jury verrouillé</button><button class="btn" onclick="show("🗺️ Itinéraire — bientôt disponible")">🗺️ Itinéraire</button>`)}
 function openFree(s,e){
  const opts=PROGRAM.filter(p=>compatible(p,{s,e}));
  open(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${s} → ${e}</h2><p><b>${fmt(tm(e)-tm(s))} disponibles</b></p><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.time} · ${p.place} · ${p.cat}</small></div>`).join(""):'<div class="info">Aucune séance automatiquement proposée pour cette fenêtre : le programme ne donne pas encore une heure de fin exploitable pour ces séances.</div>'}<button class="btn" onclick="show("Les incompatibles restent masquées par défaut")">Voir les séances incompatibles</button>`);
@@ -96,7 +115,7 @@ function markSeen(i){if(!seen.includes(i))seen.push(i);wishes=wishes.filter(x=>x
 function addNote(i){open(`<div class="section">NOTE PERSONNELLE</div><h2>${PROGRAM[i].title}</h2><textarea id="note" class="note">${notes[i]||""}</textarea><button class="btn primary" onclick="saveNote(${i})">Enregistrer</button>`)}
 function saveNote(i){notes[i]=document.getElementById("note").value;save("notes",notes);show("📝 Note enregistrée");closeM()}
 function showLists(){open(`<div class="section">PERSONNEL</div><h2>Mes envies & vus</h2><div class="info">⭐ <b>Mes envies</b><br>${wishes.length?wishes.map(i=>PROGRAM[i]?.title).join("<br>"):"Aucune envie pour le moment."}<br><br>👀 <b>Vus</b><br>${seen.length?seen.map(i=>PROGRAM[i]?.title).join("<br>"):"Aucun film marqué comme vu."}</div>`)}
-function openSearch(){open(`<div class="section">EXPLORER</div><h2>Rechercher</h2><input id="q" class="search" placeholder="Film, réalisateur, invité…" oninput="doSearch()" autofocus><div id="results" class="searchResults"></div>`);doSearch()}
+function openSearch(){open(`<div class="section">EXPLORER</div><h2>Rechercher</h2><input id="q" class="search" placeholder="Film, réalisateur, invité, salle…" oninput="doSearch()" autofocus><div id="results" class="searchResults"></div>`);doSearch()}
 function doSearch(){const q=(document.getElementById("q")?.value||"").toLowerCase().trim(),r=document.getElementById("results");if(!r)return;const a=q?PROGRAM.filter(p=>[p.title,p.person,p.place,p.cat].join(" ").toLowerCase().includes(q)).slice(0,30):[];r.innerHTML=q?(a.length?a.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.date.slice(8)} septembre · ${p.time} · ${p.place}</small></div>`).join(""):'<div class="info">Aucun résultat.</div>'):'<div class="info">Recherche dans les '+PROGRAM.length+" entrées du programme.</div>"}
 function open(h){document.getElementById("modal").style.display="flex";document.getElementById("sheet").innerHTML=h}
 function closeM(){document.getElementById("modal").style.display="none"}
