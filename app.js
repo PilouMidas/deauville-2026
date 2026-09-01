@@ -159,7 +159,7 @@ wishes=canonicalList(wishes);seen=canonicalList(seen);
 
 function render(){
  document.getElementById("app").innerHTML=`<div class="app"><header>
- <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.7</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
+ <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.7.1</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
  <div class="datebar"><button class="arrow" aria-label="Jour précédent" onclick="move(-1)" ${day===0?"disabled":""}>‹</button><div class="date" onclick="pickDate()"><b>${dateLabel(DAYS[day])}</b><small>4—13 septembre · toucher pour choisir</small></div><button class="arrow" aria-label="Jour suivant" onclick="move(1)" ${day===DAYS.length-1?"disabled":""}>›</button></div>
  <nav><button class="${view==="planning"?"on":""}" onclick="setView('planning')">🗓️ MON PLANNING</button><button class="${view==="explore"?"on":""}" onclick="setView('explore')">🔎 EXPLORER</button></nav>
  </header><main>${view==="planning"?planningHtml():exploreHtml()}</main><div class="bottom"><button onclick="showLists()">⭐ ${wishes.length} ${wishes.length===1?"envie":"envies"} · 👀 ${seen.length} ${seen.length===1?"vu":"vus"}</button></div></div>
@@ -234,11 +234,14 @@ function openRoute(place,from="Gare de Deauville"){
 function plannedSameSession(p, x){
  return planned.some(q => q.date===p.date && q.s===p.time && q.place===p.place && sameWork(q.title,p.title));
 }
+function samePlannedSession(a,p){
+ return a && p && a.date===p.date && a.s===p.time && a.place===p.place && sameWork(a.title,p.title);
+}
 function sessionConflict(p){
  const e=calcEnd(p);
  if(e===null)return null;
  const jury=JURY.filter(j=>j.date===p.date && tm(p.time)<tm(j.e) && e>tm(j.s));
- const own=planned.filter(j=>j.date===p.date && tm(p.time)<tm(j.e||j.s) && e>tm(j.s));
+ const own=planned.filter(j=>!samePlannedSession(j,p) && j.date===p.date && tm(p.time)<tm(j.e||j.s) && e>tm(j.s));
  return jury.length||own.length ? {jury,own} : null;
 }
 function conflictHtml(p){
