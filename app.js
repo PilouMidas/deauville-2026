@@ -159,7 +159,7 @@ wishes=canonicalList(wishes);seen=canonicalList(seen);
 
 function render(){
  document.getElementById("app").innerHTML=`<div class="app"><header>
- <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.7.1</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
+ <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.7.2</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div></div>
  <div class="datebar"><button class="arrow" aria-label="Jour précédent" onclick="move(-1)" ${day===0?"disabled":""}>‹</button><div class="date" onclick="pickDate()"><b>${dateLabel(DAYS[day])}</b><small>4—13 septembre · toucher pour choisir</small></div><button class="arrow" aria-label="Jour suivant" onclick="move(1)" ${day===DAYS.length-1?"disabled":""}>›</button></div>
  <nav><button class="${view==="planning"?"on":""}" onclick="setView('planning')">🗓️ MON PLANNING</button><button class="${view==="explore"?"on":""}" onclick="setView('explore')">🔎 EXPLORER</button></nav>
  </header><main>${view==="planning"?planningHtml():exploreHtml()}</main><div class="bottom"><button onclick="showLists()">⭐ ${wishes.length} ${wishes.length===1?"envie":"envies"} · 👀 ${seen.length} ${seen.length===1?"vu":"vus"}</button></div></div>
@@ -171,7 +171,7 @@ function planningHtml(){
  if(!fixed.length)return html+'<div class="empty">Aucun événement planifié pour cette journée.</div>';
  let cur="08:00";
  fixed.forEach(x=>{if(tm(x.s)>tm(cur))items.push({type:"free",s:cur,e:x.s});items.push({type:"fixed",x});cur=x.e});
- if(cur&&tm(cur)<1439)items.push({type:"free",s:cur,e:"23:59"});
+ if(cur&&tm(cur)<1439&&day!==DAYS.length-1)items.push({type:"free",s:cur,e:"23:59"});
  const now=new Date(),today=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`,nowMin=now.getHours()*60+now.getMinutes();
  let markerDone=false;
  return html+items.map(x=>{
@@ -209,7 +209,7 @@ function exploreMode(mode){
  tabs.forEach((bt,i)=>bt.classList.toggle("tabOn",(mode==="all"&&i===0)||(mode==="room"&&i===1)));
  if(mode==="all"){body.innerHTML=allProgrammeHtml(programDay());return}
  const ps=programDay(),rooms=[...new Set(ps.map(p=>p.place))].sort((a,b)=>a.localeCompare(b,"fr"));
- body.innerHTML=`<div class="roomChips">${rooms.map((r,i)=>`<button class="${i===0?"selected":""}" onclick="roomSelect(${JSON.stringify(r)},this)">${r}</button>`).join("")}</div><div id="roomList">${roomProgrammeHtml(ps,rooms[0])}</div>`;
+ body.innerHTML=`<div class="roomChips">${rooms.map((r,i)=>`<button type="button" class="${i===0?"selected":""}" aria-label="Voir les séances à ${r.replace(/"/g,"&quot;")}" onclick="roomSelect(${JSON.stringify(r)},this)">${r}</button>`).join("")}</div><div id="roomList">${roomProgrammeHtml(ps,rooms[0])}</div>`;
 }
 function roomSelect(room,btn){document.querySelectorAll(".roomChips button").forEach(b=>b.classList.remove("selected"));btn.classList.add("selected");document.getElementById("roomList").innerHTML=roomProgrammeHtml(programDay(),room)}
 function roomProgrammeHtml(ps,room){const rows=ps.filter(p=>p.place===room);return `<div class="section roomTitle">${room}</div>`+(rows.length?rows.map(p=>programmeRow(p)).join(""):'<div class="empty">Aucun rendez-vous.</div>')}
@@ -233,6 +233,9 @@ function openRoute(place,from="Gare de Deauville"){
 }
 function plannedSameSession(p, x){
  return planned.some(q => q.date===p.date && q.s===p.time && q.place===p.place && sameWork(q.title,p.title));
+}
+function plannedWork(p){
+ return planned.filter(q => sameWork(q.title,p.title));
 }
 function samePlannedSession(a,p){
  return a && p && a.date===p.date && a.s===p.time && a.place===p.place && sameWork(a.title,p.title);
@@ -270,7 +273,8 @@ function openFixed(x){
  open(`<div class="section">${isPlanned?"MON PLANNING":(isJuryItem(x)?"🏆 JURY":"ÉVÉNEMENT")}</div><h2>${x.title}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}<br>📍 ${x.place}<br>🏷️ ${x.cat}</div>${relatedBtn}${actions}<button class="btn" onclick='openRoute(${JSON.stringify(x.place)})'>🗺️ Itinéraire</button>`)
 }
 function openFree(s,e){
- const opts=PROGRAM.filter(p=>compatible(p,{s,e}));
+ const freeDate=DAYS[day];
+ const opts=PROGRAM.filter(p=>p.date===freeDate&&compatible(p,{s,e}));
  open(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${s} → ${e}</h2><p><b>${fmt(tm(e)-tm(s))} disponibles</b></p><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.time} · ${p.place} · ${p.cat}</small></div>`).join(""):'<div class="info">Aucune séance dont la durée est actuellement vérifiée ne rentre entièrement dans cette fenêtre.</div>'}<button class="btn" onclick='show("Les incompatibles restent masquées par défaut")'>Voir les séances incompatibles</button>`);
 }
 function agendaSessionsForWork(title){
@@ -278,9 +282,9 @@ function agendaSessionsForWork(title){
  return rows.map(p=>{const end=calcEnd(p);const known=end!==null;const conflict=sessionConflict(p);return {...p,agendaCompatible:known&&!conflict,knownEnd:known,conflict};});
 }
 function sessionCard(p, cls=""){
- const i=PROGRAM.indexOf(p), status=p.knownEnd?(p.agendaCompatible?"compatible":"incompatible"):"unknown";
- const badge=status==="compatible"?'<span class="sessionStatus good">Compatible</span>':status==="incompatible"?'<span class="sessionStatus bad">Conflit</span>':'<span class="sessionStatus unknown">À vérifier</span>';
- return `<button class="sessionChoice ${status} ${cls}" onclick="openProgramById(${i})"><span><b>${dateLabel(p.date)}</b><small>${p.time} · ${p.place}</small></span>${badge}</button>`;
+ const i=PROGRAM.indexOf(p), status=p.knownEnd?(p.agendaCompatible?"compatible":"incompatible"):"unknown", already=plannedSameSession(p);
+ const badge=already?'<span class="sessionStatus planned">Déjà au planning</span>':status==="compatible"?'<span class="sessionStatus good">Compatible</span>':status==="incompatible"?'<span class="sessionStatus bad">Conflit</span>':'<span class="sessionStatus unknown">À vérifier</span>';
+ return `<button class="sessionChoice ${status} ${already?"already":""} ${cls}" onclick="openProgramById(${i})"><span><b>${dateLabel(p.date)}</b><small>${p.time} · ${p.place}</small></span>${badge}</button>`;
 }
 function openProgramById(i){
  const p=PROGRAM[i];if(!p)return;const key=workIndex(i),w=wishes.includes(key),v=seen.includes(key),pl=plannedSameSession(p);
@@ -289,7 +293,7 @@ function openProgramById(i){
  const jury=isJuryProgram(p),category=jury?(p.typ.includes("Film")?competitionBadge():juryBadge()):`<span class="tag">${p.cat}</span>`;
  const md=p.typ.includes("Film")?filmMeta(p):null;
  const detail=md?`<div class="filmDetails"><div class="section">FICHE FILM</div><p class="synopsis">${md.synopsis||""}</p><div class="filmFacts">${md.year?`<span>📅 ${md.year}</span>`:""}${md.duration?`<span>⏱ ${md.duration} min</span>`:""}${md.country?`<span>🌍 ${md.country}</span>`:""}</div>${md.cast?`<p><b>Avec :</b> ${md.cast}</p>`:""}<a class="btn routeLink" href="${md.url}" target="_blank" rel="noopener">↗ Voir la fiche officielle du festival</a></div>`:`<div class="info">${p.typ.includes("Film")?`<b>Réalisateur :</b> ${p.person||"—"}${p.duration?`<br><b>Durée :</b> ${fmt(p.duration)}`:""}`:"Événement du programme officiel."}</div>`;
- open(`<div class="section">${p.typ.toUpperCase()} · ${p.cat}</div><h2>${p.title}</h2><div class="info">📅 ${dateLabel(p.date)}<br>🕘 ${p.time}${p.end?"–"+p.end:""}<br>📍 ${p.place}<br>${p.person&&p.person!=="—"?"👤 "+p.person+"<br>":""}${category}</div>${detail}${sessionBlock}${conflictHtml(p)}<button class="btn" onclick="toggleWish(${i})">${w?"⭐ Retirer des envies":"⭐ Ajouter aux envies"}</button><button class="btn primary" onclick="addPlan(${i})">${pl?"📅 Déjà dans mon planning":"📅 Ajouter à mon planning"}</button><button class="btn" onclick="markSeen(${i})">${v?"👀 Déjà marqué comme vu":"👀 Marquer comme vu"}</button><button class="btn" onclick="addNote(${i})">📝 Ajouter une note</button><button class="btn" onclick='openRoute(${JSON.stringify(p.place)})'>🗺️ Itinéraire</button>`);
+ open(`<div class="section">${p.typ.toUpperCase()} · ${p.cat}</div><h2>${p.title}</h2><div class="info">📅 ${dateLabel(p.date)}<br>🕘 ${p.time}${p.end?"–"+p.end:""}<br>📍 ${p.place}<br>${p.person&&p.person!=="—"?"👤 "+p.person+"<br>":""}${category}</div>${detail}${sessionBlock}${plannedFilm.length?`<div class="plannedFilmBox"><b>📅 Ce film est déjà dans ton planning</b>${plannedFilm.map(x=>`<button class="conflictItem plannedFilmItem" onclick='openFixed(${JSON.stringify(x).replace(/'/g,"&#39;")})'><span>${dateLabel(x.date)} · ${displayTime(x.s)}</span><strong>${x.title}</strong><small>${x.place}</small></button>`).join("")}</div>`:""}${conflictHtml(p)}<button class="btn" onclick="toggleWish(${i})">${w?"⭐ Retirer des envies":"⭐ Ajouter aux envies"}</button><button class="btn primary" onclick="addPlan(${i})">${pl?"📅 Cette séance est dans mon planning":(plannedFilm.length?"📅 Choisir cette séance":"📅 Ajouter à mon planning")}</button><button class="btn" onclick="markSeen(${i})">${v?"👀 Déjà marqué comme vu":"👀 Marquer comme vu"}</button><button class="btn" onclick="addNote(${i})">📝 Ajouter une note</button><button class="btn" onclick='openRoute(${JSON.stringify(p.place)})'>🗺️ Itinéraire</button>`);
 }
 function toggleOtherSessions(){const x=document.getElementById("otherSessions");if(x)x.hidden=!x.hidden}
 
@@ -301,7 +305,7 @@ function addPlan(i){
  planned.push({...p,pid:workIndex(i)});
  // Une œuvre ajoutée au planning quitte automatiquement les envies.
  const k=workIndex(i); wishes=wishes.filter(x=>x!==k);
- save("planned",planned);save("wishes",wishes);show("📅 Ajouté au planning · retiré des envies");closeM();render()
+ save("planned",planned);save("wishes",wishes);show("📅 Ajouté au planning · retiré des envies");closeM();render();setTimeout(()=>openProgramById(i),0)
 }
 function alternativeSlots(x){
  const rows=PROGRAM.filter(p=>sameWork(p.title,x.title)&&!(p.date===x.date&&p.time===x.s&&p.place===x.place));
