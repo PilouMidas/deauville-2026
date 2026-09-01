@@ -21,7 +21,7 @@ function compatible(p,w){if(!p.end)return false;const s=tm(p.time),e=tm(p.end);r
 
 function render(){
  document.getElementById("app").innerHTML=`<div class="app"><header>
- <div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><button class="searchBtn" onclick="openSearch()">⌕</button></div>
+ <div class="topline"><div><div class="brand">DEAUVILLE <span class="version">V1.2.1</span></div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><button class="searchBtn" onclick="openSearch()">⌕</button></div>
  <div class="datebar"><button class="arrow" onclick="move(-1)">‹</button><div class="date" onclick="pickDate()"><b>${dateLabel(DAYS[day])}</b><small>4—13 septembre · toucher pour choisir</small></div><button class="arrow" onclick="move(1)">›</button></div>
  <nav><button class="${view==="planning"?"on":""}" onclick="setView("planning")">🗓️ MON PLANNING</button><button class="${view==="explore"?"on":""}" onclick="setView("explore")">🔎 EXPLORER</button></nav>
  </header><main>${view==="planning"?planningHtml():exploreHtml()}</main><div class="bottom"><button onclick="showLists()">⭐ ${wishes.length} envies · 👀 ${seen.length} vus</button></div></div>
@@ -29,19 +29,22 @@ function render(){
  installSwipe();
 }
 function planningHtml(){
- let fixed=fixedDay(),items=[],cur="08:00";
- fixed.forEach(x=>{if(tm(x.s)>tm(cur))items.push({type:"free",s:cur,e:x.s});items.push({type:"fixed",x});cur=x.e});
- if(tm(cur)<1439)items.push({type:"free",s:cur,e:"23:59"});
- let html='<div class="section">MON PLANNING</div>';
- if(!items.length)return html+'<div class="empty">Aucun événement planifié pour cette journée.</div>';
- const now=new Date(), today=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+ let fixed=fixedDay(),items=[],html='<div class="section">MON PLANNING</div>';
+ if(!fixed.length)return html+'<div class="empty">Aucun événement planifié pour cette journée.</div>';
+ let cur=fixed[0].s;
+ fixed.forEach(x=>{
+   if(tm(x.s)>tm(cur))items.push({type:"free",s:cur,e:x.s});
+   items.push({type:"fixed",x});
+   cur=x.e;
+ });
+ const now=new Date(),today=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
  const nowMin=now.getHours()*60+now.getMinutes();
  let markerDone=false;
  return html+items.map(x=>{
    let marker="";
    if(!markerDone && DAYS[day]===today){
      const start=tm(x.type==="free"?x.s:x.x.s), end=tm(x.type==="free"?x.e:(x.x.e||x.x.s));
-     if(nowMin<=end && nowMin>=start || nowMin<start){
+     if((nowMin>=start&&nowMin<=end)||nowMin<start){
        marker='<div class="nowline"><span>MAINTENANT</span></div>';
        markerDone=true;
      }
@@ -53,8 +56,9 @@ function freeRow(w){
  const opts=PROGRAM.filter(p=>compatible(p,w));
  return `<div class="free" onclick='openFree("${w.s}","${w.e}")'><div class="time">${w.s}–${w.e}</div><div class="content"><div class="title">🟢 ${fmt(tm(w.e)-tm(w.s))} libres</div><div class="meta">${opts.length?opts.length+" séance"+(opts.length>1?"s":"")+" compatible"+(opts.length>1?"s":""):"Programme disponible · durée à préciser pour filtrage automatique"}<span class="tag green">Libre</span></div></div></div>`;
 }
+function displayTime(s){if(!s)return "";let n=tm(s);if(n>=1440)n-=1440;return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
 function fixedRow(x){
- return `<div class="event" onclick='openFixed(${JSON.stringify(x)})'><div class="time">${x.s}${x.e?"–"+x.e:""}</div><div class="content"><div class="title">🔴 ${x.title}</div><div class="meta"><span>${x.place}</span><span>·</span><span class="tag red">${x.cat}</span></div></div></div>`;
+ return `<div class="event" onclick='openFixed(${JSON.stringify(x)})'><div class="time">${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}</div><div class="content"><div class="title">🔴 ${x.title}</div><div class="meta"><span>${x.place}</span><span>·</span><span class="tag red">${x.cat}</span></div></div></div>`;
 }
 function exploreHtml(){
  const ps=programDay();
@@ -75,7 +79,7 @@ function installSwipe(){
 }
 function setView(v){view=v;render()}
 function pickDate(){open(`<div class="section">CHOISIR UNE DATE</div><h2>Mon festival</h2><div class="datepick">${DAYS.map((d,i)=>`<button class="${i===day?"sel":""}" onclick="day=${i};closeM();render()">${dateLabel(d)}</button>`).join("")}</div>`)}
-function openFixed(x){open(`<div class="section">🔴 JURY · OBLIGATOIRE</div><h2>${x.title}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.s}${x.e?"–"+x.e:""}<br>📍 ${x.place}<br>🏷️ ${x.cat}</div><button class="btn" onclick="show("🔒 Planning Jury verrouillé")">🔒 Planning Jury verrouillé</button><button class="btn" onclick="show("🗺️ Itinéraire — bientôt disponible")">🗺️ Itinéraire</button>`)}
+function openFixed(x){open(`<div class="section">🔴 JURY · OBLIGATOIRE</div><h2>${x.title}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${displayTime(x.s)}${x.e?"–"+displayTime(x.e):""}<br>📍 ${x.place}<br>🏷️ ${x.cat}</div><button class="btn" onclick="show("🔒 Planning Jury verrouillé")">🔒 Planning Jury verrouillé</button><button class="btn" onclick="show("🗺️ Itinéraire — bientôt disponible")">🗺️ Itinéraire</button>`)}
 function openFree(s,e){
  const opts=PROGRAM.filter(p=>compatible(p,{s,e}));
  open(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${s} → ${e}</h2><p><b>${fmt(tm(e)-tm(s))} disponibles</b></p><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(p=>`<div class="compat" onclick="openProgramById(${PROGRAM.indexOf(p)})">🎬 <b>${p.title}</b><br><small>${p.time} · ${p.place} · ${p.cat}</small></div>`).join(""):'<div class="info">Aucune séance automatiquement proposée pour cette fenêtre : le programme ne donne pas encore une heure de fin exploitable pour ces séances.</div>'}<button class="btn" onclick="show("Les incompatibles restent masquées par défaut")">Voir les séances incompatibles</button>`);

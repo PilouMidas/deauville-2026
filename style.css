@@ -12,3 +12,5 @@ main{padding:15px}.section{font-size:9px;letter-spacing:.16em;color:var(--muted)
 @media(min-width:700px){body{padding:25px 0}.app{border-radius:24px;overflow:hidden;min-height:820px}}
 
 .nowline{height:14px;position:relative;margin:3px 8px 1px;border-top:1px solid #a83232}.nowline span{position:absolute;left:0;top:-7px;background:var(--bg);padding-right:7px;color:#a83232;font-size:7px;letter-spacing:.14em;font-weight:800}
+
+.version{font:600 8px -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;letter-spacing:.08em;color:var(--muted);vertical-align:middle;margin-left:5px;border:1px solid var(--line);padding:3px 5px;border-radius:99px}
