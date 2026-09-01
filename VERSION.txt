@@ -1,3 +1,4 @@
-Deauville 2026 — V1.4.1
-Correction principale : navigation des jours 4→13 septembre, chevrons, swipe et sélecteur de date unifiés.
-Regroupement des titres alternatifs de Gremlins / American Nightmare conservé.
+Deauville 2026 — V1.5
+Itinéraires fonctionnels via Google Maps / Plans.
+Activités Jury mises en valeur en doré avec badge « Petits Lauriers ».
+Compteur « 1 envie » au singulier.
