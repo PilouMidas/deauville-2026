@@ -184,5 +184,37 @@ function openSession(id,blocked=false,backStart=null,backEnd=null){
   }
   openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${starsFor(s)?'<br>⭐ Séance étoile':''}</div>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${notice}${incompatible?`<button class="btn primary" onclick="addSession('${s.id}',true)">Forcer : ajouter quand même à mon planning</button>`:(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
 }
+function render(){
+  const date=dates[day];
+  if(view==='explorer'){
+    document.getElementById('app').innerHTML=`<div class="app">
+      <header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div>
+      <div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div>
+      <div class="hint">Glisser pour changer de jour</div></header>
+      <main><div class="exploreSwitch"><button class="tab" id="tabPlanning">Planning</button><button class="tab sel">Explorer</button></div>${explorerView(date)}</main>
+      </div><nav class="bottom"><button id="navPlanning">Planning</button><button class="active">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
+      <div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
+  } else {
+    const fixed=fixedItems(date), rows=[];
+    allPlanned(date).forEach(x=>rows.push({type:(x.source==='jury'||x.source==='juryExtra')?'jury':'personal',s:x.s,x}));
+    freeWindows(date).forEach(w=>rows.push({type:'free',s:w.start,w})); rows.sort((a,b)=>a.s-b.s);
+    const body=rows.map(r=>{if(r.type==='free'){const opts=compatible(date,r.w);return `<div class="item free ${opts.length?'click':''}" data-free="${r.w.start}|${r.w.end}"><div class="time">${hh(r.w.start)}<br><span class="timeSep">→</span><br>${hh(r.w.end)}</div><div class="content"><div class="title freeTitle">Créneau libre</div><div class="meta"><span class="freeText">${dur(r.w.start,r.w.end)} disponibles</span>${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?'s':''} compatible${opts.length>1?'s':''}</span>`:''}</div></div></div>`}const x=r.x,personal=r.type==='personal';return `<div class="item ${personal?'personal':'jury'}" data-${personal?'plan':'jury'}="${x.id}"><div class="time">${x.start}–${x.end}</div><div class="content"><div class="title">${esc(x.title)}</div><div class="meta"><span>${esc(x.place)}</span><span class="badge ${personal?'green':'gold'}">${personal?'MON PLANNING':'JURY · OBLIGATOIRE'}</span></div></div></div>`}).join('');
+    document.getElementById('app').innerHTML=`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Glisser pour changer de jour</div></header><main><div class="exploreSwitch"><button class="tab sel">Planning</button><button class="tab" id="tabExplorer">Explorer</button></div><div class="section">MON PLANNING</div>${body||'<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>'}</main></div><nav class="bottom"><button class="active">Planning</button><button id="navExplorer">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
+  }
+  const modal=document.getElementById('modal'),sheet=document.getElementById('sheet');
+  document.getElementById('prev').onclick=()=>move(-1);document.getElementById('next').onclick=()=>move(1);document.getElementById('pick').onclick=pickDate;
+  const np=document.getElementById('navPlanning'), ne=document.getElementById('navExplorer'), tp=document.getElementById('tabPlanning'), te=document.getElementById('tabExplorer');
+  if(np)np.onclick=()=>{view='planning';render()}; if(ne)ne.onclick=()=>{view='explorer';render()}; if(tp)tp.onclick=()=>{view='planning';render()}; if(te)te.onclick=()=>{view='explorer';render()};
+  if(view==='explorer'){
+    const search=document.getElementById('search'); if(search){search.addEventListener('input',e=>{filters.search=e.target.value;render();const q=document.getElementById('search');q.focus();q.setSelectionRange(q.value.length,q.value.length)})}
+    const fp=document.querySelector('[data-filter-place]'),fc=document.querySelector('[data-filter-cat]'),fl=document.querySelector('[data-filter-col]'),fs=document.getElementById('starFilter');
+    if(fp)fp.onchange=e=>{filters.place=e.target.value;render()};if(fc)fc.onchange=e=>{filters.category=e.target.value;render()};if(fl)fl.onchange=e=>{filters.collection=e.target.value;render()};if(fs)fs.onclick=()=>{filters.star=!filters.star;render()};
+    document.querySelectorAll('[data-session]').forEach(e=>e.onclick=()=>openSession(e.dataset.session,false));
+  }
+  document.querySelectorAll('[data-jury]').forEach(e=>e.onclick=()=>openJury(e.dataset.jury));document.querySelectorAll('[data-plan]').forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));document.querySelectorAll('[data-free]').forEach(e=>e.onclick=()=>{let [a,b]=e.dataset.free.split('|');openFree(a,b)});
+  if(modal){modal.addEventListener('click',e=>{if(e.target===modal){e.preventDefault();e.stopPropagation();closeModal()}});sheet.addEventListener('click',e=>e.stopPropagation())}
+  document.onkeydown=e=>{if(e.key==='Escape'&&modal&&modal.style.display!=='none')closeModal()};
+  attachSwipe();
+}
 function toast(t){let x=document.querySelector('.toast');if(!x){x=document.createElement('div');x.className='toast';document.body.appendChild(x)}x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
 fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})});
