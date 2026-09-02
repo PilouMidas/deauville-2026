@@ -1,9 +1,9 @@
 
-const VERSION="0.7.0";
+const VERSION="0.8.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
-const KEY="deauville2026-personal-planning-v070";
-const LEGACY_KEYS=["deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
+const KEY="deauville2026-personal-planning-v080";
+const LEGACY_KEYS=["deauville2026-personal-planning-v070","deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
 
 const pad=n=>String(n).padStart(2,"0");
 function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
@@ -71,6 +71,23 @@ function compatible(date,w){
     return ss>=ws && ee<=we;
   });
 }
+function normTitle(s){return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9]+/g," ").trim()}
+const JURY_FILMS=[
+  "Les Contrebandiers","Queen at Sea","Everybody Digs Bill Evans","Pressure","L'Invitation",
+  "Mouse","Méli-Mélo","If I Go Will They Miss Me","Here I'm Alive","A Prayer for the Dying",
+  "I'll Be Gone in June","The Last Pickpocket in New York","Test","Party USA","The Man I Love",
+  "The Liberation of Rita Cooper","Company","The Accompanist","Club Kid","Burgundy"
+].map(normTitle);
+function juryFilmAlreadyPlanned(s){
+  const t=normTitle(s.title);
+  return JURY_FILMS.includes(t) && DATA.jury.some(j=>{
+    const jt=normTitle(j.title);
+    return jt===t || jt.includes(t);
+  });
+}
+function alreadyPlanned(s){
+  return plan.some(p=>p.sessionId===s.id) || juryFilmAlreadyPlanned(s);
+}
 function conflict(s){
   const ss=mins(s.start);
   const ee=mins(s.end)<ss?mins(s.end)+1440:mins(s.end);
@@ -81,7 +98,7 @@ function conflict(s){
 }
 function addSession(id){
   const s=DATA.sessions.find(x=>x.id===id); if(!s)return;
-  if(plan.some(x=>x.sessionId===id)){toast("Cette séance est déjà dans ton planning");return}
+  if(alreadyPlanned(s)){toast("Cette séance est déjà dans ton planning");return}
   if(conflict(s)){openSession(id,true);return}
   plan.push({id:"p_"+id,sessionId:id,title:s.title,date:s.date,start:s.start,end:s.end,place:s.place,category:s.category});
   savePlan(); closeModal(); render(); toast("Séance ajoutée à ton planning");
@@ -122,14 +139,12 @@ function render(){
   <div class="hint">Glisser pour changer de jour</div></header>
   <main><div class="section">MON PLANNING</div>${body||`<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>`}</main></div>
   <nav class="bottom"><button class="active">Planning</button><button onclick="toast('Explorer arrive à l’étape suivante')">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
-  <div class="modal" id="modal"><div class="sheet"><button class="close" id="close">×</button><div class="handle"></div><div id="sheet"></div></div></div>`;
+  <div class="modal" id="modal"><div class="sheet"><div class="handle"></div><div id="sheet"></div></div></div>`;
 
   prev.onclick=()=>move(-1);next.onclick=()=>move(1);pick.onclick=pickDate;
-  close.onclick=(e)=>{e.preventDefault();e.stopPropagation();closeModal()};
-  close.onpointerup=(e)=>{e.preventDefault();e.stopPropagation();closeModal()};
   modal.onclick=e=>{if(e.target===modal)closeModal()};
-  modal.addEventListener("click",e=>{if(e.target.closest("#close")){e.preventDefault();e.stopPropagation();closeModal()}});
-  modal.addEventListener("pointerup",e=>{if(e.target.closest("#close")){e.preventDefault();e.stopPropagation();closeModal()}});
+  modal.addEventListener("pointerup",e=>{if(e.target===modal)closeModal()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape" && modal.style.display!=="none")closeModal()});
   document.querySelectorAll("[data-jury]").forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
   document.querySelectorAll("[data-plan]").forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
   document.querySelectorAll("[data-free]").forEach(e=>e.onclick=()=>{let [s,en]=e.dataset.free.split("|");openFree(s,en)});
@@ -190,13 +205,13 @@ function openFree(start,end){
   const labelEnd=hh(em);
   openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${labelStart} → ${labelEnd}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div>
   <div class="section">SÉANCES COMPATIBLES</div>
-  ${opts.length?opts.map(o=>`<button class="compat" onclick="openSession('${o.id}')"><b>${esc(o.title)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
+  ${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?"already":""}" onclick="openSession('${o.id}')"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`}).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
 }
 function openSession(id,blocked=false){
  const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
- const already=plan.some(p=>p.sessionId===id);
+ const already=alreadyPlanned(s);
  openModal(`<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(s.category)}</div>
- ${already?'<div class="notice">Cette séance est déjà dans ton planning.</div>':blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
+ ${already?'<div class="notice">Cette séance est déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
 }
 function toast(t){let x=document.querySelector(".toast");if(!x){x=document.createElement("div");x.className="toast";document.body.appendChild(x)}x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
 fetch("data.json").then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})});
