@@ -1,5 +1,5 @@
-const C="deauville-planning-0.12.0";
-const A=["./","./index.html","./style.css?v=0.12.0","./app.js?v=0.12.0","./data.json","./manifest.json?v=0.12.0","./icon.svg"];
+const C="deauville-planning-1.0.0";
+const A=["./","./index.html","./style.css?v=1.0.0","./app.js?v=1.0.0","./data.json","./manifest.json?v=1.0.0","./icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(C).then(cache=>cache.addAll(A)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",event=>{

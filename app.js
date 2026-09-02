@@ -1,5 +1,5 @@
 
-const VERSION="0.12.0";
+const VERSION="1.0.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
 const KEY="deauville2026-personal-planning-v100";
@@ -107,117 +107,86 @@ function removeSession(pid){
   plan=plan.filter(x=>x.id!==pid);savePlan();closeModal();render();toast("Séance retirée du planning");
 }
 
+const CAT_LABEL={COMP:"Compétition",PREM:"Premières",DOC:"American Doc Stories",POV:"Prix d'Ornano-Valenti",BF:"Deauville Talent Award — Brendan Fraser",EH:"Deauville Talent Award — Ethan Hawke",250:"Once Upon a Time (In) America"};
+const PLACES=["Tous les lieux","CID","Casino","Morny 1","Morny 2","Morny 3"];
+let view="planning", filters={place:"Tous les lieux",category:"Toutes les catégories",collection:"Toutes les collections",search:""};
+function catLabel(c){return CAT_LABEL[c]||c||""}
+function isInMyPlan(s){return plan.some(p=>p.sessionId===s.id)}
+function isJuryForFilm(s){return juryFilmAlreadyPlanned(s)}
+function starsFor(s){return !!s.star || !!s.etoile || !!s.étoile || !!s.seanceEtoile}
+function collectionLabel(s){return s.category==="250"?"Once Upon a Time (In) America":""}
+function sessionMatches(s){
+  if(filters.place!=="Tous les lieux" && s.place!==filters.place)return false;
+  if(filters.category!=="Toutes les catégories" && catLabel(s.category)!==filters.category)return false;
+  if(filters.collection!=="Toutes les collections" && collectionLabel(s)!==filters.collection)return false;
+  const q=normTitle(filters.search);
+  if(q && !normTitle(s.title).includes(q))return false;
+  return true;
+}
+function sortedSessions(date){return DATA.sessions.filter(s=>s.date===date && sessionMatches(s)).sort((a,b)=>mins(a.start)-mins(b.start)||a.title.localeCompare(b.title,"fr"))}
+function dayCount(){return DATA.sessions.filter(s=>s.date===dates[day]).length}
 function render(){
-  const date=dates[day], fixed=fixedItems(date), personal=plan.filter(x=>x.date===date), rows=[];
-  allPlanned(date).forEach(x=>{
-    if(x.source==="jury"||x.source==="juryExtra") rows.push({type:"jury",s:x.s,x});
-    else rows.push({type:"personal",s:x.s,x});
-  });
-  freeWindows(date).forEach(w=>rows.push({type:"free",s:w.start,w}));
-  rows.sort((a,b)=>a.s-b.s);
-
-  const body=rows.map(r=>{
-    if(r.type==="free"){
-      const opts=compatible(date,r.w);
-      return `<div class="item free ${opts.length?"click":""}" data-free="${r.w.start}|${r.w.end}">
-        <div class="time">${hh(r.w.start)}<br><span class="timeSep">→</span><br>${hh(r.w.end)}</div>
-        <div class="content"><div class="title freeTitle">Créneau libre</div>
-        <div class="meta"><span class="freeText">${dur(r.w.start,r.w.end)} disponibles</span>
-        ${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?"s":""} compatible${opts.length>1?"s":""}</span>`:""}</div></div></div>`;
-    }
-    const x=r.x;
-    const personal=r.type==="personal";
-    return `<div class="item ${personal?"personal":"jury"}" data-${personal?"plan":"jury"}="${x.id}">
-      <div class="time">${x.start}–${x.end}</div><div class="content">
-      <div class="title">${esc(x.title)}</div><div class="meta"><span>${esc(x.place)}</span>
-      <span class="badge ${personal?"green":"gold"}">${personal?"MON PLANNING":"JURY · OBLIGATOIRE"}</span></div></div></div>`;
-  }).join("");
-
+  const date=dates[day];
   document.getElementById("app").innerHTML=`<div class="app">
   <header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div>
   <div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div>
   <div class="hint">Glisser pour changer de jour</div></header>
-  <main><div class="section">MON PLANNING</div>${body||`<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>`}</main></div>
-  <nav class="bottom"><button class="active">Planning</button><button onclick="toast('Explorer arrive à l’étape suivante')">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
+  <main>
+    <div class="exploreSwitch"><button class="tab ${view==='planning'?'sel':''}" data-view="planning">MON PLANNING</button><button class="tab ${view==='explorer'?'sel':''}" data-view="explorer">EXPLORER</button></div>
+    ${view==='explorer'?explorerView(date):planningView(date)}
+  </main></div>
+  <nav class="bottom"><button class="${view==='planning'?'active':''}" data-view="planning">Planning</button><button class="${view==='explorer'?'active':''}" data-view="explorer">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
   <div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
-
-  prev.onclick=()=>move(-1);next.onclick=()=>move(1);pick.onclick=pickDate;
-  modal.addEventListener("click",e=>{
-    if(e.target===modal){e.preventDefault();closeModal();}
-  });
-  document.querySelector(".sheet").addEventListener("click",e=>e.stopPropagation());
-  document.addEventListener("keydown",e=>{if(e.key==="Escape" && modal.style.display!=="none")closeModal()});
-  document.querySelectorAll("[data-jury]").forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
-  document.querySelectorAll("[data-plan]").forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
-  document.querySelectorAll("[data-free]").forEach(e=>e.onclick=()=>{let [s,en]=e.dataset.free.split("|");openFree(s,en)});
-  const swipeTarget=document.querySelector(".app");
-  let swipeStartX=null, swipeStartY=null, swipeLocked=false;
-  swipeTarget.addEventListener("touchstart",e=>{
-    if(e.touches.length!==1)return;
-    const t=e.touches[0];
-    swipeStartX=t.clientX; swipeStartY=t.clientY; swipeLocked=false;
-  },{passive:true});
-  swipeTarget.addEventListener("touchmove",e=>{
-    if(swipeStartX===null || e.touches.length!==1)return;
-    const t=e.touches[0];
-    const dx=t.clientX-swipeStartX, dy=t.clientY-swipeStartY;
-    // A swipe must be predominantly horizontal; vertical scrolling never changes day.
-    if(Math.abs(dx)>18 && Math.abs(dx)>Math.abs(dy)*1.35) swipeLocked=true;
-  },{passive:true});
-  swipeTarget.addEventListener("touchend",e=>{
-    if(swipeStartX===null)return;
-    const t=e.changedTouches[0];
-    const dx=t.clientX-swipeStartX, dy=t.clientY-swipeStartY;
-    const isHorizontal=Math.abs(dx)>=55 && Math.abs(dx)>Math.abs(dy)*1.35;
-    if(isHorizontal && swipeLocked) move(dx<0?1:-1);
-    swipeStartX=null; swipeStartY=null; swipeLocked=false;
-  },{passive:true});
-  swipeTarget.addEventListener("touchcancel",()=>{
-    swipeStartX=null; swipeStartY=null; swipeLocked=false;
-  },{passive:true});
-  // Pointer support for desktop testing, with the same one-step guard.
-  let pointerStartX=null,pointerStartY=null;
-  swipeTarget.addEventListener("pointerdown",e=>{
-    if(e.pointerType==="mouse" && e.button!==0)return;
-    pointerStartX=e.clientX; pointerStartY=e.clientY;
-  });
-  swipeTarget.addEventListener("pointerup",e=>{
-    if(pointerStartX===null)return;
-    const dx=e.clientX-pointerStartX,dy=e.clientY-pointerStartY;
-    if(Math.abs(dx)>=70 && Math.abs(dx)>Math.abs(dy)*1.35) move(dx<0?1:-1);
-    pointerStartX=null;pointerStartY=null;
-  });
-  swipeTarget.addEventListener("pointercancel",()=>{
-    pointerStartX=null;pointerStartY=null;
-  });
+  prev.onclick=()=>move(-1); next.onclick=()=>move(1); pick.onclick=pickDate;
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render()});
+  document.querySelectorAll('[data-free]').forEach(e=>e.onclick=()=>{let [s,en]=e.dataset.free.split('|');openFree(s,en)});
+  document.querySelectorAll('[data-jury]').forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
+  document.querySelectorAll('[data-plan]').forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
+  document.querySelectorAll('[data-session]').forEach(e=>e.onclick=()=>openSession(e.dataset.session));
+  document.querySelectorAll('[data-filter-place]').forEach(e=>e.onchange=()=>{filters.place=e.value;render()});
+  document.querySelectorAll('[data-filter-cat]').forEach(e=>e.onchange=()=>{filters.category=e.value;render()});
+  document.querySelectorAll('[data-filter-col]').forEach(e=>e.onchange=()=>{filters.collection=e.value;render()});
+  const search=document.getElementById('search'); if(search){search.oninput=()=>{filters.search=search.value;render(); const el=document.getElementById('search'); if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}}}
+  const modal=document.getElementById('modal');
+  modal.addEventListener('click',e=>{if(e.target===modal){e.preventDefault();closeModal()}});
+  document.querySelector('.sheet').addEventListener('click',e=>e.stopPropagation());
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+  attachSwipe();
 }
-function move(n){day=Math.max(0,Math.min(9,day+n));render();window.scrollTo({top:0,behavior:"smooth"})}
-function closeModal(){modal.style.display="none";modal.setAttribute("aria-hidden","true")}
-function openModal(c){sheet.innerHTML=c;modal.style.display="flex";modal.setAttribute("aria-hidden","false")}
-
-function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>Mon planning</h2><div class="datepick">${dates.map((d,i)=>`<button class="${i===day?"sel":""}" data-d="${i}">${dateLabel(d)}</button>`).join("")}</div>`);document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{day=+b.dataset.d;closeModal();render()})}
+function planningView(date){
+  const fixed=fixedItems(date), rows=[];
+  allPlanned(date).forEach(x=>rows.push({type:(x.source==='jury'||x.source==='juryExtra')?'jury':'personal',s:x.s,x}));
+  freeWindows(date).forEach(w=>rows.push({type:'free',s:w.start,w})); rows.sort((a,b)=>a.s-b.s);
+  const body=rows.map(r=>{if(r.type==='free'){const opts=compatible(date,r.w);return `<div class="item free ${opts.length?'click':''}" data-free="${r.w.start}|${r.w.end}"><div class="time">${hh(r.w.start)}<br><span class="timeSep">→</span><br>${hh(r.w.end)}</div><div class="content"><div class="title freeTitle">Créneau libre</div><div class="meta"><span>${dur(r.w.start,r.w.end)} disponibles</span>${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?'s':''} compatible${opts.length>1?'s':''}</span>`:''}</div></div></div>`}const x=r.x,p=r.type==='personal';return `<div class="item ${p?'personal':'jury'}" data-${p?'plan':'jury'}="${x.id}"><div class="time">${x.start}–${x.end}</div><div class="content"><div class="title">${esc(x.title)}</div><div class="meta"><span>${esc(x.place)}</span><span class="badge ${p?'green':'gold'}">${p?'MON PLANNING':'JURY · OBLIGATOIRE'}</span></div></div></div>`}).join('');
+  return `<div class="section">MON PLANNING</div>${body||'<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>'}`;
+}
+function explorerView(date){
+  const sessions=sortedSessions(date);
+  const cats=["Toutes les catégories",...Object.values(CAT_LABEL).filter((v,i,a)=>a.indexOf(v)===i)];
+  const collections=["Toutes les collections","Once Upon a Time (In) America"];
+  const hasStars=DATA.sessions.some(starsFor);
+  return `<div class="section">EXPLORER · ${sessions.length} SÉANCE${sessions.length>1?'S':''}</div>
+  <div class="filters"><div class="searchWrap"><span>⌕</span><input id="search" value="${esc(filters.search)}" placeholder="Rechercher un film…" autocomplete="off"></div>
+  <div class="filterRow"><select data-filter-place>${PLACES.map(x=>`<option ${filters.place===x?'selected':''}>${x}</option>`).join('')}</select><select data-filter-cat>${cats.map(x=>`<option ${filters.category===x?'selected':''}>${x}</option>`).join('')}</select></div>
+  <div class="filterRow"><select data-filter-col>${collections.map(x=>`<option ${filters.collection===x?'selected':''}>${x}</option>`).join('')}</select>${hasStars?'<button class="starFilter">⭐ Séances étoile</button>':''}</div></div>
+  ${sessions.length?sessions.map(explorerCard).join(''):`<div class="empty">Aucune séance ne correspond à ces filtres.</div>`}`;
+}
+function explorerCard(s){
+  const jury=isJuryForFilm(s), personal=isInMyPlan(s), star=starsFor(s);
+  return `<button class="exploreCard" data-session="${s.id}"><div class="ecTime">${s.start}</div><div class="ecBody"><div class="ecTitle">${esc(s.title)}</div><div class="ecMeta">${esc(s.place)} · ${esc(catLabel(s.category))}</div><div class="ecBadges">${jury?'<span class="badge gold">JURY · DÉJÀ AU PLANNING</span>':''}${personal?'<span class="badge green">MON PLANNING</span>':''}${star?'<span class="badge star">⭐ SÉANCE ÉTOILE</span>':''}</div></div><div class="ecArrow">›</div></button>`;
+}
+function attachSwipe(){
+  const target=document.querySelector('.app');let sx=null,sy=null;
+  target.addEventListener('touchstart',e=>{if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY}},{passive:true});
+  target.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>=55&&Math.abs(dx)>Math.abs(dy)*1.35)move(dx<0?1:-1);sx=sy=null},{passive:true});
+}
+function move(n){day=Math.max(0,Math.min(9,day+n));render();window.scrollTo({top:0,behavior:'smooth'})}
+function closeModal(){const m=document.getElementById('modal');if(m){m.style.display='none';m.setAttribute('aria-hidden','true')}}
+function openModal(c){const m=document.getElementById('modal');document.getElementById('sheet').innerHTML=c;m.style.display='flex';m.setAttribute('aria-hidden','false')}
+function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>${view==='explorer'?'Explorer':'Mon planning'}</h2><div class="datepick">${dates.map((d,i)=>`<button class="${i===day?'sel':''}" data-d="${i}">${dateLabel(d)}</button>`).join('')}</div>`);document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{day=+b.dataset.d;closeModal();render()})}
 function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id);if(!x)return;openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><p>Ce créneau est une contrainte fixe de ton planning Jury.</p>`)}
 function openPlan(id){const x=plan.find(a=>a.id===id);if(!x)return;openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
-function openFree(start,end){
-  // data-free stores minute values; normalize them before both display and matching.
-  const sm=typeof start==="number"?start:Number(start);
-  const em=typeof end==="number"?end:Number(end);
-  const w={start:sm,end:em};
-  const opts=compatible(dates[day],w);
-  const labelStart=hh(sm);
-  const labelEnd=hh(em);
-  openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${labelStart} → ${labelEnd}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div>
-  <div class="section">SÉANCES COMPATIBLES</div>
-  ${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?"already":""}" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`}).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
-}
-function openSession(id,blocked=false,backStart=null,backEnd=null){
- const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
- const already=alreadyPlanned(s);
- const backButton=(backStart!==null && backEnd!==null)
-   ? `<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`
-   : '';
- openModal(`${backButton}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(s.category)}</div>
- ${already?'<div class="notice">Cette séance est déjà dans ton planning, car elle fait partie de tes obligations Jury.</div><button class="btn primary" onclick="addSession(\'${s.id}\',true)">Ajouter quand même à mon planning</button>':blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
-}
-function toast(t){let x=document.querySelector(".toast");if(!x){x=document.createElement("div");x.className="toast";document.body.appendChild(x)}x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
-fetch("data.json").then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})});
+function openFree(start,end){const sm=Number(start),em=Number(end),opts=compatible(dates[day],{start:sm,end:em});openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${hh(sm)} → ${hh(em)}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?'already':''}" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(catLabel(o.category))}</small></button>`}).join(''):'<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>'}`)}
+function openSession(id,blocked=false,backStart=null,backEnd=null){const s=DATA.sessions.find(x=>x.id===id);if(!s)return;const already=alreadyPlanned(s),back=(backStart!==null&&backEnd!==null)?`<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`:'';const jury=isJuryForFilm(s);openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${collectionLabel(s)?`<br>📚 ${collectionLabel(s)}`:''}${starsFor(s)?'<br>⭐ Séance étoile':''}</div>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`)}
+function toast(t){let x=document.querySelector('.toast');if(!x){x=document.createElement('div');x.className='toast';document.body.appendChild(x)}x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
+fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})});
