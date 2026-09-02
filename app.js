@@ -1,8 +1,8 @@
 
-const VERSION="0.10.0";
+const VERSION="0.11.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
-const KEY="deauville2026-personal-planning-v090";
+const KEY="deauville2026-personal-planning-v100";
 const LEGACY_KEYS=["deauville2026-personal-planning-v080","deauville2026-personal-planning-v070","deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
 
 const pad=n=>String(n).padStart(2,"0");
@@ -208,12 +208,15 @@ function openFree(start,end){
   const labelEnd=hh(em);
   openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${labelStart} → ${labelEnd}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div>
   <div class="section">SÉANCES COMPATIBLES</div>
-  ${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?"already":""}" onclick="openSession('${o.id}')"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`}).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
+  ${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?"already":""}" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`}).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
 }
-function openSession(id,blocked=false){
+function openSession(id,blocked=false,backStart=null,backEnd=null){
  const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
  const already=alreadyPlanned(s);
- openModal(`<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(s.category)}</div>
+ const backButton=(backStart!==null && backEnd!==null)
+   ? `<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`
+   : '';
+ openModal(`${backButton}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(s.category)}</div>
  ${already?'<div class="notice">Cette séance est déjà dans ton planning, car elle fait partie de tes obligations Jury.</div><button class="btn primary" onclick="addSession(\'${s.id}\',true)">Ajouter quand même à mon planning</button>':blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
 }
 function toast(t){let x=document.querySelector(".toast");if(!x){x=document.createElement("div");x.className="toast";document.body.appendChild(x)}x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
