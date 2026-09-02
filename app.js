@@ -1,8 +1,9 @@
 
-const VERSION="0.2.0";
+const VERSION="0.6.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
-const KEY="deauville2026-personal-planning-v020";
+const KEY="deauville2026-personal-planning-v060";
+const LEGACY_KEYS=["deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
 
 const pad=n=>String(n).padStart(2,"0");
 function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
@@ -15,7 +16,21 @@ function dur(a,b){
   if(d<0)d+=1440;
   return `${Math.floor(d/60)}h${d%60?pad(d%60):""}`;
 }
-function loadPlan(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return[]}}
+function loadPlan(){
+  try{
+    const current=localStorage.getItem(KEY);
+    if(current) return JSON.parse(current);
+    for(const k of LEGACY_KEYS){
+      const raw=localStorage.getItem(k);
+      if(raw){
+        const parsed=JSON.parse(raw);
+        localStorage.setItem(KEY,JSON.stringify(parsed));
+        return parsed;
+      }
+    }
+    return [];
+  }catch{return[]}
+}
 function savePlan(){localStorage.setItem(KEY,JSON.stringify(plan))}
 let plan=[];
 
@@ -52,9 +67,11 @@ function compatible(date,w){
   }).filter(s=>!plan.some(p=>p.sessionId===s.id));
 }
 function conflict(s){
+  const ss=mins(s.start);
+  const ee=mins(s.end)<ss?mins(s.end)+1440:mins(s.end);
   return allPlanned(s.date).some(x=>{
     if(x.id===s.id || x.sessionId===s.id)return false;
-    return s.start<undefined ? false : (mins(s.start)<x.e && (mins(s.end)<mins(s.start)?mins(s.end)+1440:mins(s.end))>x.s);
+    return ss<x.e && ee>x.s;
   });
 }
 function addSession(id){
@@ -171,4 +188,4 @@ function openSession(id,blocked=false){
  ${already?'<div class="notice">Cette séance est déjà dans ton planning.</div>':blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
 }
 function toast(t){let x=document.querySelector(".toast");if(!x){x=document.createElement("div");x.className="toast";document.body.appendChild(x)}x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
-fetch("data.json").then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js")});
+fetch("data.json").then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})});

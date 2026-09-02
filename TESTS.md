@@ -1,18 +1,23 @@
-# TESTS — v0.3
+# TESTS — v0.6.0
 
-Corrections de cette étape :
-- Les inaugurations de cabines de plage du Guide ne sont plus considérées comme des obligations Jury.
-- Le planning obligatoire provient uniquement de `VOTRE PLANNING` dans le PDF Jury.
-- Les projections communes Guide/Jury ne sont pas dupliquées.
-- Le swipe est attaché à l'application entière avec touch events + pointer fallback.
-- Le sélecteur de date reste disponible.
-- Le détail d'un créneau libre affiche de nouveau ses horaires explicites.
-- Correction du bug d'affichage des durées qui produisait des nombres bruts au lieu de `HH:MM`.
-- Les séances compatibles affichent titre + horaires + salle + catégorie.
-- Le planning personnel reste persistant via localStorage.
+## Corrections intégrées
+- Version affichée dans l'application : **v0.6.0**.
+- Version des données : **0.6.0**.
+- Cache PWA/service worker : **deauville-planning-0.6.0**.
+- Les assets `index.html`, CSS, JS et manifest sont versionnés en `?v=0.6.0`.
+- Le service worker est enregistré avec `updateViaCache: "none"` et forcé à vérifier sa mise à jour.
+- Le service worker utilise une stratégie réseau d'abord : une nouvelle version publiée est donc récupérée immédiatement quand le réseau est disponible.
+- Les anciennes clés localStorage v0.2/v0.3/v0.4/v0.5 sont migrées vers la clé v0.6 afin de ne pas perdre le planning personnel existant.
+- Correction définitive de la fonction de détection de conflit (suppression de la condition erronée `s.start<undefined`).
 
-- v0.4 : durée des créneaux libres calculée sur des minutes numériques, suppression du bug d'affichage en nombres bruts.
-- v0.4 : bouton × du panneau rendu réellement cliquable/tactile avec gestion click + pointerup et zone tactile 44px.
+## Données
+- 132 séances issues du programme officiel intégré.
+- 29 contraintes issues du planning Jury « VOTRE PLANNING ».
+- 0 contrainte `juryExtra` : les inaugurations de cabines de plage ne sont pas des obligations Jury.
+- Les alias « American Nightmare » / « Gremlins, l’Amérique parasitée » sont conservés.
 
-- v0.5 : swipe horizontal protégé contre les mouvements verticaux et limité à exactement un changement de jour par geste.
-- v0.5 : touchcancel géré pour éviter les gestes fantômes.
+## Tests techniques
+- `node --check app.js` : OK.
+- `node --check sw.js` : OK.
+- JSON `data.json` : valide.
+- Aucune référence active à la version 0.2.0 ou 0.5.0 dans l'interface, les données ou le cache.
