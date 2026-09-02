@@ -1,9 +1,9 @@
 
-const VERSION="0.6.0";
+const VERSION="0.7.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
-const KEY="deauville2026-personal-planning-v060";
-const LEGACY_KEYS=["deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
+const KEY="deauville2026-personal-planning-v070";
+const LEGACY_KEYS=["deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
 
 const pad=n=>String(n).padStart(2,"0");
 function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
@@ -60,11 +60,16 @@ function freeWindows(date){
 }
 function hh(m){return `${pad(Math.floor(m/60)%24)}:${pad(m%60)}`}
 function compatible(date,w){
+  // Compare everything on the same minute timeline. A free window may end at
+  // 24:00 (1440), while sessions remain expressed as HH:MM.
+  const ws=Number(w.start), we=Number(w.end);
   return DATA.sessions.filter(s=>{
     if(s.date!==date)return false;
-    const ss=mins(s.start), ee=mins(s.end)<ss?mins(s.end)+1440:mins(s.end);
-    return ss>=w.start && ee<=w.end;
-  }).filter(s=>!plan.some(p=>p.sessionId===s.id));
+    const ss=mins(s.start);
+    const rawEnd=mins(s.end);
+    const ee=rawEnd<ss?rawEnd+1440:rawEnd;
+    return ss>=ws && ee<=we;
+  });
 }
 function conflict(s){
   const ss=mins(s.start);
@@ -176,10 +181,16 @@ function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>Mo
 function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id);if(!x)return;openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><p>Ce créneau est une contrainte fixe de ton planning Jury.</p>`)}
 function openPlan(id){const x=plan.find(a=>a.id===id);if(!x)return;openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
 function openFree(start,end){
- const w={start:mins(start),end:mins(end)}, opts=compatible(dates[day],w);
- openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${start} → ${end}</h2><div class="info"><b>${dur(start,end)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div>
- <div class="section">SÉANCES COMPATIBLES</div>
- ${opts.length?opts.map(o=>`<button class="compat" onclick="openSession('${o.id}')"><b>${esc(o.title)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
+  // data-free stores minute values; normalize them before both display and matching.
+  const sm=typeof start==="number"?start:Number(start);
+  const em=typeof end==="number"?end:Number(end);
+  const w={start:sm,end:em};
+  const opts=compatible(dates[day],w);
+  const labelStart=hh(sm);
+  const labelEnd=hh(em);
+  openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${labelStart} → ${labelEnd}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div>
+  <div class="section">SÉANCES COMPATIBLES</div>
+  ${opts.length?opts.map(o=>`<button class="compat" onclick="openSession('${o.id}')"><b>${esc(o.title)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
 }
 function openSession(id,blocked=false){
  const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
