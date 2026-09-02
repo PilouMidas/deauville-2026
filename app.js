@@ -1,5 +1,5 @@
 
-const VERSION="0.9.0";
+const VERSION="0.10.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
 const KEY="deauville2026-personal-planning-v090";
@@ -139,14 +139,13 @@ function render(){
   <div class="hint">Glisser pour changer de jour</div></header>
   <main><div class="section">MON PLANNING</div>${body||`<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>`}</main></div>
   <nav class="bottom"><button class="active">Planning</button><button onclick="toast('Explorer arrive à l’étape suivante')">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
-  <div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><button class="handle" type="button" aria-label="Fermer la fiche"></button><div id="sheet"></div></div></div>`;
+  <div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
 
   prev.onclick=()=>move(-1);next.onclick=()=>move(1);pick.onclick=pickDate;
-  modal.onclick=e=>{
-    if(e.target===modal){e.preventDefault();e.stopPropagation();closeModal();}
-  };
-  document.querySelector(".handle").onclick=e=>{e.preventDefault();e.stopPropagation();closeModal()};
-  modal.addEventListener("click",e=>{e.stopPropagation()},true);
+  modal.addEventListener("click",e=>{
+    if(e.target===modal){e.preventDefault();closeModal();}
+  });
+  document.querySelector(".sheet").addEventListener("click",e=>e.stopPropagation());
   document.addEventListener("keydown",e=>{if(e.key==="Escape" && modal.style.display!=="none")closeModal()});
   document.querySelectorAll("[data-jury]").forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
   document.querySelectorAll("[data-plan]").forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
