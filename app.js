@@ -1,230 +1,58 @@
-
-const VERSION="2.0.0";
+const VERSION="2.0.1";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
-let DATA=null, day=0, touchX=0;
-const KEY="deauville2026-personal-planning-v110";
-const LEGACY_KEYS=["deauville2026-personal-planning-v100","deauville2026-personal-planning-v080","deauville2026-personal-planning-v070","deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
-
+let DATA=null,day=0,view="planning",plan=[],wishes=[];
+const KEY="deauville2026-personal-planning-v110",WISH_KEY="deauville2026-wishlist-v200";
 const pad=n=>String(n).padStart(2,"0");
-function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
-function dateLabel(d){return new Intl.DateTimeFormat("fr-FR",{weekday:"long",day:"numeric",month:"long"}).format(new Date(d+"T12:00:00"))}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function dur(a,b){
-  const sm=typeof a==="number"?a:mins(a);
-  const em=typeof b==="number"?b:mins(b);
-  let d=em-sm;
-  if(d<0)d+=1440;
-  return `${Math.floor(d/60)}h${d%60?pad(d%60):""}`;
-}
-function loadPlan(){
-  try{
-    const current=localStorage.getItem(KEY);
-    if(current) return JSON.parse(current);
-    for(const k of LEGACY_KEYS){
-      const raw=localStorage.getItem(k);
-      if(raw){
-        const parsed=JSON.parse(raw);
-        localStorage.setItem(KEY,JSON.stringify(parsed));
-        return parsed;
-      }
-    }
-    return [];
-  }catch{return[]}
-}
-function savePlan(){localStorage.setItem(KEY,JSON.stringify(plan))}
-let plan=[];
-const WISH_KEY="deauville2026-wishlist-v200";
-let wishes=[];
-function canonicalTitle(title){
-  const raw=String(title||"");
-  const aliases=DATA?.aliases||{};
-  return aliases[raw]||raw;
-}
-function loadWishes(){try{return JSON.parse(localStorage.getItem(WISH_KEY)||"[]")}catch{return[]}}
-function saveWishes(){localStorage.setItem(WISH_KEY,JSON.stringify(wishes))}
-function wished(title){const c=normTitle(canonicalTitle(title));return wishes.some(x=>normTitle(x)===c)}
-function toggleWish(title){
-  const c=canonicalTitle(title);
-  if(wished(c)) wishes=wishes.filter(x=>normTitle(x)!==normTitle(c));
-  else wishes.push(c);
-  saveWishes();
-  render();
-  toast(wished(c)?"Ajouté à tes envies ❤️":"Retiré de tes envies");
-}
-function wishTitles(){return wishes.slice().sort((a,b)=>a.localeCompare(b,"fr"))}
-function filmSessions(title){const t=normTitle(canonicalTitle(title));return DATA.sessions.filter(s=>normTitle(canonicalTitle(s.title))===t).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start))}
-function conflictItems(s){
-  const ss=mins(s.start), ee0=mins(s.end), ee=ee0<ss?ee0+1440:ee0;
-  return allPlanned(s.date).filter(x=>{if(x.sessionId===s.id||x.id===s.id)return false;return ss<x.e&&ee>x.s;});
-}
-function sessionStatusHtml(s){
-  const conflicts=conflictItems(s);
-  const personal=plan.some(p=>p.sessionId===s.id);
-  const jury=conflicts.some(x=>x.source==='jury'||x.source==='juryExtra');
-  if(conflicts.length){
-    return `<div class="wishStatus bad">⚠️ NON COMPATIBLE${jury?' · CONFLIT JURY':''}</div>`;
-  }
-  if(personal) return '<div class="wishStatus planned">✓ SÉANCE PLANIFIÉE</div>';
-  if(juryFilmAlreadyPlanned(s)) return '<div class="wishStatus juryPlan">✓ SÉANCE JURY PLANIFIÉE</div>';
-  return '<div class="wishStatus good">✓ COMPATIBLE</div>';
-}
-function openWishes(){view="wishes";closeModal();render()}
-
-function fixedItems(date){
-  return [
-    ...DATA.jury.filter(x=>x.date===date).map(x=>({...x,source:"jury",mandatory:true})),
-    ...DATA.juryExtra.filter(x=>x.date===date).map(x=>({...x,source:"juryExtra",mandatory:true}))
-  ].sort((a,b)=>mins(a.start)-mins(b.start));
-}
-function allPlanned(date){
-  return [...fixedItems(date),...plan.filter(x=>x.date===date)]
-    .map(x=>({...x,s:mins(x.start),e:(mins(x.end)<mins(x.start)?mins(x.end)+1440:mins(x.end))}))
-    .sort((a,b)=>a.s-b.s);
-}
-function freeWindows(date){
-  const fixed=allPlanned(date);
-  let cursor=date==="2026-09-04"?15*60:8*60;
-  const boundary=date==="2026-09-13"?12*60+12:24*60;
-  const out=[];
-  for(const x of fixed){
-    const s=Math.max(x.s,cursor), e=Math.min(x.e,boundary);
-    if(s>cursor) out.push({start:cursor,end:s});
-    cursor=Math.max(cursor,x.e);
-  }
-  if(cursor<boundary)out.push({start:cursor,end:boundary});
-  return out.filter(w=>w.end-w.start>=30);
-}
-function hh(m){return `${pad(Math.floor(m/60)%24)}:${pad(m%60)}`}
-function compatible(date,w){
-  const ws=Number(w.start), we=Number(w.end);
-  return DATA.sessions.filter(s=>{
-    if(s.date!==date)return false;
-    const ss=mins(s.start);
-    const rawEnd=mins(s.end);
-    const ee=rawEnd<ss?rawEnd+1440:rawEnd;
-    return ss>=ws && ee<=we;
-  });
-}
-function normTitle(s){return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9]+/g," ").trim()}
-const JURY_FILMS=[
-  "Les Contrebandiers","Queen at Sea","Everybody Digs Bill Evans","Pressure","L'Invitation",
-  "Mouse","Méli-Mélo","If I Go Will They Miss Me","Here I'm Alive","A Prayer for the Dying",
-  "I'll Be Gone in June","The Last Pickpocket in New York","Test","Party USA","The Man I Love",
-  "The Liberation of Rita Cooper","Company","The Accompanist","Club Kid","Burgundy"
-].map(normTitle);
-function juryFilmAlreadyPlanned(s){
-  const t=normTitle(s.title);
-  return JURY_FILMS.includes(t) && DATA.jury.some(j=>{
-    const jt=normTitle(j.title);
-    return jt===t || jt.includes(t);
-  });
-}
-function alreadyPlanned(s){return plan.some(p=>p.sessionId===s.id) || juryFilmAlreadyPlanned(s)}
-function conflict(s){
-  const ss=mins(s.start);
-  const ee=mins(s.end)<ss?mins(s.end)+1440:mins(s.end);
-  return allPlanned(s.date).some(x=>{if(x.id===s.id || x.sessionId===s.id)return false;return ss<x.e && ee>x.s});
-}
-function addSession(id,force=false){
-  const s=DATA.sessions.find(x=>x.id===id); if(!s)return;
-  if(alreadyPlanned(s) && !force){toast("Cette séance est déjà dans ton planning");return}
-  if(conflict(s)){openSession(id,true);return}
-  plan.push({id:"p_"+id,sessionId:id,title:s.title,date:s.date,start:s.start,end:s.end,place:s.place,category:s.category});
-  savePlan(); closeModal(); render(); toast("Séance ajoutée à ton planning");
-}
-function removeSession(pid){plan=plan.filter(x=>x.id!==pid);savePlan();closeModal();render();toast("Séance retirée du planning")}
-
+const mins=h=>{const[a,b]=String(h).split(":").map(Number);return a*60+b};
+const normTitle=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9]+/g," ").trim();
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const dateLabel=d=>new Intl.DateTimeFormat("fr-FR",{weekday:"long",day:"numeric",month:"long"}).format(new Date(d+"T12:00:00"));
+const dur=(a,b)=>{let d=(typeof b==="number"?b:mins(b))-(typeof a==="number"?a:mins(a));if(d<0)d+=1440;return `${Math.floor(d/60)}h${d%60?pad(d%60):""}`};
 const CAT_LABEL={COMP:"Compétition",PREM:"Premières",DOC:"American Doc Stories",POV:"Prix d'Ornano-Valenti",BF:"Deauville Talent Award — Brendan Fraser",EH:"Deauville Talent Award — Ethan Hawke",250:"Once Upon a Time (In) America"};
 const PLACES=["Tous les lieux","CID","Casino","Morny 1","Morny 2","Morny 3"];
-let view="planning", filters={place:"Tous les lieux",category:"Toutes les catégories",collection:"Toutes les collections",search:""};
+let filters={place:"Tous les lieux",category:"Toutes les catégories",collection:"Toutes les collections",search:"",star:false};
+const JURY_FILMS=["Les Contrebandiers","Queen at Sea","Everybody Digs Bill Evans","Pressure","L'Invitation","Mouse","Méli-Mélo","If I Go Will They Miss Me","Here I'm Alive","A Prayer for the Dying","I'll Be Gone in June","The Last Pickpocket in New York","Test","Party USA","The Man I Love","The Liberation of Rita Cooper","Company","The Accompanist","Club Kid","Burgundy"].map(normTitle);
+function loadPlan(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return[]}}
+function savePlan(){localStorage.setItem(KEY,JSON.stringify(plan))}
+function loadWishes(){try{return JSON.parse(localStorage.getItem(WISH_KEY)||"[]")}catch{return[]}}
+function saveWishes(){localStorage.setItem(WISH_KEY,JSON.stringify(wishes))}
+function canonicalTitle(title){const raw=String(title||"");return (DATA?.aliases||{})[raw]||raw}
+function wished(title){const t=normTitle(canonicalTitle(title));return wishes.some(x=>normTitle(x)===t)}
+function toggleWish(title){const c=canonicalTitle(title);wishes=wished(c)?wishes.filter(x=>normTitle(x)!==normTitle(c)):[...wishes,c];saveWishes();render();toast(wished(c)?"Ajouté à tes envies ❤️":"Retiré de tes envies")}
+function filmSessions(title){const t=normTitle(canonicalTitle(title));return DATA.sessions.filter(s=>normTitle(canonicalTitle(s.title))===t).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start))}
+function fixedItems(date){return[...DATA.jury.filter(x=>x.date===date).map(x=>({...x,source:"jury",mandatory:true})),...DATA.juryExtra.filter(x=>x.date===date).map(x=>({...x,source:"juryExtra",mandatory:true}))].sort((a,b)=>mins(a.start)-mins(b.start))}
+function allPlanned(date){return[...fixedItems(date),...plan.filter(x=>x.date===date)].map(x=>({...x,s:mins(x.start),e:mins(x.end)<mins(x.start)?mins(x.end)+1440:mins(x.end)})).sort((a,b)=>a.s-b.s)}
+function juryFilmAlreadyPlanned(s){const t=normTitle(canonicalTitle(s.title));return JURY_FILMS.includes(t)&&DATA.jury.some(j=>{const jt=normTitle(canonicalTitle(j.title));return jt===t||jt.includes(t)})}
+function alreadyPlanned(s){return plan.some(p=>p.sessionId===s.id)||juryFilmAlreadyPlanned(s)}
+function conflict(s){const ss=mins(s.start),ee=mins(s.end)<ss?mins(s.end)+1440:mins(s.end);return allPlanned(s.date).some(x=>x.id!==s.id&&x.sessionId!==s.id&&ss<x.e&&ee>x.s)}
+function conflictItems(s){const ss=mins(s.start),ee=mins(s.end)<ss?mins(s.end)+1440:mins(s.end);return allPlanned(s.date).filter(x=>x.id!==s.id&&x.sessionId!==s.id&&ss<x.e&&ee>x.s)}
+function starsFor(s){return!!s.star||!!s.etoile||!!s.étoile||!!s.seanceEtoile}
 function catLabel(c){return CAT_LABEL[c]||c||""}
-function isInMyPlan(s){return plan.some(p=>p.sessionId===s.id)}
-function isJuryForFilm(s){return juryFilmAlreadyPlanned(s)}
-function starsFor(s){return !!s.star || !!s.etoile || !!s.étoile || !!s.seanceEtoile}
 function collectionLabel(s){return s.category==="250"?"Once Upon a Time (In) America":""}
-function sessionMatches(s){
-  if(filters.place!=="Tous les lieux" && s.place!==filters.place)return false;
-  if(filters.category!=="Toutes les catégories" && catLabel(s.category)!==filters.category)return false;
-  if(filters.collection!=="Toutes les collections" && collectionLabel(s)!==filters.collection)return false;
-  if(filters.star && !starsFor(s))return false;
-  const q=normTitle(filters.search);
-  if(q && !normTitle(s.title).includes(q))return false;
-  return true;
-}
+function isInMyPlan(s){return plan.some(p=>p.sessionId===s.id)}
+function sessionMatches(s){if(filters.place!=="Tous les lieux"&&s.place!==filters.place)return false;if(filters.category!=="Toutes les catégories"&&catLabel(s.category)!==filters.category)return false;if(filters.collection!=="Toutes les collections"&&collectionLabel(s)!==filters.collection)return false;if(filters.star&&!starsFor(s))return false;const q=normTitle(filters.search);return!q||normTitle(canonicalTitle(s.title)).includes(q)||normTitle(s.title).includes(q)}
+function sortedSessions(date){return DATA.sessions.filter(s=>s.date===date&&sessionMatches(s)).sort((a,b)=>mins(a.start)-mins(b.start)||a.title.localeCompare(b.title,"fr"))}
 function filteredAllSessions(){return DATA.sessions.filter(sessionMatches).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start)||a.title.localeCompare(b.title,"fr"))}
-function sortedSessions(date){return DATA.sessions.filter(s=>s.date===date && sessionMatches(s)).sort((a,b)=>mins(a.start)-mins(b.start)||a.title.localeCompare(b.title,"fr"))}
-function dayCount(){return DATA.sessions.filter(s=>s.date===dates[day]).length}
-function otherFilmSessions(s){const t=normTitle(s.title);return DATA.sessions.filter(x=>x.id!==s.id && normTitle(x.title)===t).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start))}
-function wishesView(){
-  const titles=wishTitles();
-  if(!titles.length) return `<div class="section">MES ENVIES</div><div class="empty wishEmpty"><div class="wishHeart">♡</div><h2>Pas encore d'envies</h2><p>Ajoute des films depuis Explorer et retrouve ici toutes leurs séances.</p><button class="btn primary" onclick="view='explorer';render()">Explorer les films</button></div>`;
-  const blocks=titles.map(title=>{
-    const ss=filmSessions(title);
-    return `<section class="wishFilm"><div class="wishFilmHead"><div><div class="wishTitle">${esc(title)}</div><div class="ecMeta">${ss.length} séance${ss.length>1?'s':''} · toutes les dates</div></div><button class="wishRemove" onclick="toggleWish('${esc(title).replace(/'/g,"\'")}')" aria-label="Retirer des envies">♥</button></div>${ss.map(s=>`<button class="wishSession" data-session="${s.id}"><div><b>${dateLabel(s.date)}</b><br><small>${s.start}–${s.end} · ${esc(s.place)}</small></div>${sessionStatusHtml(s)}<span class="ecArrow">›</span></button>`).join('')}</section>`;
-  }).join('');
-  return `<div class="section">MES ENVIES</div><div class="wishIntro">${titles.length} film${titles.length>1?'s':''} dans tes envies</div>${blocks}`;
-}
-function explorerView(date){
-  const searching=!!normTitle(filters.search);
-  const sessions=searching?filteredAllSessions():sortedSessions(date);
-  const cats=["Toutes les catégories",...Object.values(CAT_LABEL).filter((v,i,a)=>a.indexOf(v)===i)];
-  const collections=["Toutes les collections","Once Upon a Time (In) America"];
-  const hasStars=DATA.sessions.some(starsFor);
-  const heading=searching?`RECHERCHE · ${sessions.length} RÉSULTAT${sessions.length>1?'S':''}`:`EXPLORER · ${sessions.length} SÉANCE${sessions.length>1?'S':''}`;
-  let cards='';
-  if(searching){const groups=dates.map(d=>({date:d,items:sessions.filter(s=>s.date===d)})).filter(g=>g.items.length);cards=groups.map(g=>`<div class="searchDay"><div class="searchDate"><span>${dateLabel(g.date)}</span>${g.date===date?'<b>· JOUR SÉLECTIONNÉ</b>':''}</div>${g.items.map(explorerCard).join('')}</div>`).join('');}
-  else cards=sessions.map(explorerCard).join('');
-  return `<div class="section">${heading}</div><div class="filters"><div class="searchWrap"><span>⌕</span><input id="search" value="${esc(filters.search)}" placeholder="Rechercher un film…" autocomplete="off" inputmode="search"></div><div class="filterRow"><select data-filter-place>${PLACES.map(x=>`<option ${filters.place===x?'selected':''}>${x}</option>`).join('')}</select><select data-filter-cat>${cats.map(x=>`<option ${filters.category===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="filterRow"><select data-filter-col>${collections.map(x=>`<option ${filters.collection===x?'selected':''}>${x}</option>`).join('')}</select>${hasStars?`<button type="button" class="starFilter ${filters.star?'active':''}" id="starFilter">⭐ Séances étoile</button>`:''}</div></div>${cards||`<div class="empty">${searching?`Aucune séance ne correspond à « ${esc(filters.search)} ». <br><small>La recherche porte sur tout le Festival.</small>`:'Aucune séance ne correspond à ces filtres.'}</div>`}`;
-}
-function explorerCard(s){const jury=isJuryForFilm(s), personal=isInMyPlan(s), star=starsFor(s);return `<button class="exploreCard" data-session="${s.id}"><div class="ecTime">${s.start}</div><div class="ecBody"><div class="ecTitle">${esc(s.title)}</div><div class="ecMeta">${esc(s.place)} · ${esc(catLabel(s.category))}</div><div class="ecBadges">${jury?'<span class="badge gold">JURY · DÉJÀ AU PLANNING</span>':''}${personal?'<span class="badge green">MON PLANNING</span>':''}${star?'<span class="badge star">⭐ SÉANCE ÉTOILE</span>':''}</div></div><div class="ecArrow">›</div></button>`}
-function attachSwipe(){const target=document.querySelector('.app');let sx=null,sy=null;target.addEventListener('touchstart',e=>{if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY}},{passive:true});target.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>=55&&Math.abs(dx)>Math.abs(dy)*1.35)move(dx<0?1:-1);sx=sy=null},{passive:true})}
-function move(n){day=Math.max(0,Math.min(9,day+n));render();window.scrollTo({top:0,behavior:'smooth'})}
-function closeModal(){const m=document.getElementById('modal');if(m){m.style.display='none';m.setAttribute('aria-hidden','true')}}
-function openModal(c){const m=document.getElementById('modal');document.getElementById('sheet').innerHTML=c;m.style.display='flex';m.setAttribute('aria-hidden','false')}
-function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>${view==='explorer'?'Explorer':'Mon planning'}</h2><div class="datepick">${dates.map((d,i)=>`<button class="${i===day?'sel':''}" data-d="${i}">${dateLabel(d)}</button>`).join('')}</div>`);document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{day=+b.dataset.d;closeModal();render()})}
-function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id);if(!x)return;openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><p>Ce créneau est une contrainte fixe de ton planning Jury.</p>`)}
-function openPlan(id){const x=plan.find(a=>a.id===id);if(!x)return;openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
-function openFree(start,end){const sm=Number(start),em=Number(end),opts=compatible(dates[day],{start:sm,end:em});openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${hh(sm)} → ${hh(em)}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?'already':''}" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(catLabel(o.category))}</small></button>`}).join(''):'<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`)}
-function compatibilityLabel(s){const incompatible=conflict(s), already=alreadyPlanned(s);if(incompatible)return '<span class="status bad">⚠️ NON COMPATIBLE</span>';if(already)return '<span class="status good">✓ COMPATIBLE · DÉJÀ AU PLANNING</span>';return '<span class="status good">✓ COMPATIBLE</span>'}
-function openSession(id,blocked=false,backStart=null,backEnd=null,backSessionId=null){
-  const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
-  const already=alreadyPlanned(s), wishedNow=wished(s.title);
-  let back='';
-  if(backSessionId) back=`<button class="backBtn" onclick="openSession('${backSessionId}',false,${backStart!==null?Number(backStart):'null'},${backEnd!==null?Number(backEnd):'null'},null)">← Retour à la séance précédente</button>`;
-  else if(backStart!==null&&backEnd!==null) back=`<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`;
-  const jury=isJuryForFilm(s), incompatible=conflict(s), alternatives=otherFilmSessions(s);
-  let notice='';
-  if(incompatible){const cs=conflictItems(s);notice+=`<div class="notice warn"><b>⚠️ Cette séance n'est pas compatible avec ton planning.</b><br>Elle entre en conflit avec :${cs.map(x=>`<br>• <b>${x.source==='jury'||x.source==='juryExtra'?'Séance Jury planifiée':'Séance planifiée'}</b> · ${esc(x.title)} · ${x.start}–${x.end}`).join('')}</div>`}
-  if(alternatives.length){notice+=`<div class="section">AUTRES SÉANCES DE CE FILM</div>${alternatives.map(o=>{const status=compatibilityLabel(o);return `<button class="compat" onclick="openSession('${o.id}',false,${backStart!==null?Number(backStart):'null'},${backEnd!==null?Number(backEnd):'null'},'${s.id}')"><b>${o.date===s.date?'Même jour · ':''}${dateLabel(o.date)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)}</small><br>${status}</button>`}).join('')}`}
-  else notice+=`<div class="info"><b>Aucune autre séance de ce film n'est programmée.</b></div>`;
-  const wishTitle=esc(canonicalTitle(s.title)).replace(/'/g,"\\'");
-  openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${starsFor(s)?'<br>⭐ Séance étoile':''}</div><button class="btn wishBtn" onclick="toggleWish('${wishTitle}')">${wishedNow?'♥ Retirer de mes envies':'♡ Ajouter à mes envies'}</button>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${notice}${incompatible?`<button class="btn primary" onclick="addSession('${s.id}',true)">Forcer : ajouter quand même à mon planning</button>`:(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`)
-}
-function render(){
-  const date=dates[day];
-  if(view==='wishes'){
-    document.getElementById('app').innerHTML=`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Le jour reste synchronisé avec Planning et Explorer</div></header><main><div class="exploreSwitch"><button class="tab" id="tabPlanning">Planning</button><button class="tab" id="tabExplorer">Explorer</button><button class="tab sel">Envies</button></div>${wishesView()}</main></div><nav class="bottom"><button id="navPlanning">Planning</button><button id="navExplorer">Explorer</button><button class="active">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
-  } else if(view==='explorer'){
-    document.getElementById('app').innerHTML=`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Glisser pour changer de jour</div></header><main><div class="exploreSwitch"><button class="tab" id="tabPlanning">Planning</button><button class="tab sel">Explorer</button></div>${explorerView(date)}</main></div><nav class="bottom"><button id="navPlanning">Planning</button><button class="active">Explorer</button><button id="navWishes">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
-  } else {
-    const rows=[];allPlanned(date).forEach(x=>rows.push({type:(x.source==='jury'||x.source==='juryExtra')?'jury':'personal',s:x.s,x}));freeWindows(date).forEach(w=>rows.push({type:'free',s:w.start,w}));rows.sort((a,b)=>a.s-b.s);
-    const body=rows.map(r=>{if(r.type==='free'){const opts=compatible(date,r.w);return `<div class="item free ${opts.length?'click':''}" data-free="${r.w.start}|${r.w.end}"><div class="time">${hh(r.w.start)}<br><span class="timeSep">→</span><br>${hh(r.w.end)}</div><div class="content"><div class="title freeTitle">Créneau libre</div><div class="meta"><span class="freeText">${dur(r.w.start,r.w.end)} disponibles</span>${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?'s':''} compatible${opts.length>1?'s':''}</span>`:''}</div></div></div>`}const x=r.x,personal=r.type==='personal';return `<div class="item ${personal?'personal':'jury'}" data-${personal?'plan':'jury'}="${x.id}"><div class="time">${x.start}–${x.end}</div><div class="content"><div class="title">${esc(x.title)}</div><div class="meta"><span>${esc(x.place)}</span><span class="badge ${personal?'green':'gold'}">${personal?'MON PLANNING':'JURY · OBLIGATOIRE'}</span></div></div></div>`}).join('');
-    document.getElementById('app').innerHTML=`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Glisser pour changer de jour</div></header><main><div class="exploreSwitch"><button class="tab sel">Planning</button><button class="tab" id="tabExplorer">Explorer</button></div><div class="section">MON PLANNING</div>${body||'<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>'}</main></div><nav class="bottom"><button class="active">Planning</button><button id="navExplorer">Explorer</button><button id="navWishes">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
-  }
-  const modal=document.getElementById('modal'),sheet=document.getElementById('sheet');
-  document.getElementById('prev').onclick=()=>move(-1);document.getElementById('next').onclick=()=>move(1);document.getElementById('pick').onclick=pickDate;
-  const np=document.getElementById('navPlanning'),ne=document.getElementById('navExplorer'),nw=document.getElementById('navWishes'),tp=document.getElementById('tabPlanning'),te=document.getElementById('tabExplorer');
-  if(np)np.onclick=()=>{view='planning';render()};if(ne)ne.onclick=()=>{view='explorer';render()};if(nw)nw.onclick=()=>{view='wishes';render()};if(tp)tp.onclick=()=>{view='planning';render()};if(te)te.onclick=()=>{view='explorer';render()};
-  if(view==='wishes')document.querySelectorAll('[data-session]').forEach(e=>e.onclick=()=>openSession(e.dataset.session,false));
-  if(view==='explorer'){
-    const search=document.getElementById('search');if(search)search.addEventListener('input',e=>{filters.search=e.target.value;render();const q=document.getElementById('search');q.focus();q.setSelectionRange(q.value.length,q.value.length)});
-    const fp=document.querySelector('[data-filter-place]'),fc=document.querySelector('[data-filter-cat]'),fl=document.querySelector('[data-filter-col]'),fs=document.getElementById('starFilter');
-    if(fp)fp.onchange=e=>{filters.place=e.target.value;render()};if(fc)fc.onchange=e=>{filters.category=e.target.value;render()};if(fl)fl.onchange=e=>{filters.collection=e.target.value;render()};if(fs)fs.onclick=()=>{filters.star=!filters.star;render()};
-    document.querySelectorAll('[data-session]').forEach(e=>e.onclick=()=>openSession(e.dataset.session,false));
-  }
-  document.querySelectorAll('[data-jury]').forEach(e=>e.onclick=()=>openJury(e.dataset.jury));document.querySelectorAll('[data-plan]').forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));document.querySelectorAll('[data-free]').forEach(e=>e.onclick=()=>{let [a,b]=e.dataset.free.split('|');openFree(a,b)});
-  if(modal){modal.addEventListener('click',e=>{if(e.target===modal){e.preventDefault();e.stopPropagation();closeModal()}});sheet.addEventListener('click',e=>e.stopPropagation())}
-  document.onkeydown=e=>{if(e.key==='Escape'&&modal&&modal.style.display!=='none')closeModal()};attachSwipe();
-}
-function toast(t){let x=document.querySelector('.toast');if(!x){x=document.createElement('div');x.className='toast';document.body.appendChild(x)}x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
-fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();wishes=loadWishes();render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})});
+function otherFilmSessions(s){const t=normTitle(canonicalTitle(s.title));return DATA.sessions.filter(x=>x.id!==s.id&&normTitle(canonicalTitle(x.title))===t).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start))}
+function hh(m){return`${pad(Math.floor(m/60)%24)}:${pad(m%60)}`}
+function compatible(date,w){const ws=Number(w.start),we=Number(w.end);return DATA.sessions.filter(s=>{if(s.date!==date)return false;const ss=mins(s.start),ee0=mins(s.end),ee=ee0<ss?ee0+1440:ee0;return ss>=ws&&ee<=we})}
+function openModal(c){const m=document.getElementById("modal"),sheet=document.getElementById("sheet");if(!m||!sheet)return;sheet.innerHTML=c;m.style.display="flex";m.setAttribute("aria-hidden","false")}
+function closeModal(){const m=document.getElementById("modal");if(m){m.style.display="none";m.setAttribute("aria-hidden","true")}}
+function openSession(id,blocked=false,backStart=null,backEnd=null,backSessionId=null){const s=DATA.sessions.find(x=>x.id===id);if(!s)return;const already=alreadyPlanned(s),wishedNow=wished(s.title),jury=juryFilmAlreadyPlanned(s),incompatible=conflict(s),alternatives=otherFilmSessions(s);let back="";if(backSessionId)back=`<button class="backBtn" onclick="openSession('${backSessionId}',false,${backStart??"null"},${backEnd??"null"},null)">← Retour à la séance précédente</button>`;else if(backStart!==null&&backEnd!==null)back=`<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`;let notice="";if(incompatible){const cs=conflictItems(s);notice+=`<div class="notice warn"><b>⚠️ Cette séance n'est pas compatible avec ton planning.</b><br>Elle entre en conflit avec :${cs.map(x=>`<br>• <b>${x.source==='jury'||x.source==='juryExtra'?'Séance Jury planifiée':'Séance planifiée'}</b> · ${esc(x.title)} · ${x.start}–${x.end}`).join("")}</div>`}if(alternatives.length)notice+=`<div class="section">AUTRES SÉANCES DE CE FILM</div>${alternatives.map(o=>`<button class="compat" onclick="openSession('${o.id}',false,${backStart!==null?Number(backStart):"null"},${backEnd!==null?Number(backEnd):"null"},'${s.id}')"><b>${o.date===s.date?"Même jour · ":""}${dateLabel(o.date)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)}</small><br>${conflict(o)?'<span class="status bad">⚠️ NON COMPATIBLE</span>':'<span class="status good">✓ COMPATIBLE</span>'}</button>`).join("")}`;else notice+=`<div class="info"><b>Aucune autre séance de ce film n'est programmée.</b></div>`;const wishTitle=esc(canonicalTitle(s.title)).replace(/'/g,"\\'");openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${starsFor(s)?"<br>⭐ Séance étoile":""}</div><button class="btn wishBtn" onclick="toggleWish('${wishTitle}')">${wishedNow?"♥ Retirer de mes envies":"♡ Ajouter à mes envies"}</button>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':""}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':""}${notice}${incompatible?`<button class="btn primary" onclick="addSession('${s.id}',true)">Forcer : ajouter quand même à mon planning</button>`:(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`)}
+function addSession(id,force=false){const s=DATA.sessions.find(x=>x.id===id);if(!s)return;if(alreadyPlanned(s)&&!force){toast("Cette séance est déjà dans ton planning");return}if(conflict(s)&&!force){openSession(id,true);return}plan.push({id:"p_"+id,sessionId:id,title:s.title,date:s.date,start:s.start,end:s.end,place:s.place,category:s.category});savePlan();closeModal();render();toast("Séance ajoutée à ton planning")}
+function removeSession(id){plan=plan.filter(x=>x.id!==id);savePlan();closeModal();render();toast("Séance retirée du planning")}
+function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id);if(x)openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><p>Ce créneau est une contrainte fixe de ton planning Jury.</p>`)}
+function openPlan(id){const x=plan.find(a=>a.id===id);if(x)openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
+function openFree(start,end){const sm=Number(start),em=Number(end),opts=compatible(dates[day],{start:sm,end:em});openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${hh(sm)} → ${hh(em)}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(o=>`<button class="compat" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(catLabel(o.category))}</small></button>`).join(""):"<div class=\"info\">Aucune séance ne tient entièrement dans ce créneau.</div>`)}`)}
+function wishesView(){const titles=[...wishes].sort((a,b)=>a.localeCompare(b,"fr"));if(!titles.length)return`<div class="section">MES ENVIES</div><div class="empty wishEmpty"><div class="wishHeart">♡</div><h2>Pas encore d'envies</h2><p>Ajoute des films depuis Explorer et retrouve ici toutes leurs séances.</p><button class="btn primary" onclick="view='explorer';render()">Explorer les films</button></div>`;return`<div class="section">MES ENVIES</div><div class="wishIntro">${titles.length} film${titles.length>1?'s':''} dans tes envies</div>${titles.map(title=>{const ss=filmSessions(title),wt=esc(title).replace(/'/g,"\\'");return`<section class="wishFilm"><div class="wishFilmHead"><div><div class="wishTitle">${esc(title)}</div><div class="ecMeta">${ss.length} séance${ss.length>1?'s':''} · toutes les dates</div></div><button class="wishRemove" onclick="toggleWish('${wt}')" aria-label="Retirer des envies">♥</button></div>${ss.map(s=>`<button class="wishSession" data-session="${s.id}"><div><b>${dateLabel(s.date)}</b><br><small>${s.start}–${s.end} · ${esc(s.place)}</small></div><span class="ecArrow">›</span></button>`).join("")}</section>`}).join("")}`}
+function explorerCard(s){return`<button class="exploreCard" data-session="${s.id}"><div class="ecTime">${s.start}</div><div class="ecBody"><div class="ecTitle">${esc(s.title)}</div><div class="ecMeta">${esc(s.place)} · ${esc(catLabel(s.category))}</div><div class="ecBadges">${juryFilmAlreadyPlanned(s)?'<span class="badge gold">JURY · DÉJÀ AU PLANNING</span>':''}${isInMyPlan(s)?'<span class="badge green">MON PLANNING</span>':''}${starsFor(s)?'<span class="badge star">⭐ SÉANCE ÉTOILE</span>':''}</div></div><div class="ecArrow">›</div></button>`}
+function explorerView(date){const searching=!!normTitle(filters.search),sessions=searching?filteredAllSessions():sortedSessions(date),cats=["Toutes les catégories",...Object.values(CAT_LABEL).filter((v,i,a)=>a.indexOf(v)===i)],collections=["Toutes les collections","Once Upon a Time (In) America"],hasStars=DATA.sessions.some(starsFor);let cards="";if(searching){cards=dates.map(d=>({date:d,items:sessions.filter(s=>s.date===d)})).filter(g=>g.items.length).map(g=>`<div class="searchDay"><div class="searchDate"><span>${dateLabel(g.date)}</span>${g.date===date?'<b>· JOUR SÉLECTIONNÉ</b>':''}</div>${g.items.map(explorerCard).join("")}</div>`).join("")}else cards=sessions.map(explorerCard).join("");return`<div class="section">${searching?`RECHERCHE · ${sessions.length} RÉSULTAT${sessions.length>1?'S':''}`:`EXPLORER · ${sessions.length} SÉANCE${sessions.length>1?'S':''}`}</div><div class="filters"><div class="searchWrap"><span>⌕</span><input id="search" value="${esc(filters.search)}" placeholder="Rechercher un film…" autocomplete="off" inputmode="search"></div><div class="filterRow"><select data-filter-place>${PLACES.map(x=>`<option ${filters.place===x?'selected':''}>${x}</option>`).join("")} </select><select data-filter-cat>${cats.map(x=>`<option ${filters.category===x?'selected':''}>${x}</option>`).join("")}</select></div><div class="filterRow"><select data-filter-col>${collections.map(x=>`<option ${filters.collection===x?'selected':''}>${x}</option>`).join("")}</select>${hasStars?`<button type="button" class="starFilter ${filters.star?'active':''}" id="starFilter">⭐ Séances étoile</button>`:""}</div></div>${cards||`<div class="empty">${searching?`Aucune séance ne correspond à « ${esc(filters.search)} ». <br><small>La recherche porte sur tout le Festival.</small>`:"Aucune séance ne correspond à ces filtres."}</div>`}`}
+function planningView(date){const items=allPlanned(date),sessions=sortedSessions(date);return`<div class="section">MON PLANNING · ${dateLabel(date)}</div><div class="planningList">${items.length?items.map(x=>`<button class="planCard" data-${x.source==='jury'||x.source==='juryExtra'?'jury':'plan'}="${x.id}"><div class="ecTime">${x.start}</div><div class="ecBody"><div class="ecTitle">${esc(x.title)}</div><div class="ecMeta">${esc(x.place||"")}</div></div></button>`).join(""):"<div class=\"empty\">Aucune séance planifiée pour ce jour.</div>"}<div class="section">SÉANCES DU JOUR</div>${sessions.map(explorerCard).join("")}</div>`}
+function shell(){const date=dates[day];const main=view==='explorer'?explorerView(date):view==='wishes'?wishesView():planningView(date);return`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Glisser pour changer de jour</div></header><main><div class="exploreSwitch"><button class="tab ${view==='planning'?'sel':''}" id="tabPlanning">Planning</button><button class="tab ${view==='explorer'?'sel':''}" id="tabExplorer">Explorer</button>${view==='wishes'?'<button class="tab sel" id="tabWishes">Envies</button>':''}</div>${main}</main></div><nav class="bottom"><button id="navPlanning" class="${view==='planning'?'active':''}">Planning</button><button id="navExplorer" class="${view==='explorer'?'active':''}">Explorer</button><button id="navWishes" class="${view==='wishes'?'active':''}">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`}
+function attach(){const app=document.querySelector(".app");if(!app)return;document.getElementById("prev").onclick=()=>move(-1);document.getElementById("next").onclick=()=>move(1);document.getElementById("pick").onclick=pickDate;const bind=(id,v)=>{const e=document.getElementById(id);if(e)e.onclick=()=>{view=v;closeModal();render()}};bind("navPlanning","planning");bind("navExplorer","explorer");bind("navWishes","wishes");bind("tabPlanning","planning");bind("tabExplorer","explorer");bind("tabWishes","wishes");document.querySelectorAll("[data-session]").forEach(e=>e.onclick=()=>openSession(e.dataset.session,false));document.querySelectorAll("[data-jury]").forEach(e=>e.onclick=()=>openJury(e.dataset.jury));document.querySelectorAll("[data-plan]").forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));if(view==='explorer'){const search=document.getElementById("search");if(search)search.oninput=e=>{filters.search=e.target.value;render();const q=document.getElementById("search");q.focus();q.setSelectionRange(q.value.length,q.value.length)};const fp=document.querySelector("[data-filter-place]"),fc=document.querySelector("[data-filter-cat]"),fl=document.querySelector("[data-filter-col]"),fs=document.getElementById("starFilter");if(fp)fp.onchange=e=>{filters.place=e.target.value;render()};if(fc)fc.onchange=e=>{filters.category=e.target.value;render()};if(fl)fl.onchange=e=>{filters.collection=e.target.value;render()};if(fs)fs.onclick=()=>{filters.star=!filters.star;render()}}const modal=document.getElementById("modal"),sheet=document.getElementById("sheet");if(modal)modal.onclick=e=>{if(e.target===modal)closeModal()};if(sheet)sheet.onclick=e=>e.stopPropagation();let sx=null,sy=null;app.ontouchstart=e=>{if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY}};app.ontouchend=e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>=55&&Math.abs(dx)>Math.abs(dy)*1.35)move(dx<0?1:-1);sx=sy=null}}
+function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>${view==='explorer'?'Explorer':'Mon planning'}</h2><div class="datepick">${dates.map((d,i)=>`<button class="${i===day?'sel':''}" data-d="${i}">${dateLabel(d)}</button>`).join("")}</div>`);document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{day=+b.dataset.d;closeModal();render()})}
+function move(n){day=Math.max(0,Math.min(9,day+n));render();window.scrollTo({top:0,behavior:"smooth"})}
+function toast(t){let x=document.querySelector(".toast");if(!x){x=document.createElement("div");x.className="toast";document.body.appendChild(x)}x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
+function render(){document.getElementById("app").innerHTML=shell();attach()}
+window.addEventListener("error",e=>{console.error("Deauville app error:",e.error||e.message)});
+fetch("data.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("data.json: "+r.status);return r.json()}).then(d=>{DATA=d;plan=loadPlan();wishes=loadWishes();render();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})}).catch(e=>{document.getElementById("app").innerHTML=`<div style="padding:24px;font-family:system-ui"><h1>Deauville 2026</h1><p>Impossible de charger les données du programme.</p><small>${esc(e.message)}</small></div>`;console.error(e)});
