@@ -8,9 +8,11 @@ const pad=n=>String(n).padStart(2,"0");
 function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
 function dateLabel(d){return new Intl.DateTimeFormat("fr-FR",{weekday:"long",day:"numeric",month:"long"}).format(new Date(d+"T12:00:00"))}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function dur(s,e){
-  const sm=typeof s==="number"?s:mins(s), em=typeof e==="number"?e:mins(e);
-  let d=em-sm;if(d<0)d+=1440;
+function dur(a,b){
+  const sm=typeof a==="number"?a:mins(a);
+  const em=typeof b==="number"?b:mins(b);
+  let d=em-sm;
+  if(d<0)d+=1440;
   return `${Math.floor(d/60)}h${d%60?pad(d%60):""}`;
 }
 function loadPlan(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return[]}}
@@ -79,7 +81,7 @@ function render(){
     if(r.type==="free"){
       const opts=compatible(date,r.w);
       return `<div class="item free ${opts.length?"click":""}" data-free="${r.w.start}|${r.w.end}">
-        <div class="time">${hh(r.w.start)}–${hh(r.w.end)}</div>
+        <div class="time">${hh(r.w.start)}<br><span class="timeSep">→</span><br>${hh(r.w.end)}</div>
         <div class="content"><div class="title freeTitle">Créneau libre</div>
         <div class="meta"><span class="freeText">${dur(r.w.start,r.w.end)} disponibles</span>
         ${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?"s":""} compatible${opts.length>1?"s":""}</span>`:""}</div></div></div>`;
@@ -100,23 +102,54 @@ function render(){
   <nav class="bottom"><button class="active">Planning</button><button onclick="toast('Explorer arrive à l’étape suivante')">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
   <div class="modal" id="modal"><div class="sheet"><button class="close" id="close">×</button><div class="handle"></div><div id="sheet"></div></div></div>`;
 
-  prev.onclick=()=>move(-1);next.onclick=()=>move(1);pick.onclick=pickDate;close.onclick=closeModal;
+  prev.onclick=()=>move(-1);next.onclick=()=>move(1);pick.onclick=pickDate;
+  close.onclick=(e)=>{e.preventDefault();e.stopPropagation();closeModal()};
+  close.onpointerup=(e)=>{e.preventDefault();e.stopPropagation();closeModal()};
   modal.onclick=e=>{if(e.target===modal)closeModal()};
+  modal.addEventListener("click",e=>{if(e.target.closest("#close")){e.preventDefault();e.stopPropagation();closeModal()}});
+  modal.addEventListener("pointerup",e=>{if(e.target.closest("#close")){e.preventDefault();e.stopPropagation();closeModal()}});
   document.querySelectorAll("[data-jury]").forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
   document.querySelectorAll("[data-plan]").forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
   document.querySelectorAll("[data-free]").forEach(e=>e.onclick=()=>{let [s,en]=e.dataset.free.split("|");openFree(s,en)});
   const swipeTarget=document.querySelector(".app");
-  swipeTarget.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].clientX},{passive:true});
-  swipeTarget.addEventListener("touchend",e=>{
-    const dx=e.changedTouches[0].clientX-touchX;
-    if(Math.abs(dx)>45) move(dx<0?1:-1);
+  let swipeStartX=null, swipeStartY=null, swipeLocked=false;
+  swipeTarget.addEventListener("touchstart",e=>{
+    if(e.touches.length!==1)return;
+    const t=e.touches[0];
+    swipeStartX=t.clientX; swipeStartY=t.clientY; swipeLocked=false;
   },{passive:true});
-  let pointerStart=null;
-  swipeTarget.addEventListener("pointerdown",e=>{pointerStart=e.clientX});
+  swipeTarget.addEventListener("touchmove",e=>{
+    if(swipeStartX===null || e.touches.length!==1)return;
+    const t=e.touches[0];
+    const dx=t.clientX-swipeStartX, dy=t.clientY-swipeStartY;
+    // A swipe must be predominantly horizontal; vertical scrolling never changes day.
+    if(Math.abs(dx)>18 && Math.abs(dx)>Math.abs(dy)*1.35) swipeLocked=true;
+  },{passive:true});
+  swipeTarget.addEventListener("touchend",e=>{
+    if(swipeStartX===null)return;
+    const t=e.changedTouches[0];
+    const dx=t.clientX-swipeStartX, dy=t.clientY-swipeStartY;
+    const isHorizontal=Math.abs(dx)>=55 && Math.abs(dx)>Math.abs(dy)*1.35;
+    if(isHorizontal && swipeLocked) move(dx<0?1:-1);
+    swipeStartX=null; swipeStartY=null; swipeLocked=false;
+  },{passive:true});
+  swipeTarget.addEventListener("touchcancel",()=>{
+    swipeStartX=null; swipeStartY=null; swipeLocked=false;
+  },{passive:true});
+  // Pointer support for desktop testing, with the same one-step guard.
+  let pointerStartX=null,pointerStartY=null;
+  swipeTarget.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse" && e.button!==0)return;
+    pointerStartX=e.clientX; pointerStartY=e.clientY;
+  });
   swipeTarget.addEventListener("pointerup",e=>{
-    if(pointerStart===null)return;
-    const dx=e.clientX-pointerStart; pointerStart=null;
-    if(Math.abs(dx)>60) move(dx<0?1:-1);
+    if(pointerStartX===null)return;
+    const dx=e.clientX-pointerStartX,dy=e.clientY-pointerStartY;
+    if(Math.abs(dx)>=70 && Math.abs(dx)>Math.abs(dy)*1.35) move(dx<0?1:-1);
+    pointerStartX=null;pointerStartY=null;
+  });
+  swipeTarget.addEventListener("pointercancel",()=>{
+    pointerStartX=null;pointerStartY=null;
   });
 }
 function move(n){day=Math.max(0,Math.min(9,day+n));render();window.scrollTo({top:0,behavior:"smooth"})}

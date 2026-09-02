@@ -10,3 +10,9 @@ Corrections de cette étape :
 - Correction du bug d'affichage des durées qui produisait des nombres bruts au lieu de `HH:MM`.
 - Les séances compatibles affichent titre + horaires + salle + catégorie.
 - Le planning personnel reste persistant via localStorage.
+
+- v0.4 : durée des créneaux libres calculée sur des minutes numériques, suppression du bug d'affichage en nombres bruts.
+- v0.4 : bouton × du panneau rendu réellement cliquable/tactile avec gestion click + pointerup et zone tactile 44px.
+
+- v0.5 : swipe horizontal protégé contre les mouvements verticaux et limité à exactement un changement de jour par geste.
+- v0.5 : touchcancel géré pour éviter les gestes fantômes.
