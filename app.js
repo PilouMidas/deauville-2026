@@ -1,5 +1,5 @@
 
-const VERSION="0.11.0";
+const VERSION="0.12.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
 const KEY="deauville2026-personal-planning-v100";
