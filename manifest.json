@@ -1,11 +1,16 @@
 {
-  "name":"Deauville 2026 — Mon Planning",
-  "short_name":"Deauville 2026",
-  "start_url":".",
-  "display":"standalone",
-  "background_color":"#f4f1ea",
-  "theme_color":"#181714",
-  "description":"Assistant personnel du Festival du cinéma américain de Deauville 2026",
-  "lang":"fr-FR",
-  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "name": "Deauville 2026 — Mon planning",
+  "short_name": "Deauville 2026",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f1ea",
+  "theme_color": "#191815",
+  "lang": "fr-FR",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
 }
