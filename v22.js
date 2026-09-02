@@ -37,7 +37,7 @@
   function exactJurySession(s){
     return juryFilmSessions(s).find(j=>
       j.date===s.date && j.start===s.start && j.end===s.end &&
-      normTitle(j.place)===normTitle(s.place)
+      (!j.place||!s.place||normTitle(j.place)===normTitle(s.place))
     )||null;
   }
 
@@ -52,7 +52,7 @@
   function existingJuryInfo(s){
     const j=juryFilmSessions(s)[0];
     if(!j) return '';
-    return `<div class="existingPlan">Séance déjà prévue le ${dateLabel(j.date)} à ${j.start} · ${esc(j.place)}</div>`;
+    return `<div class="existingPlan">Séance déjà prévue le ${dateLabel(j.date)} à ${j.start}${j.place?' · '+esc(j.place):''}</div>`;
   }
 
   const originalConflict=window.conflict;
@@ -60,9 +60,8 @@
   if(typeof originalConflict==='function' && typeof originalConflictItems==='function'){
     window.conflictItems=function(s){
       const items=originalConflictItems(s);
-      /* La séance Jury elle-même n'est pas un conflit : elle est déjà au planning.
-         Pour les autres séances du même film, on conserve les vrais conflits avec
-         les autres créneaux du planning. */
+      /* Une séance du programme qui correspond à la séance Jury n'est pas
+         un conflit : elle représente le même créneau déjà obligatoire. */
       return items.filter(x=>{
         if((x.source==='jury'||x.source==='juryExtra') && sameFilm(x,s)) return false;
         return true;
@@ -102,12 +101,26 @@
     };
   }
 
-  /* Empêche tout ajout manuel d'une séance Jury déjà présente au planning. */
+  /* Sur la séance exacte du PDF Jury : fiche informative uniquement, sans
+     bouton d'ajout, pour empêcher tout doublon dans le planning personnel. */
+  const originalOpenSession=window.openSession;
+  if(typeof originalOpenSession==='function'){
+    window.openSession=function(id){
+      const s=DATA&&DATA.sessions.find(x=>x.id===id);
+      const exact=s&&exactJurySession(s);
+      if(exact){
+        openModal(`<div class="section">JURY · DÉJÀ AU PLANNING</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}</div><p>Cette séance est déjà au planning car elle fait partie de tes obligations Jury.</p><div class="notice jury">✓ Séance déjà prévue le ${dateLabel(exact.date)} à ${exact.start}.</div>`);
+        return;
+      }
+      return originalOpenSession.apply(this,arguments);
+    };
+  }
+
   const originalAddSession=window.addSession;
   if(typeof originalAddSession==='function'){
     window.addSession=function(id,force=false){
       const s=DATA&&DATA.sessions.find(x=>x.id===id);
-      if(s&&exactJurySession(s)&&!force){
+      if(s&&exactJurySession(s)){
         toast('Cette séance est déjà au planning');
         return;
       }
