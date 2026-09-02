@@ -1,9 +1,9 @@
 
-const VERSION="1.0.0";
+const VERSION="1.1.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
-const KEY="deauville2026-personal-planning-v100";
-const LEGACY_KEYS=["deauville2026-personal-planning-v080","deauville2026-personal-planning-v070","deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
+const KEY="deauville2026-personal-planning-v110";
+const LEGACY_KEYS=["deauville2026-personal-planning-v100","deauville2026-personal-planning-v080","deauville2026-personal-planning-v070","deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
 
 const pad=n=>String(n).padStart(2,"0");
 function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
@@ -119,57 +119,37 @@ function sessionMatches(s){
   if(filters.place!=="Tous les lieux" && s.place!==filters.place)return false;
   if(filters.category!=="Toutes les catégories" && catLabel(s.category)!==filters.category)return false;
   if(filters.collection!=="Toutes les collections" && collectionLabel(s)!==filters.collection)return false;
+  if(filters.star && !starsFor(s))return false;
   const q=normTitle(filters.search);
   if(q && !normTitle(s.title).includes(q))return false;
   return true;
 }
+function filteredAllSessions(){
+  return DATA.sessions.filter(sessionMatches).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start)||a.title.localeCompare(b.title,"fr"));
+}
 function sortedSessions(date){return DATA.sessions.filter(s=>s.date===date && sessionMatches(s)).sort((a,b)=>mins(a.start)-mins(b.start)||a.title.localeCompare(b.title,"fr"))}
 function dayCount(){return DATA.sessions.filter(s=>s.date===dates[day]).length}
-function render(){
-  const date=dates[day];
-  document.getElementById("app").innerHTML=`<div class="app">
-  <header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div>
-  <div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div>
-  <div class="hint">Glisser pour changer de jour</div></header>
-  <main>
-    <div class="exploreSwitch"><button class="tab ${view==='planning'?'sel':''}" data-view="planning">MON PLANNING</button><button class="tab ${view==='explorer'?'sel':''}" data-view="explorer">EXPLORER</button></div>
-    ${view==='explorer'?explorerView(date):planningView(date)}
-  </main></div>
-  <nav class="bottom"><button class="${view==='planning'?'active':''}" data-view="planning">Planning</button><button class="${view==='explorer'?'active':''}" data-view="explorer">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
-  <div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
-  prev.onclick=()=>move(-1); next.onclick=()=>move(1); pick.onclick=pickDate;
-  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;render()});
-  document.querySelectorAll('[data-free]').forEach(e=>e.onclick=()=>{let [s,en]=e.dataset.free.split('|');openFree(s,en)});
-  document.querySelectorAll('[data-jury]').forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
-  document.querySelectorAll('[data-plan]').forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
-  document.querySelectorAll('[data-session]').forEach(e=>e.onclick=()=>openSession(e.dataset.session));
-  document.querySelectorAll('[data-filter-place]').forEach(e=>e.onchange=()=>{filters.place=e.value;render()});
-  document.querySelectorAll('[data-filter-cat]').forEach(e=>e.onchange=()=>{filters.category=e.value;render()});
-  document.querySelectorAll('[data-filter-col]').forEach(e=>e.onchange=()=>{filters.collection=e.value;render()});
-  const search=document.getElementById('search'); if(search){search.oninput=()=>{filters.search=search.value;render(); const el=document.getElementById('search'); if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}}}
-  const modal=document.getElementById('modal');
-  modal.addEventListener('click',e=>{if(e.target===modal){e.preventDefault();closeModal()}});
-  document.querySelector('.sheet').addEventListener('click',e=>e.stopPropagation());
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-  attachSwipe();
-}
-function planningView(date){
-  const fixed=fixedItems(date), rows=[];
-  allPlanned(date).forEach(x=>rows.push({type:(x.source==='jury'||x.source==='juryExtra')?'jury':'personal',s:x.s,x}));
-  freeWindows(date).forEach(w=>rows.push({type:'free',s:w.start,w})); rows.sort((a,b)=>a.s-b.s);
-  const body=rows.map(r=>{if(r.type==='free'){const opts=compatible(date,r.w);return `<div class="item free ${opts.length?'click':''}" data-free="${r.w.start}|${r.w.end}"><div class="time">${hh(r.w.start)}<br><span class="timeSep">→</span><br>${hh(r.w.end)}</div><div class="content"><div class="title freeTitle">Créneau libre</div><div class="meta"><span>${dur(r.w.start,r.w.end)} disponibles</span>${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?'s':''} compatible${opts.length>1?'s':''}</span>`:''}</div></div></div>`}const x=r.x,p=r.type==='personal';return `<div class="item ${p?'personal':'jury'}" data-${p?'plan':'jury'}="${x.id}"><div class="time">${x.start}–${x.end}</div><div class="content"><div class="title">${esc(x.title)}</div><div class="meta"><span>${esc(x.place)}</span><span class="badge ${p?'green':'gold'}">${p?'MON PLANNING':'JURY · OBLIGATOIRE'}</span></div></div></div>`}).join('');
-  return `<div class="section">MON PLANNING</div>${body||'<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>'}`;
+function otherFilmSessions(s){
+  const t=normTitle(s.title);
+  return DATA.sessions.filter(x=>x.id!==s.id && normTitle(x.title)===t).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start));
 }
 function explorerView(date){
-  const sessions=sortedSessions(date);
+  const searching=!!normTitle(filters.search);
+  const sessions=searching?filteredAllSessions():sortedSessions(date);
   const cats=["Toutes les catégories",...Object.values(CAT_LABEL).filter((v,i,a)=>a.indexOf(v)===i)];
   const collections=["Toutes les collections","Once Upon a Time (In) America"];
   const hasStars=DATA.sessions.some(starsFor);
-  return `<div class="section">EXPLORER · ${sessions.length} SÉANCE${sessions.length>1?'S':''}</div>
-  <div class="filters"><div class="searchWrap"><span>⌕</span><input id="search" value="${esc(filters.search)}" placeholder="Rechercher un film…" autocomplete="off"></div>
+  const heading=searching?`RECHERCHE · ${sessions.length} RÉSULTAT${sessions.length>1?'S':''}`:`EXPLORER · ${sessions.length} SÉANCE${sessions.length>1?'S':''}`;
+  let cards='';
+  if(searching){
+    const groups=dates.map(d=>({date:d,items:sessions.filter(s=>s.date===d)})).filter(g=>g.items.length);
+    cards=groups.map(g=>`<div class="searchDay"><div class="section">${dateLabel(g.date)}</div>${g.items.map(explorerCard).join('')}</div>`).join('');
+  } else cards=sessions.map(explorerCard).join('');
+  return `<div class="section">${heading}</div>
+  <div class="filters"><div class="searchWrap"><span>⌕</span><input id="search" value="${esc(filters.search)}" placeholder="Rechercher un film…" autocomplete="off" inputmode="search"></div>
   <div class="filterRow"><select data-filter-place>${PLACES.map(x=>`<option ${filters.place===x?'selected':''}>${x}</option>`).join('')}</select><select data-filter-cat>${cats.map(x=>`<option ${filters.category===x?'selected':''}>${x}</option>`).join('')}</select></div>
-  <div class="filterRow"><select data-filter-col>${collections.map(x=>`<option ${filters.collection===x?'selected':''}>${x}</option>`).join('')}</select>${hasStars?'<button class="starFilter">⭐ Séances étoile</button>':''}</div></div>
-  ${sessions.length?sessions.map(explorerCard).join(''):`<div class="empty">Aucune séance ne correspond à ces filtres.</div>`}`;
+  <div class="filterRow"><select data-filter-col>${collections.map(x=>`<option ${filters.collection===x?'selected':''}>${x}</option>`).join('')}</select>${hasStars?`<button type="button" class="starFilter ${filters.star?'active':''}" id="starFilter">⭐ Séances étoile</button>`:''}</div></div>
+  ${cards||`<div class="empty">${searching?`Aucune séance ne correspond à « ${esc(filters.search)} ». <br><small>La recherche porte sur tout le Festival.</small>`:'Aucune séance ne correspond à ces filtres.'}</div>`}`;
 }
 function explorerCard(s){
   const jury=isJuryForFilm(s), personal=isInMyPlan(s), star=starsFor(s);
@@ -187,6 +167,22 @@ function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>${
 function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id);if(!x)return;openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><p>Ce créneau est une contrainte fixe de ton planning Jury.</p>`)}
 function openPlan(id){const x=plan.find(a=>a.id===id);if(!x)return;openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
 function openFree(start,end){const sm=Number(start),em=Number(end),opts=compatible(dates[day],{start:sm,end:em});openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${hh(sm)} → ${hh(em)}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?'already':''}" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(catLabel(o.category))}</small></button>`}).join(''):'<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>'}`)}
-function openSession(id,blocked=false,backStart=null,backEnd=null){const s=DATA.sessions.find(x=>x.id===id);if(!s)return;const already=alreadyPlanned(s),back=(backStart!==null&&backEnd!==null)?`<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`:'';const jury=isJuryForFilm(s);openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${collectionLabel(s)?`<br>📚 ${collectionLabel(s)}`:''}${starsFor(s)?'<br>⭐ Séance étoile':''}</div>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`)}
+function openSession(id,blocked=false,backStart=null,backEnd=null){
+  const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
+  const already=alreadyPlanned(s);
+  const back=(backStart!==null&&backEnd!==null)?`<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`:'';
+  const jury=isJuryForFilm(s);
+  const incompatible=conflict(s);
+  const alternatives=otherFilmSessions(s);
+  const collection=collectionLabel(s);
+  let notice='';
+  if(incompatible){
+    notice+=`<div class="notice warn"><b>⚠️ Cette séance n'est pas compatible avec ton planning.</b><br>Elle entre en conflit avec un événement obligatoire ou déjà planifié.</div>`;
+    if(alternatives.length){
+      notice+=`<div class="section">AUTRES SÉANCES DE CE FILM</div>${alternatives.map(o=>`<button class="compat" onclick="openSession('${o.id}',false,${backStart!==null?Number(backStart):'null'},${backEnd!==null?Number(backEnd):'null'})"><b>${o.date===s.date?'Même jour · ':''}${dateLabel(o.date)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)}</small></button>`).join('')}`;
+    }else notice+=`<div class="info"><b>Aucune autre séance de ce film n'est programmée.</b></div>`;
+  }
+  openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${starsFor(s)?'<br>⭐ Séance étoile':''}</div>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${notice}${incompatible?`<button class="btn primary" onclick="addSession('${s.id}',true)">Forcer : ajouter quand même à mon planning</button>`:(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
+}
 function toast(t){let x=document.querySelector('.toast');if(!x){x=document.createElement('div');x.className='toast';document.body.appendChild(x)}x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
 fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})});

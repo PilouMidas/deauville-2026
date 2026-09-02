@@ -1,8 +1,8 @@
-# Deauville 2026 — Explorer V1
+# Deauville 2026 — Explorer V1.1
 
-Version 1.0.0. Cette version conserve le moteur de Planning de la V0.12 et ajoute Explorer.
+Version 1.1.0. Cette version conserve le moteur de Planning de la V0.12 et ajoute Explorer.
 
-## Explorer V1
+## Explorer V1.1
 - jour synchronisé avec Planning et inversement
 - programme complet de la journée, chronologique
 - recherche par titre

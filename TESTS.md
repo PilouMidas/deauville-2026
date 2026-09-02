@@ -8,7 +8,7 @@
 - Le fonctionnement des séances compatibles de la v0.10 est conservé.
 
 
-## Explorer V1 checks
+## Explorer V1.1 checks
 - Planning -> Explorer conserve le jour courant.
 - Explorer -> Planning conserve le jour courant.
 - La journée est triée par heure.
