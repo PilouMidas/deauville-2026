@@ -1,4 +1,4 @@
-/* Deauville 2026 · V2.2.5 UX layer */
+/* Deauville 2026 · V2.2.6 UX layer */
 (function(){
   function installClear(){
     const wrap=document.querySelector('.searchWrap'),input=document.getElementById('search');
@@ -34,14 +34,17 @@
     return '<div class="wishStatus good">✓ COMPATIBLE</div>';
   };
   const originalOpenSession=window.openSession;
-  if(typeof originalOpenSession==='function')window.openSession=function(id){const s=DATA&&DATA.sessions.find(x=>x.id===id),exact=s&&exactJurySession(s);if(exact){openModal(`<div class="section">JURY · DÉJÀ AU PLANNING</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}</div><div class="notice jury">✓ SÉANCE DÉJÀ AU PLANNING</div><p>Cette séance fait partie de tes obligations Jury et est déjà inscrite dans ton planning.</p>`);return;}return originalOpenSession.apply(this,arguments);};
+  if(typeof originalOpenSession==='function')window.openSession=function(id){const s=DATA&&DATA.sessions.find(x=>x.id===id),exact=s&&exactJurySession(s);if(exact){openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}</div><div class="notice jury">📅 DANS TON PLANNING<br><strong>⚖️ SÉANCE JURY OBLIGATOIRE</strong></div><p>Cette séance fait partie de tes obligations Jury et est déjà inscrite dans ton planning.</p>`);return;}return originalOpenSession.apply(this,arguments);};
   const originalAddSession=window.addSession;
   if(typeof originalAddSession==='function')window.addSession=function(id,force=false){const s=DATA&&DATA.sessions.find(x=>x.id===id);if(s&&exactJurySession(s)){toast('Cette séance est déjà au planning');return;}return originalAddSession.apply(this,arguments);};
   const originalExplorerCard=window.explorerCard;
   if(typeof originalExplorerCard==='function')window.explorerCard=function(s){
-    const html=originalExplorerCard.apply(this,arguments);
-    if(exactJurySession(s))return html;
-    return html.replace('<span class="badge gold">JURY · DÉJÀ AU PLANNING</span>','');
+    let html=originalExplorerCard.apply(this,arguments);
+    const exact=exactJurySession(s),personal=isInMyPlan(s);
+    html=html.replace('<span class="badge gold">JURY · DÉJÀ AU PLANNING</span>','');
+    const badges=exact?'<span class="badge green">📅 DANS MON PLANNING</span><span class="badge gold">⚖️ JURY · OBLIGATOIRE</span>':personal?'<span class="badge green">📅 DANS MON PLANNING</span>':'';
+    html=html.replace('<div class="ecBadges">','<div class="ecBadges">'+badges);
+    return html;
   };
 
   let compatibleOnly=false;
@@ -56,21 +59,28 @@
     return !compatibleOnly||isCompatibleForFilter(s);
   };
   function installCompatibilityFilter(){
-    const row=document.querySelector('.filterRow');
-    if(!row||row.querySelector('#compatibleFilter'))return;
-    const b=document.createElement('button');
-    b.type='button';b.id='compatibleFilter';b.className='planningFilter'+(compatibleOnly?' active':'');
+    const filters=document.querySelector('.filters');
+    if(!filters)return;
+    let row=filters.querySelector('.compatibilityRow');
+    if(!row){
+      row=document.createElement('div');row.className='filterRow compatibilityRow';
+      const b=document.createElement('button');
+      b.type='button';b.id='compatibleFilter';b.className='planningFilter';
+      b.setAttribute('aria-pressed','false');
+      b.addEventListener('click',function(){compatibleOnly=!compatibleOnly;render();});
+      row.appendChild(b);filters.appendChild(row);
+    }
+    const b=row.querySelector('#compatibleFilter');
     b.textContent='✓ Compatible avec mon planning';
     b.setAttribute('aria-pressed',compatibleOnly?'true':'false');
-    b.addEventListener('click',function(){compatibleOnly=!compatibleOnly;render();});
-    row.appendChild(b);
+    b.classList.toggle('active',compatibleOnly);
   }
   function enhance(){
     installClear();installCompatibilityFilter();
-    const version=document.querySelector('.version');if(version)version.textContent='V2.2.5';
+    const version=document.querySelector('.version');if(version)version.textContent='V2.2.6';
   }
   const originalRender=window.render;
   if(typeof originalRender==='function')window.render=function(){const result=originalRender.apply(this,arguments);enhance();return result;};
-  const style=document.createElement('style');style.textContent=`.searchWrap{position:relative}.searchWrap input{padding-right:42px}.searchClear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:0;border-radius:50%;background:#eee9df;color:#191815;font-size:24px;line-height:1;align-items:center;justify-content:center;cursor:pointer;opacity:.8;padding:0;-webkit-tap-highlight-color:transparent}.searchClear:hover{opacity:1}.planningFilter{border:1px solid #d7d0c4;border-radius:999px;background:#fffaf2;color:#191815;padding:8px 12px;font:inherit;cursor:pointer;white-space:nowrap}.planningFilter.active{font-weight:700}`;document.head.appendChild(style);
+  const style=document.createElement('style');style.textContent=`.searchWrap{position:relative}.searchWrap input{padding-right:42px}.searchClear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:0;border-radius:50%;background:#eee9df;color:#191815;font-size:24px;line-height:1;align-items:center;justify-content:center;cursor:pointer;opacity:.8;padding:0;-webkit-tap-highlight-color:transparent}.searchClear:hover{opacity:1}.planningFilter{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:9px 8px;font-size:11px;cursor:pointer;text-align:left;white-space:nowrap;flex:1;min-width:0}.planningFilter.active{background:#fff;color:var(--ink);font-weight:700;border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}.compatibilityRow{margin-top:7px}.ecBadges .badge{display:inline-flex;align-items:center;gap:3px}`;document.head.appendChild(style);
   if(document.readyState!=='loading')enhance();else document.addEventListener('DOMContentLoaded',enhance);
 })();
