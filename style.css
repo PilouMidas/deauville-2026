@@ -21,7 +21,7 @@ main{padding:17px}.section{font-size:10px;letter-spacing:.16em;color:var(--muted
 .exploreSwitch{display:flex;background:var(--cream);border-radius:12px;padding:3px;margin:0 0 14px;border:1px solid var(--line)}
 .exploreSwitch .tab{flex:1;border:0;background:transparent;border-radius:9px;padding:9px 6px;font-size:10px;letter-spacing:.1em;font-weight:700;color:var(--muted)}
 .exploreSwitch .tab.sel{background:var(--paper);color:var(--ink);box-shadow:0 1px 4px #0001}
-.filters{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:12px}
+.filters{position:relative;z-index:10;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:12px}.filters:focus-within{position:sticky;top:0;z-index:50;box-shadow:0 10px 22px rgba(0,0,0,.10)}
 .searchWrap{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 10px;margin-bottom:8px}.searchWrap span{font-size:20px;color:var(--muted)}.searchWrap input{width:100%;border:0;outline:0;background:transparent;padding:10px 0;font:14px inherit;color:var(--ink)}
 .filterRow{display:flex;gap:7px;margin-top:7px}.filterRow select,.starFilter{flex:1;min-width:0;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 8px;font-size:11px;color:var(--ink)}.starFilter{color:#7a5b18;font-weight:700}
 .exploreCard{display:flex;width:100%;text-align:left;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:12px;margin:0 0 8px;box-shadow:var(--shadow);font:inherit;color:inherit;cursor:pointer}.exploreCard:active{transform:scale(.995)}

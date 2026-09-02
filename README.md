@@ -1,6 +1,6 @@
 # Deauville 2026 — Explorer V1.1
 
-Version 1.4.0. Cette version conserve le moteur de Planning de la V0.12 et ajoute Explorer.
+Version 1.5.0. Cette version conserve le moteur de Planning de la V0.12 et ajoute Explorer.
 
 ## Explorer V1.1
 - jour synchronisé avec Planning et inversement
@@ -16,3 +16,8 @@ Les séances étoile ne sont marquées que si le jeu de données contient explic
 
 
 V1.4 : recherche multi-jours conservée ; dates de résultats rendues plus visibles, avec indication du jour sélectionné. Aucun changement au moteur Planning.
+
+
+## V1.5.0
+- Le panneau de recherche passe au premier plan lorsqu’un champ de recherche est actif (`:focus-within`).
+- Aucun changement au moteur Planning ni aux filtres/recherche.
