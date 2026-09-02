@@ -1,5 +1,5 @@
 
-const VERSION="1.5.0";
+const VERSION="2.0.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
 const KEY="deauville2026-personal-planning-v110";
@@ -33,6 +33,42 @@ function loadPlan(){
 }
 function savePlan(){localStorage.setItem(KEY,JSON.stringify(plan))}
 let plan=[];
+const WISH_KEY="deauville2026-wishlist-v200";
+let wishes=[];
+function canonicalTitle(title){
+  const raw=String(title||"");
+  const aliases=DATA?.aliases||{};
+  return aliases[raw]||raw;
+}
+function loadWishes(){try{return JSON.parse(localStorage.getItem(WISH_KEY)||"[]")}catch{return[]}}
+function saveWishes(){localStorage.setItem(WISH_KEY,JSON.stringify(wishes))}
+function wished(title){const c=normTitle(canonicalTitle(title));return wishes.some(x=>normTitle(x)===c)}
+function toggleWish(title){
+  const c=canonicalTitle(title);
+  if(wished(c)) wishes=wishes.filter(x=>normTitle(x)!==normTitle(c));
+  else wishes.push(c);
+  saveWishes();
+  render();
+  toast(wished(c)?"Ajouté à tes envies ❤️":"Retiré de tes envies");
+}
+function wishTitles(){return wishes.slice().sort((a,b)=>a.localeCompare(b,"fr"))}
+function filmSessions(title){const t=normTitle(canonicalTitle(title));return DATA.sessions.filter(s=>normTitle(canonicalTitle(s.title))===t).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start))}
+function conflictItems(s){
+  const ss=mins(s.start), ee0=mins(s.end), ee=ee0<ss?ee0+1440:ee0;
+  return allPlanned(s.date).filter(x=>{if(x.sessionId===s.id||x.id===s.id)return false;return ss<x.e&&ee>x.s;});
+}
+function sessionStatusHtml(s){
+  const conflicts=conflictItems(s);
+  const personal=plan.some(p=>p.sessionId===s.id);
+  const jury=conflicts.some(x=>x.source==='jury'||x.source==='juryExtra');
+  if(conflicts.length){
+    return `<div class="wishStatus bad">⚠️ NON COMPATIBLE${jury?' · CONFLIT JURY':''}</div>`;
+  }
+  if(personal) return '<div class="wishStatus planned">✓ SÉANCE PLANIFIÉE</div>';
+  if(juryFilmAlreadyPlanned(s)) return '<div class="wishStatus juryPlan">✓ SÉANCE JURY PLANIFIÉE</div>';
+  return '<div class="wishStatus good">✓ COMPATIBLE</div>';
+}
+function openWishes(){view="wishes";closeModal();render()}
 
 function fixedItems(date){
   return [
@@ -133,6 +169,16 @@ function otherFilmSessions(s){
   const t=normTitle(s.title);
   return DATA.sessions.filter(x=>x.id!==s.id && normTitle(x.title)===t).sort((a,b)=>a.date.localeCompare(b.date)||mins(a.start)-mins(b.start));
 }
+function wishesView(){
+  const titles=wishTitles();
+  if(!titles.length) return `<div class="section">MES ENVIES</div><div class="empty wishEmpty"><div class="wishHeart">♡</div><h2>Pas encore d'envies</h2><p>Ajoute des films depuis Explorer et retrouve ici toutes leurs séances.</p><button class="btn primary" onclick="view='explorer';render()">Explorer les films</button></div>`;
+  const blocks=titles.map(title=>{
+    const ss=filmSessions(title);
+    return `<section class="wishFilm"><div class="wishFilmHead"><div><div class="wishTitle">${esc(title)}</div><div class="ecMeta">${ss.length} séance${ss.length>1?'s':''} · toutes les dates</div></div><button class="wishRemove" onclick="toggleWish('${esc(title).replace(/'/g,"\'")}')" aria-label="Retirer des envies">♥</button></div>${ss.map(s=>`<button class="wishSession" data-session="${s.id}"><div><b>${dateLabel(s.date)}</b><br><small>${s.start}–${s.end} · ${esc(s.place)}</small></div>${sessionStatusHtml(s)}<span class="ecArrow">›</span></button>`).join('')}</section>`;
+  }).join('');
+  return `<div class="section">MES ENVIES</div><div class="wishIntro">${titles.length} film${titles.length>1?'s':''} dans tes envies</div>${blocks}`;
+}
+
 function explorerView(date){
   const searching=!!normTitle(filters.search);
   const sessions=searching?filteredAllSessions():sortedSessions(date);
@@ -177,6 +223,7 @@ function compatibilityLabel(s){
 function openSession(id,blocked=false,backStart=null,backEnd=null,backSessionId=null){
   const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
   const already=alreadyPlanned(s);
+  const wishedNow=wished(s.title);
   let back='';
   if(backSessionId){
     back=`<button class="backBtn" onclick="openSession('${backSessionId}',false,${backStart!==null?Number(backStart):'null'},${backEnd!==null?Number(backEnd):'null'},null)">← Retour à la séance précédente</button>`;
@@ -188,7 +235,8 @@ function openSession(id,blocked=false,backStart=null,backEnd=null,backSessionId=
   const alternatives=otherFilmSessions(s);
   let notice='';
   if(incompatible){
-    notice+=`<div class="notice warn"><b>⚠️ Cette séance n'est pas compatible avec ton planning.</b><br>Elle entre en conflit avec un événement obligatoire ou déjà planifié.</div>`;
+    const cs=conflictItems(s);
+    notice+=`<div class="notice warn"><b>⚠️ Cette séance n'est pas compatible avec ton planning.</b><br>Elle entre en conflit avec :${cs.map(x=>`<br>• <b>${x.source==='jury'||x.source==='juryExtra'?'Séance Jury planifiée':'Séance planifiée'}</b> · ${esc(x.title)} · ${x.start}–${x.end}`).join('')}</div>`;
   }
   if(alternatives.length){
     notice+=`<div class="section">AUTRES SÉANCES DE CE FILM</div>${alternatives.map(o=>{
@@ -198,29 +246,32 @@ function openSession(id,blocked=false,backStart=null,backEnd=null,backSessionId=
   } else {
     notice+=`<div class="info"><b>Aucune autre séance de ce film n'est programmée.</b></div>`;
   }
-  openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${starsFor(s)?'<br>⭐ Séance étoile':''}</div>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${notice}${incompatible?`<button class="btn primary" onclick="addSession('${s.id}',true)">Forcer : ajouter quand même à mon planning</button>`:(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
+  openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${starsFor(s)?'<br>⭐ Séance étoile':''}</div><button class="btn wishBtn" onclick="toggleWish('${esc(canonicalTitle(s.title)).replace(chr(39), chr(92)+chr(39))}')">${wishedNow?'♥ Retirer de mes envies':'♡ Ajouter à mes envies'}</button>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${notice}${incompatible?`<button class="btn primary" onclick="addSession('${s.id}',true)">Forcer : ajouter quand même à mon planning</button>`:(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
 }
 function render(){
   const date=dates[day];
-  if(view==='explorer'){
+  if(view==='wishes'){
+    document.getElementById('app').innerHTML=`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Le jour reste synchronisé avec Planning et Explorer</div></header><main><div class="exploreSwitch"><button class="tab" id="tabPlanning">Planning</button><button class="tab" id="tabExplorer">Explorer</button><button class="tab sel">Envies</button></div>${wishesView()}</main></div><nav class="bottom"><button id="navPlanning">Planning</button><button id="navExplorer">Explorer</button><button class="active">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
+  } else if(view==='explorer'){
     document.getElementById('app').innerHTML=`<div class="app">
       <header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div>
       <div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div>
       <div class="hint">Glisser pour changer de jour</div></header>
       <main><div class="exploreSwitch"><button class="tab" id="tabPlanning">Planning</button><button class="tab sel">Explorer</button></div>${explorerView(date)}</main>
-      </div><nav class="bottom"><button id="navPlanning">Planning</button><button class="active">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
+      </div><nav class="bottom"><button id="navPlanning">Planning</button><button class="active">Explorer</button><button id="navWishes">Envies</button></nav>
       <div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
   } else {
     const fixed=fixedItems(date), rows=[];
     allPlanned(date).forEach(x=>rows.push({type:(x.source==='jury'||x.source==='juryExtra')?'jury':'personal',s:x.s,x}));
     freeWindows(date).forEach(w=>rows.push({type:'free',s:w.start,w})); rows.sort((a,b)=>a.s-b.s);
     const body=rows.map(r=>{if(r.type==='free'){const opts=compatible(date,r.w);return `<div class="item free ${opts.length?'click':''}" data-free="${r.w.start}|${r.w.end}"><div class="time">${hh(r.w.start)}<br><span class="timeSep">→</span><br>${hh(r.w.end)}</div><div class="content"><div class="title freeTitle">Créneau libre</div><div class="meta"><span class="freeText">${dur(r.w.start,r.w.end)} disponibles</span>${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?'s':''} compatible${opts.length>1?'s':''}</span>`:''}</div></div></div>`}const x=r.x,personal=r.type==='personal';return `<div class="item ${personal?'personal':'jury'}" data-${personal?'plan':'jury'}="${x.id}"><div class="time">${x.start}–${x.end}</div><div class="content"><div class="title">${esc(x.title)}</div><div class="meta"><span>${esc(x.place)}</span><span class="badge ${personal?'green':'gold'}">${personal?'MON PLANNING':'JURY · OBLIGATOIRE'}</span></div></div></div>`}).join('');
-    document.getElementById('app').innerHTML=`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Glisser pour changer de jour</div></header><main><div class="exploreSwitch"><button class="tab sel">Planning</button><button class="tab" id="tabExplorer">Explorer</button></div><div class="section">MON PLANNING</div>${body||'<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>'}</main></div><nav class="bottom"><button class="active">Planning</button><button id="navExplorer">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
+    document.getElementById('app').innerHTML=`<div class="app"><header><div class="topline"><div><div class="brand">DEAUVILLE</div><div class="sub">FESTIVAL DU CINÉMA AMÉRICAIN · 2026</div></div><div class="version">v${VERSION}</div></div><div class="datebar"><button class="arrow" id="prev">‹</button><div class="date" id="pick"><b>${dateLabel(date)}</b><small>4—13 septembre</small></div><button class="arrow" id="next">›</button></div><div class="hint">Glisser pour changer de jour</div></header><main><div class="exploreSwitch"><button class="tab sel">Planning</button><button class="tab" id="tabExplorer">Explorer</button></div><div class="section">MON PLANNING</div>${body||'<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>'}</main></div><nav class="bottom"><button class="active">Planning</button><button id="navExplorer">Explorer</button><button id="navWishes">Envies</button></nav><div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div id="sheet"></div></div></div>`;
   }
   const modal=document.getElementById('modal'),sheet=document.getElementById('sheet');
   document.getElementById('prev').onclick=()=>move(-1);document.getElementById('next').onclick=()=>move(1);document.getElementById('pick').onclick=pickDate;
-  const np=document.getElementById('navPlanning'), ne=document.getElementById('navExplorer'), tp=document.getElementById('tabPlanning'), te=document.getElementById('tabExplorer');
-  if(np)np.onclick=()=>{view='planning';render()}; if(ne)ne.onclick=()=>{view='explorer';render()}; if(tp)tp.onclick=()=>{view='planning';render()}; if(te)te.onclick=()=>{view='explorer';render()};
+  const np=document.getElementById('navPlanning'), ne=document.getElementById('navExplorer'), nw=document.getElementById('navWishes'), tp=document.getElementById('tabPlanning'), te=document.getElementById('tabExplorer');
+  if(np)np.onclick=()=>{view='planning';render()}; if(ne)ne.onclick=()=>{view='explorer';render()}; if(nw)nw.onclick=()=>{view='wishes';render()}; if(tp)tp.onclick=()=>{view='planning';render()}; if(te)te.onclick=()=>{view='explorer';render()};
+  if(view==='wishes'){ document.querySelectorAll('[data-session]').forEach(e=>e.onclick=()=>openSession(e.dataset.session,false)); }
   if(view==='explorer'){
     const search=document.getElementById('search'); if(search){search.addEventListener('input',e=>{filters.search=e.target.value;render();const q=document.getElementById('search');q.focus();q.setSelectionRange(q.value.length,q.value.length)})}
     const fp=document.querySelector('[data-filter-place]'),fc=document.querySelector('[data-filter-cat]'),fl=document.querySelector('[data-filter-col]'),fs=document.getElementById('starFilter');
@@ -233,4 +284,4 @@ function render(){
   attachSwipe();
 }
 function toast(t){let x=document.querySelector('.toast');if(!x){x=document.createElement('div');x.className='toast';document.body.appendChild(x)}x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}
-fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})});
+fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();wishes=loadWishes();render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})});

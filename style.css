@@ -29,3 +29,13 @@ main{padding:17px}.section{font-size:10px;letter-spacing:.16em;color:var(--muted
 
 /* Explorer V1.1 */
 .searchWrap input{font-size:16px}.starFilter.active{background:#fff7e7;color:#7a5b18}.searchDay{margin-bottom:8px}.searchDay .section{margin-top:14px}.notice.warn{margin-bottom:10px}.sheet .compat{cursor:pointer}
+
+/* Mes envies V2 */
+.exploreSwitch{display:flex;gap:2px}.exploreSwitch .tab{min-width:0}
+.wishIntro{font-size:12px;color:var(--muted);margin:-2px 2px 12px}
+.wishFilm{background:var(--paper);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
+.wishFilmHead{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;border-bottom:1px solid var(--line)}
+.wishTitle{font:19px/1.2 Georgia,serif}.wishRemove{border:1px solid var(--line);background:#fff;border-radius:999px;width:38px;height:38px;font-size:18px;color:#8b681d}
+.wishSession{display:flex;align-items:center;gap:10px;width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:11px 12px;text-align:left;font:inherit;color:inherit}.wishSession:last-child{border-bottom:0}.wishSession>div:first-child{width:112px;flex:none}.wishSession b{font-size:11px}.wishSession small{color:var(--muted)}
+.wishStatus{flex:1;font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:800}.wishStatus.good{color:var(--green)}.wishStatus.planned{color:var(--green)}.wishStatus.juryPlan{color:#8b681d}.wishStatus.bad{color:#8a4b2c}
+.wishEmpty{padding-top:30px}.wishHeart{font-size:54px;line-height:1;margin-bottom:5px;color:var(--gold)}.wishEmpty h2{font:24px Georgia,serif;margin:5px 0}.wishEmpty p{max-width:280px;margin:0 auto 18px}.wishBtn{width:100%;margin-bottom:8px}.btn{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 13px;font:inherit;font-weight:700}.btn.primary{background:#191815;color:#fff;border-color:#191815}
