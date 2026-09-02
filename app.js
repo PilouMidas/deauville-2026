@@ -1,9 +1,9 @@
 
-const VERSION="0.8.0";
+const VERSION="0.9.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
-const KEY="deauville2026-personal-planning-v080";
-const LEGACY_KEYS=["deauville2026-personal-planning-v070","deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
+const KEY="deauville2026-personal-planning-v090";
+const LEGACY_KEYS=["deauville2026-personal-planning-v080","deauville2026-personal-planning-v070","deauville2026-personal-planning-v060","deauville2026-personal-planning-v020","deauville2026-personal-planning-v030","deauville2026-personal-planning-v040","deauville2026-personal-planning-v050"];
 
 const pad=n=>String(n).padStart(2,"0");
 function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
@@ -96,9 +96,9 @@ function conflict(s){
     return ss<x.e && ee>x.s;
   });
 }
-function addSession(id){
+function addSession(id,force=false){
   const s=DATA.sessions.find(x=>x.id===id); if(!s)return;
-  if(alreadyPlanned(s)){toast("Cette séance est déjà dans ton planning");return}
+  if(alreadyPlanned(s) && !force){toast("Cette séance est déjà dans ton planning");return}
   if(conflict(s)){openSession(id,true);return}
   plan.push({id:"p_"+id,sessionId:id,title:s.title,date:s.date,start:s.start,end:s.end,place:s.place,category:s.category});
   savePlan(); closeModal(); render(); toast("Séance ajoutée à ton planning");
@@ -139,11 +139,14 @@ function render(){
   <div class="hint">Glisser pour changer de jour</div></header>
   <main><div class="section">MON PLANNING</div>${body||`<div class="empty">Aucune contrainte ce jour.<br>La journée est entièrement disponible.</div>`}</main></div>
   <nav class="bottom"><button class="active">Planning</button><button onclick="toast('Explorer arrive à l’étape suivante')">Explorer</button><button onclick="toast('Mes envies arrive à l’étape suivante')">Envies</button></nav>
-  <div class="modal" id="modal"><div class="sheet"><div class="handle"></div><div id="sheet"></div></div></div>`;
+  <div class="modal" id="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><button class="handle" type="button" aria-label="Fermer la fiche"></button><div id="sheet"></div></div></div>`;
 
   prev.onclick=()=>move(-1);next.onclick=()=>move(1);pick.onclick=pickDate;
-  modal.onclick=e=>{if(e.target===modal)closeModal()};
-  modal.addEventListener("pointerup",e=>{if(e.target===modal)closeModal()});
+  modal.onclick=e=>{
+    if(e.target===modal){e.preventDefault();e.stopPropagation();closeModal();}
+  };
+  document.querySelector(".handle").onclick=e=>{e.preventDefault();e.stopPropagation();closeModal()};
+  modal.addEventListener("click",e=>{e.stopPropagation()},true);
   document.addEventListener("keydown",e=>{if(e.key==="Escape" && modal.style.display!=="none")closeModal()});
   document.querySelectorAll("[data-jury]").forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
   document.querySelectorAll("[data-plan]").forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
@@ -190,8 +193,9 @@ function render(){
   });
 }
 function move(n){day=Math.max(0,Math.min(9,day+n));render();window.scrollTo({top:0,behavior:"smooth"})}
-function closeModal(){modal.style.display="none"}
-function openModal(c){sheet.innerHTML=c;modal.style.display="flex"}
+function closeModal(){modal.style.display="none";modal.setAttribute("aria-hidden","true")}
+function openModal(c){sheet.innerHTML=c;modal.style.display="flex";modal.setAttribute("aria-hidden","false")}
+
 function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>Mon planning</h2><div class="datepick">${dates.map((d,i)=>`<button class="${i===day?"sel":""}" data-d="${i}">${dateLabel(d)}</button>`).join("")}</div>`);document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{day=+b.dataset.d;closeModal();render()})}
 function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id);if(!x)return;openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><p>Ce créneau est une contrainte fixe de ton planning Jury.</p>`)}
 function openPlan(id){const x=plan.find(a=>a.id===id);if(!x)return;openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
@@ -211,7 +215,7 @@ function openSession(id,blocked=false){
  const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
  const already=alreadyPlanned(s);
  openModal(`<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(s.category)}</div>
- ${already?'<div class="notice">Cette séance est déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
+ ${already?'<div class="notice">Cette séance est déjà dans ton planning, car elle fait partie de tes obligations Jury.</div><button class="btn primary" onclick="addSession(\'${s.id}\',true)">Ajouter quand même à mon planning</button>':blocked?'<div class="notice warn">Cette séance entre en conflit avec un élément obligatoire ou déjà planifié.</div>':`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
 }
 function toast(t){let x=document.querySelector(".toast");if(!x){x=document.createElement("div");x.className="toast";document.body.appendChild(x)}x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
 fetch("data.json").then(r=>r.json()).then(d=>{DATA=d;plan=loadPlan();render();if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{})});
