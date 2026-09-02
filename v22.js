@@ -1,4 +1,4 @@
-/* Deauville 2026 · V2.2 UX layer */
+/* Deauville 2026 · V2.2.1 UX layer */
 (function(){
   function installClear(){
     const wrap=document.querySelector('.searchWrap');
@@ -22,34 +22,49 @@
     clear.style.display=input.value?'flex':'none';
   }
 
+  const originalConflict=window.conflict;
+  const originalConflictItems=window.conflictItems;
+  if(typeof originalConflict==='function' && typeof originalConflictItems==='function'){
+    window.conflictItems=function(s){
+      const items=originalConflictItems(s);
+      if(typeof window.juryFilmAlreadyPlanned==='function' && window.juryFilmAlreadyPlanned(s)){
+        return items.filter(x=>x.source!=='jury'&&x.source!=='juryExtra');
+      }
+      return items;
+    };
+    window.conflict=function(s){
+      if(typeof window.juryFilmAlreadyPlanned==='function' && window.juryFilmAlreadyPlanned(s)){
+        return window.conflictItems(s).length>0;
+      }
+      return originalConflict(s);
+    };
+  }
+
+  const originalCompatibilityLabel=window.compatibilityLabel;
+  if(typeof originalCompatibilityLabel==='function'){
+    window.compatibilityLabel=function(s){
+      if(typeof window.juryFilmAlreadyPlanned==='function' && window.juryFilmAlreadyPlanned(s)){
+        return '<span class="status good">✓ FILM DÉJÀ PLANIFIÉ</span>';
+      }
+      return originalCompatibilityLabel(s);
+    };
+  }
+
   function refineWishStatuses(){
     document.querySelectorAll('.wishFilm').forEach(function(film){
-      const alreadyPlanned=!!film.querySelector('.wishStatus.juryPlan');
       film.querySelectorAll('.wishStatus.juryPlan').forEach(function(status){
         status.textContent='✓ FILM DÉJÀ PLANIFIÉ';
       });
-      if(alreadyPlanned){
-        film.querySelectorAll('.wishStatus.bad').forEach(function(status){
-          if(status.textContent.includes('CONFLIT JURY')) status.textContent='✓ FILM DÉJÀ PLANIFIÉ';
-        });
-      }
     });
   }
 
   function enhance(){
     installClear();
     const version=document.querySelector('.version');
-    if(version) version.textContent='V2.2.0';
+    if(version) version.textContent='V2.2.1';
     refineWishStatuses();
-    document.querySelectorAll('.sheet .btn.primary').forEach(function(b){
-      const t=b.textContent.trim();
-      if(t==='Ajouter à mon planning') b.textContent='Ajouter cette séance à mon planning';
-      if(t==='Ajouter quand même à mon planning') b.textContent='Ajouter cette séance quand même à mon planning';
-    });
   }
 
-  /* Hook render itself so the patch survives the app's normal re-renders.
-     No MutationObserver: this avoids the V2.2 regression that caused a blank page. */
   const originalRender=window.render;
   if(typeof originalRender==='function'){
     window.render=function(){
