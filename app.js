@@ -8,7 +8,11 @@ const pad=n=>String(n).padStart(2,"0");
 function mins(h){let [a,b]=h.split(":").map(Number);return a*60+b}
 function dateLabel(d){return new Intl.DateTimeFormat("fr-FR",{weekday:"long",day:"numeric",month:"long"}).format(new Date(d+"T12:00:00"))}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function dur(s,e){let d=mins(e)-mins(s);if(d<0)d+=1440;return `${Math.floor(d/60)}h${d%60?pad(d%60):""}`}
+function dur(s,e){
+  const sm=typeof s==="number"?s:mins(s), em=typeof e==="number"?e:mins(e);
+  let d=em-sm;if(d<0)d+=1440;
+  return `${Math.floor(d/60)}h${d%60?pad(d%60):""}`;
+}
 function loadPlan(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return[]}}
 function savePlan(){localStorage.setItem(KEY,JSON.stringify(plan))}
 let plan=[];
@@ -77,7 +81,7 @@ function render(){
       return `<div class="item free ${opts.length?"click":""}" data-free="${r.w.start}|${r.w.end}">
         <div class="time">${hh(r.w.start)}–${hh(r.w.end)}</div>
         <div class="content"><div class="title freeTitle">Créneau libre</div>
-        <div class="meta"><span class="freeText">${dur(hh(r.w.start),hh(r.w.end))} disponibles</span>
+        <div class="meta"><span class="freeText">${dur(r.w.start,r.w.end)} disponibles</span>
         ${opts.length?`<span class="badge">${opts.length} séance${opts.length>1?"s":""} compatible${opts.length>1?"s":""}</span>`:""}</div></div></div>`;
     }
     const x=r.x;
@@ -101,9 +105,19 @@ function render(){
   document.querySelectorAll("[data-jury]").forEach(e=>e.onclick=()=>openJury(e.dataset.jury));
   document.querySelectorAll("[data-plan]").forEach(e=>e.onclick=()=>openPlan(e.dataset.plan));
   document.querySelectorAll("[data-free]").forEach(e=>e.onclick=()=>{let [s,en]=e.dataset.free.split("|");openFree(s,en)});
-  const header=document.querySelector("header");
-  header.ontouchstart=e=>touchX=e.changedTouches[0].clientX;
-  header.ontouchend=e=>{const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>45)move(dx<0?1:-1)};
+  const swipeTarget=document.querySelector(".app");
+  swipeTarget.addEventListener("touchstart",e=>{touchX=e.changedTouches[0].clientX},{passive:true});
+  swipeTarget.addEventListener("touchend",e=>{
+    const dx=e.changedTouches[0].clientX-touchX;
+    if(Math.abs(dx)>45) move(dx<0?1:-1);
+  },{passive:true});
+  let pointerStart=null;
+  swipeTarget.addEventListener("pointerdown",e=>{pointerStart=e.clientX});
+  swipeTarget.addEventListener("pointerup",e=>{
+    if(pointerStart===null)return;
+    const dx=e.clientX-pointerStart; pointerStart=null;
+    if(Math.abs(dx)>60) move(dx<0?1:-1);
+  });
 }
 function move(n){day=Math.max(0,Math.min(9,day+n));render();window.scrollTo({top:0,behavior:"smooth"})}
 function closeModal(){modal.style.display="none"}
@@ -113,7 +127,7 @@ function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id
 function openPlan(id){const x=plan.find(a=>a.id===id);if(!x)return;openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
 function openFree(start,end){
  const w={start:mins(start),end:mins(end)}, opts=compatible(dates[day],w);
- openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${start} → ${end}</h2><div class="info"><b>${dur(start,end)} disponibles</b><br>Aucune obligation dans cette plage.</div>
+ openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${start} → ${end}</h2><div class="info"><b>${dur(start,end)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div>
  <div class="section">SÉANCES COMPATIBLES</div>
  ${opts.length?opts.map(o=>`<button class="compat" onclick="openSession('${o.id}')"><b>${esc(o.title)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(o.category)}</small></button>`).join(""):`<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>`}`);
 }

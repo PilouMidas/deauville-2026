@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "dates": [
     "2026-09-04",
     "2026-09-05",
@@ -1465,91 +1465,16 @@
       "mandatory": true
     }
   ],
-  "juryExtra": [
-    {
-      "id": "x01",
-      "date": "2026-09-05",
-      "start": "11:30",
-      "end": "12:00",
-      "title": "Inauguration de la cabine de plage Ethan Hawke",
-      "place": "Les Planches",
-      "mandatory": true
-    },
-    {
-      "id": "x02",
-      "date": "2026-09-05",
-      "start": "15:00",
-      "end": "15:30",
-      "title": "Inauguration de la cabine de plage Brendan Fraser",
-      "place": "Les Planches",
-      "mandatory": true
-    },
-    {
-      "id": "x03",
-      "date": "2026-09-08",
-      "start": "15:30",
-      "end": "16:00",
-      "title": "Inauguration de la cabine de plage Faye Dunaway",
-      "place": "Les Planches",
-      "mandatory": true
-    },
-    {
-      "id": "x04",
-      "date": "2026-09-09",
-      "start": "16:00",
-      "end": "17:00",
-      "title": "Rencontre avec Siri Hustvedt & dédicaces « Ghost Stories »",
-      "place": "Les Franciscaines",
-      "mandatory": true
-    },
-    {
-      "id": "x05",
-      "date": "2026-09-10",
-      "start": "15:00",
-      "end": "15:30",
-      "title": "Inauguration de la cabine de plage Susan Sarandon",
-      "place": "Les Planches",
-      "mandatory": true
-    },
-    {
-      "id": "x06",
-      "date": "2026-09-12",
-      "start": "14:30",
-      "end": "15:00",
-      "title": "Carte blanche Catherine Deneuve",
-      "place": "À confirmer selon programme officiel",
-      "mandatory": true
-    },
-    {
-      "id": "x07",
-      "date": "2026-09-13",
-      "start": "11:30",
-      "end": "12:00",
-      "title": "Prix de la Révélation 2026",
-      "place": "Casino",
-      "mandatory": true
-    },
-    {
-      "id": "x08",
-      "date": "2026-09-13",
-      "start": "14:00",
-      "end": "14:30",
-      "title": "Grand Prix 2026",
-      "place": "Casino",
-      "mandatory": true
-    },
-    {
-      "id": "x09",
-      "date": "2026-09-13",
-      "start": "20:30",
-      "end": "21:00",
-      "title": "Prix du Public de la Ville de Deauville 2026",
-      "place": "Casino",
-      "mandatory": true
-    }
-  ],
+  "juryExtra": [],
   "aliases": {
     "American Nightmare": "Gremlins, l’Amérique parasitée",
     "Gremlins, l’Amérique parasitée": "Gremlins, l’Amérique parasitée"
-  }
+  },
+  "notes": [
+    "Le PDF Jury est traité comme le planning personnel obligatoire : seuls les éléments explicitement présents dans la rubrique « VOTRE PLANNING » sont des contraintes fixes.",
+    "Les inaugurations de cabines de plage figurant dans le Guide du Festival ne sont PAS considérées comme obligatoires du Jury.",
+    "Lorsqu'une projection apparaît dans les deux PDF, elle n'est affichée qu'une seule fois dans le planning ; le bloc horaire du PDF Jury est utilisé comme contrainte obligatoire.",
+    "Les autres séances du Guide restent disponibles comme alternatives.",
+    "Gremlins, l’Amérique parasitée et American Nightmare désignent la même œuvre."
+  ]
 }
