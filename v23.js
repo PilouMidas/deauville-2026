@@ -1,4 +1,5 @@
 /* Deauville 2026 · V2.2.20 — suppression de « Envies » */
+/* V2.2.20 test deployment */
 (function(){
   'use strict';
 
