@@ -1,86 +1,21 @@
-/* Deauville 2026 · V2.2.6 UX layer */
+/* Deauville 2026 · V2.2.7 UX layer */
 (function(){
-  function installClear(){
-    const wrap=document.querySelector('.searchWrap'),input=document.getElementById('search');
-    if(!wrap||!input)return;
-    let clear=wrap.querySelector('.searchClear');
-    if(!clear){
-      clear=document.createElement('button');clear.type='button';clear.className='searchClear';clear.setAttribute('aria-label','Effacer la recherche');clear.textContent='×';
-      clear.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();input.value='';input.dispatchEvent(new Event('input',{bubbles:true}));});
-      wrap.appendChild(clear);
-    }
-    clear.style.display=input.value?'flex':'none';
-  }
-  function sameFilm(a,b){if(!a||!b)return false;const aa=normTitle(canonicalTitle(a.title)),bb=normTitle(canonicalTitle(b.title));return aa===bb||aa.includes(bb)||bb.includes(aa)}
-  function juryFilmSessions(s){return DATA&&Array.isArray(DATA.jury)?DATA.jury.filter(j=>sameFilm(j,s)):[]}
-  function exactJurySession(s){return juryFilmSessions(s).find(j=>j.date===s.date&&j.start===s.start&&j.end===s.end&&(!j.place||!s.place||normTitle(j.place)===normTitle(s.place)))||null}
-  function alreadyPlanned(s){return plan.some(p=>p.sessionId===s.id)||!!exactJurySession(s)}
-  const originalConflict=window.conflict,originalConflictItems=window.conflictItems;
-  if(typeof originalConflict==='function'&&typeof originalConflictItems==='function'){
-    window.conflictItems=function(s){
-      const exact=exactJurySession(s);
-      return originalConflictItems(s).filter(x=>!(exact&&(x.source==='jury'||x.source==='juryExtra')&&sameFilm(x,s)));
-    };
-    window.conflict=function(s){return window.conflictItems(s).length>0;};
-  }
-  const originalCompatibilityLabel=window.compatibilityLabel;
-  if(typeof originalCompatibilityLabel==='function')window.compatibilityLabel=function(s){if(exactJurySession(s))return '<span class="status planned">✓ PLANIFIÉ</span>';return originalCompatibilityLabel(s);};
-  const originalSessionStatusHtml=window.sessionStatusHtml;
-  if(typeof originalSessionStatusHtml==='function')window.sessionStatusHtml=function(s){
-    if(exactJurySession(s))return '<div class="wishStatus planned">✓ PLANIFIÉ</div>';
-    const conflicts=window.conflictItems(s),personal=plan.some(p=>p.sessionId===s.id);
-    if(conflicts.length){const jury=conflicts.some(x=>x.source==='jury'||x.source==='juryExtra');return `<div class="wishStatus bad">⚠️ NON COMPATIBLE${jury?' · CONFLIT JURY':''}</div>`;}
-    if(personal)return '<div class="wishStatus planned">✓ PLANIFIÉ</div>';
-    return '<div class="wishStatus good">✓ COMPATIBLE</div>';
-  };
-  const originalOpenSession=window.openSession;
-  if(typeof originalOpenSession==='function')window.openSession=function(id){const s=DATA&&DATA.sessions.find(x=>x.id===id),exact=s&&exactJurySession(s);if(exact){openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}</div><div class="notice jury">📅 DANS TON PLANNING<br><strong>⚖️ SÉANCE JURY OBLIGATOIRE</strong></div><p>Cette séance fait partie de tes obligations Jury et est déjà inscrite dans ton planning.</p>`);return;}return originalOpenSession.apply(this,arguments);};
-  const originalAddSession=window.addSession;
-  if(typeof originalAddSession==='function')window.addSession=function(id,force=false){const s=DATA&&DATA.sessions.find(x=>x.id===id);if(s&&exactJurySession(s)){toast('Cette séance est déjà au planning');return;}return originalAddSession.apply(this,arguments);};
-  const originalExplorerCard=window.explorerCard;
-  if(typeof originalExplorerCard==='function')window.explorerCard=function(s){
-    let html=originalExplorerCard.apply(this,arguments);
-    const exact=exactJurySession(s),personal=isInMyPlan(s);
-    html=html.replace('<span class="badge gold">JURY · DÉJÀ AU PLANNING</span>','');
-    const badges=exact?'<span class="badge green">📅 DANS MON PLANNING</span><span class="badge gold">⚖️ JURY · OBLIGATOIRE</span>':personal?'<span class="badge green">📅 DANS MON PLANNING</span>':'';
-    html=html.replace('<div class="ecBadges">','<div class="ecBadges">'+badges);
-    return html;
-  };
-
-  let compatibleOnly=false;
-  function isCompatibleForFilter(s){
-    if(!s)return false;
-    if(exactJurySession(s))return true;
-    return !window.conflict(s);
-  }
-  const originalSessionMatches=window.sessionMatches;
-  if(typeof originalSessionMatches==='function')window.sessionMatches=function(s){
-    if(!originalSessionMatches(s))return false;
-    return !compatibleOnly||isCompatibleForFilter(s);
-  };
-  function installCompatibilityFilter(){
-    const filters=document.querySelector('.filters');
-    if(!filters)return;
-    let row=filters.querySelector('.compatibilityRow');
-    if(!row){
-      row=document.createElement('div');row.className='filterRow compatibilityRow';
-      const b=document.createElement('button');
-      b.type='button';b.id='compatibleFilter';b.className='planningFilter';
-      b.setAttribute('aria-pressed','false');
-      b.addEventListener('click',function(){compatibleOnly=!compatibleOnly;render();});
-      row.appendChild(b);filters.appendChild(row);
-    }
-    const b=row.querySelector('#compatibleFilter');
-    b.textContent='✓ Compatible avec mon planning';
-    b.setAttribute('aria-pressed',compatibleOnly?'true':'false');
-    b.classList.toggle('active',compatibleOnly);
-  }
-  function enhance(){
-    installClear();installCompatibilityFilter();
-    const version=document.querySelector('.version');if(version)version.textContent='V2.2.6';
-  }
-  const originalRender=window.render;
-  if(typeof originalRender==='function')window.render=function(){const result=originalRender.apply(this,arguments);enhance();return result;};
-  const style=document.createElement('style');style.textContent=`.searchWrap{position:relative}.searchWrap input{padding-right:42px}.searchClear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:0;border-radius:50%;background:#eee9df;color:#191815;font-size:24px;line-height:1;align-items:center;justify-content:center;cursor:pointer;opacity:.8;padding:0;-webkit-tap-highlight-color:transparent}.searchClear:hover{opacity:1}.planningFilter{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:9px 8px;font-size:11px;cursor:pointer;text-align:left;white-space:nowrap;flex:1;min-width:0}.planningFilter.active{background:#fff;color:var(--ink);font-weight:700;border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}.compatibilityRow{margin-top:7px}.ecBadges .badge{display:inline-flex;align-items:center;gap:3px}`;document.head.appendChild(style);
-  if(document.readyState!=='loading')enhance();else document.addEventListener('DOMContentLoaded',enhance);
+function installClear(){const w=document.querySelector('.searchWrap'),i=document.getElementById('search');if(!w||!i)return;let b=w.querySelector('.searchClear');if(!b){b=document.createElement('button');b.type='button';b.className='searchClear';b.setAttribute('aria-label','Effacer la recherche');b.textContent='×';b.onclick=e=>{e.preventDefault();e.stopPropagation();i.value='';i.dispatchEvent(new Event('input',{bubbles:true}))};w.appendChild(b)}b.style.display=i.value?'flex':'none'}
+function sameFilm(a,b){if(!a||!b)return false;const aa=normTitle(canonicalTitle(a.title)),bb=normTitle(canonicalTitle(b.title));return aa===bb||aa.includes(bb)||bb.includes(aa)}
+function juryFilmSessions(s){return DATA&&Array.isArray(DATA.jury)?DATA.jury.filter(j=>sameFilm(j,s)):[]}
+function exactJurySession(s){return juryFilmSessions(s).find(j=>j.date===s.date&&j.start===s.start&&j.end===s.end&&(!j.place||!s.place||normTitle(j.place)===normTitle(s.place)))||null}
+function plannedFilmSession(s){if(!s)return null;const p=plan.find(x=>x.sessionId!==s.id&&normTitle(canonicalTitle(x.title))===normTitle(canonicalTitle(s.title)));return p?DATA.sessions.find(x=>x.id===p.sessionId)||p:null}
+function plannedFilmLabel(s){const p=plannedFilmSession(s);return p?`<span class="badge green">🎬 FILM DÉJÀ PRÉVU</span><span class="filmPlanRef">Séance prévue : ${dateLabel(p.date)} · ${p.start}</span>`:''}
+const oci=window.conflictItems;if(typeof oci==='function'){window.conflictItems=function(s){const e=exactJurySession(s);return oci(s).filter(x=>!(e&&(x.source==='jury'||x.source==='juryExtra')&&sameFilm(x,s)))}}window.conflict=function(s){return typeof window.conflictItems==='function'&&window.conflictItems(s).length>0}
+const ocl=window.compatibilityLabel;if(typeof ocl==='function')window.compatibilityLabel=function(s){if(exactJurySession(s))return '<span class="status planned">✓ SÉANCE JURY AU PLANNING</span>';return ocl(s)};
+const oss=window.sessionStatusHtml;if(typeof oss==='function')window.sessionStatusHtml=function(s){if(exactJurySession(s))return '<div class="wishStatus planned">📅 SÉANCE JURY · OBLIGATOIRE · DANS TON PLANNING</div>';const c=window.conflictItems(s),p=plan.some(x=>x.sessionId===s.id);if(c.length)return `<div class="wishStatus bad">⚠️ NON COMPATIBLE${c.some(x=>x.source==='jury'||x.source==='juryExtra')?' · CONFLIT JURY':''}</div>`;if(p)return '<div class="wishStatus planned">✓ SÉANCE DANS TON PLANNING</div>';return '<div class="wishStatus good">✓ COMPATIBLE</div>'};
+const oes=window.explorerCard;if(typeof oes==='function')window.explorerCard=function(s){let h=oes.apply(this,arguments);const e=exactJurySession(s),p=plan.some(x=>x.sessionId===s.id);h=h.replace(/<span class="badge gold">JURY · DÉJÀ AU PLANNING<\/span>/g,'');const b=e?'<span class="badge green">📅 DANS MON PLANNING</span><span class="badge gold">⚖️ JURY · OBLIGATOIRE</span>':p?'<span class="badge green">📅 DANS MON PLANNING</span>':plannedFilmLabel(s);h=h.replace('<div class="ecBadges">','<div class="ecBadges">'+b);return h};
+const oos=window.openSession;if(typeof oos==='function')window.openSession=function(id){const s=DATA&&DATA.sessions.find(x=>x.id===id),e=s&&exactJurySession(s);if(e){openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}</div><div class="notice jury">📅 DANS TON PLANNING<br><strong>⚖️ SÉANCE JURY OBLIGATOIRE</strong></div><p>Cette séance est imposée par ton planning Jury. Elle ne doit pas être ajoutée une seconde fois.</p>`);return}return oos.apply(this,arguments)};
+const oas=window.addSession;if(typeof oas==='function')window.addSession=function(id,force){const s=DATA&&DATA.sessions.find(x=>x.id===id);if(s&&exactJurySession(s)){toast('Cette séance Jury est déjà au planning');return}return oas.apply(this,arguments)};
+let compatibleOnly=false;function isCompatibleForFilter(s){return !!s&&(!!exactJurySession(s)||!window.conflict(s))}const osm=window.sessionMatches;if(typeof osm==='function')window.sessionMatches=function(s){return osm(s)&&(!compatibleOnly||isCompatibleForFilter(s))};
+function installFilter(){const f=document.querySelector('.filters');if(!f)return;let r=f.querySelector('.compatibilityRow');if(!r){r=document.createElement('div');r.className='filterRow compatibilityRow';const b=document.createElement('button');b.type='button';b.id='compatibleFilter';b.className='planningFilter';b.onclick=()=>{compatibleOnly=!compatibleOnly;render()};r.appendChild(b);f.appendChild(r)}const b=r.querySelector('#compatibleFilter');b.textContent='✓ Compatible avec mon planning';b.setAttribute('aria-pressed',compatibleOnly);b.classList.toggle('active',compatibleOnly)}
+function enhance(){installClear();installFilter();const v=document.querySelector('.version');if(v)v.textContent='V2.2.7'}
+const or=window.render;if(typeof or==='function')window.render=function(){const r=or.apply(this,arguments);enhance();return r};
+document.addEventListener('click',function(e){const card=e.target.closest&&e.target.closest('[data-session]');if(!card)return;const s=DATA&&DATA.sessions.find(x=>x.id===card.dataset.session);if(s&&exactJurySession(s)){e.preventDefault();e.stopImmediatePropagation();openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}</div><div class="notice jury">📅 DANS TON PLANNING<br><strong>⚖️ SÉANCE JURY OBLIGATOIRE</strong></div><p>Cette séance est imposée par ton planning Jury. Elle ne doit pas être ajoutée une seconde fois.</p>`)}} ,true);
+const style=document.createElement('style');style.textContent=`.searchWrap{position:relative}.searchWrap input{padding-right:42px}.searchClear{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:0;border-radius:50%;background:#eee9df;color:#191815;font-size:24px;line-height:1;align-items:center;justify-content:center;cursor:pointer;opacity:.8;padding:0}.planningFilter{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:9px 8px;font-size:11px;cursor:pointer;text-align:left;white-space:nowrap;flex:1 1 0;min-width:0}.planningFilter.active{font-weight:700;border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}.compatibilityRow{margin-top:7px}.filterRow select{flex:1 1 0;width:0;min-width:0}.filmPlanRef{font-size:9px;color:var(--muted);align-self:center}.ecBadges .badge{display:inline-flex;align-items:center;gap:3px}`;document.head.appendChild(style);if(document.readyState!=='loading')enhance();else document.addEventListener('DOMContentLoaded',enhance)
 })();
