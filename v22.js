@@ -14,21 +14,33 @@
       clear.addEventListener('click',function(e){
         e.preventDefault();
         e.stopPropagation();
-        /* app.js owns the lexical `filters` variable, so update it through
-           the same input event used by the normal search field. */
         input.value='';
         input.dispatchEvent(new Event('input',{bubbles:true}));
-        input.focus();
       });
       wrap.appendChild(clear);
     }
     clear.style.display=input.value?'flex':'none';
   }
 
+  function refineWishStatuses(){
+    document.querySelectorAll('.wishFilm').forEach(function(film){
+      const alreadyPlanned=!!film.querySelector('.wishStatus.juryPlan');
+      film.querySelectorAll('.wishStatus.juryPlan').forEach(function(status){
+        status.textContent='✓ FILM DÉJÀ PLANIFIÉ';
+      });
+      if(alreadyPlanned){
+        film.querySelectorAll('.wishStatus.bad').forEach(function(status){
+          if(status.textContent.includes('CONFLIT JURY')) status.textContent='✓ FILM DÉJÀ PLANIFIÉ';
+        });
+      }
+    });
+  }
+
   function enhance(){
     installClear();
     const version=document.querySelector('.version');
     if(version) version.textContent='V2.2.0';
+    refineWishStatuses();
     document.querySelectorAll('.sheet .btn.primary').forEach(function(b){
       const t=b.textContent.trim();
       if(t==='Ajouter à mon planning') b.textContent='Ajouter cette séance à mon planning';
