@@ -14,9 +14,11 @@
       clear.addEventListener('click',function(e){
         e.preventDefault();
         e.stopPropagation();
-        if(window.filters) window.filters.search='';
+        /* app.js owns the lexical `filters` variable, so update it through
+           the same input event used by the normal search field. */
         input.value='';
-        if(typeof window.render==='function') window.render();
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+        input.focus();
       });
       wrap.appendChild(clear);
     }
