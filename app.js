@@ -1,5 +1,5 @@
 
-const VERSION="1.1.0";
+const VERSION="1.3.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
 const KEY="deauville2026-personal-planning-v110";
@@ -167,20 +167,36 @@ function pickDate(){openModal(`<div class="section">CHOISIR UNE DATE</div><h2>${
 function openJury(id){const x=[...DATA.jury,...DATA.juryExtra].find(a=>a.id===id);if(!x)return;openModal(`<div class="section">JURY · OBLIGATOIRE</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><p>Ce créneau est une contrainte fixe de ton planning Jury.</p>`)}
 function openPlan(id){const x=plan.find(a=>a.id===id);if(!x)return;openModal(`<div class="section">MON PLANNING</div><h2>${esc(x.title)}</h2><div class="info">📅 ${dateLabel(x.date)}<br>🕘 ${x.start}–${x.end}<br>📍 ${esc(x.place)}</div><button class="btn" onclick="removeSession('${x.id}')">Retirer de mon planning</button>`)}
 function openFree(start,end){const sm=Number(start),em=Number(end),opts=compatible(dates[day],{start:sm,end:em});openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${hh(sm)} → ${hh(em)}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div><div class="section">SÉANCES COMPATIBLES</div>${opts.length?opts.map(o=>{const ap=alreadyPlanned(o);return `<button class="compat ${ap?'already':''}" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b>${ap?'<br><span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · OBLIGATION JURY</span>':''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(catLabel(o.category))}</small></button>`}).join(''):'<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>'}`)}
-function openSession(id,blocked=false,backStart=null,backEnd=null){
+function compatibilityLabel(s){
+  const incompatible=conflict(s);
+  const already=alreadyPlanned(s);
+  if(incompatible) return '<span class="status bad">⚠️ NON COMPATIBLE</span>';
+  if(already) return '<span class="status good">✓ COMPATIBLE · DÉJÀ AU PLANNING</span>';
+  return '<span class="status good">✓ COMPATIBLE</span>';
+}
+function openSession(id,blocked=false,backStart=null,backEnd=null,backSessionId=null){
   const s=DATA.sessions.find(x=>x.id===id);if(!s)return;
   const already=alreadyPlanned(s);
-  const back=(backStart!==null&&backEnd!==null)?`<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`:'';
+  let back='';
+  if(backSessionId){
+    back=`<button class="backBtn" onclick="openSession('${backSessionId}',false,${backStart!==null?Number(backStart):'null'},${backEnd!==null?Number(backEnd):'null'},null)">← Retour à la séance précédente</button>`;
+  } else if(backStart!==null&&backEnd!==null){
+    back=`<button class="backBtn" onclick="openFree(${Number(backStart)},${Number(backEnd)})">← Retour aux séances compatibles</button>`;
+  }
   const jury=isJuryForFilm(s);
   const incompatible=conflict(s);
   const alternatives=otherFilmSessions(s);
-  const collection=collectionLabel(s);
   let notice='';
   if(incompatible){
     notice+=`<div class="notice warn"><b>⚠️ Cette séance n'est pas compatible avec ton planning.</b><br>Elle entre en conflit avec un événement obligatoire ou déjà planifié.</div>`;
-    if(alternatives.length){
-      notice+=`<div class="section">AUTRES SÉANCES DE CE FILM</div>${alternatives.map(o=>`<button class="compat" onclick="openSession('${o.id}',false,${backStart!==null?Number(backStart):'null'},${backEnd!==null?Number(backEnd):'null'})"><b>${o.date===s.date?'Même jour · ':''}${dateLabel(o.date)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)}</small></button>`).join('')}`;
-    }else notice+=`<div class="info"><b>Aucune autre séance de ce film n'est programmée.</b></div>`;
+  }
+  if(alternatives.length){
+    notice+=`<div class="section">AUTRES SÉANCES DE CE FILM</div>${alternatives.map(o=>{
+      const status=compatibilityLabel(o);
+      return `<button class="compat" onclick="openSession('${o.id}',false,${backStart!==null?Number(backStart):'null'},${backEnd!==null?Number(backEnd):'null'},'${s.id}')"><b>${o.date===s.date?'Même jour · ':''}${dateLabel(o.date)}</b><br><small>${o.start}–${o.end} · ${esc(o.place)}</small><br>${status}</button>`;
+    }).join('')}`;
+  } else {
+    notice+=`<div class="info"><b>Aucune autre séance de ce film n'est programmée.</b></div>`;
   }
   openModal(`${back}<div class="section">SÉANCE</div><h2>${esc(s.title)}</h2><div class="info">📅 ${dateLabel(s.date)}<br>🕘 ${s.start}–${s.end}<br>📍 ${esc(s.place)}<br>🏷️ ${esc(catLabel(s.category))}${starsFor(s)?'<br>⭐ Séance étoile':''}</div>${jury?'<div class="notice">Cette œuvre figure déjà dans ton planning, car elle fait partie de tes obligations Jury.</div>':''}${already&&!jury?'<div class="notice">Cette séance est déjà dans ton planning.</div>':''}${notice}${incompatible?`<button class="btn primary" onclick="addSession('${s.id}',true)">Forcer : ajouter quand même à mon planning</button>`:(already||jury)?`<button class="btn primary" onclick="addSession('${s.id}',true)">Ajouter quand même à mon planning</button>`:`<button class="btn primary" onclick="addSession('${s.id}')">Ajouter à mon planning</button>`}`);
 }
