@@ -15,3 +15,7 @@
 - Recherche et filtres sont appliqués aux séances.
 - Un clic sur une séance ouvre sa fiche.
 - Une œuvre Jury déjà planifiée reste ajoutable volontairement.
+
+
+- Recherche depuis un autre jour : résultats groupés par date, date du résultat visuellement proéminente.
+- Le jour sélectionné est signalé dans les résultats.

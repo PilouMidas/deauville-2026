@@ -1,5 +1,5 @@
 
-const VERSION="1.3.0";
+const VERSION="1.4.0";
 const dates=Array.from({length:10},(_,i)=>`2026-09-${String(i+4).padStart(2,"0")}`);
 let DATA=null, day=0, touchX=0;
 const KEY="deauville2026-personal-planning-v110";
@@ -143,7 +143,7 @@ function explorerView(date){
   let cards='';
   if(searching){
     const groups=dates.map(d=>({date:d,items:sessions.filter(s=>s.date===d)})).filter(g=>g.items.length);
-    cards=groups.map(g=>`<div class="searchDay"><div class="section">${dateLabel(g.date)}</div>${g.items.map(explorerCard).join('')}</div>`).join('');
+    cards=groups.map(g=>`<div class="searchDay"><div class="searchDate"><span>${dateLabel(g.date)}</span>${g.date===date?'<b>· JOUR SÉLECTIONNÉ</b>':''}</div>${g.items.map(explorerCard).join('')}</div>`).join('');
   } else cards=sessions.map(explorerCard).join('');
   return `<div class="section">${heading}</div>
   <div class="filters"><div class="searchWrap"><span>⌕</span><input id="search" value="${esc(filters.search)}" placeholder="Rechercher un film…" autocomplete="off" inputmode="search"></div>
