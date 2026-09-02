@@ -39,9 +39,9 @@
       const status=ref?`<span class="alreadyLabel">✓ DÉJÀ DANS TON PLANNING · ${ref.label}</span><span class="plannedWhen">Séance prévue : ${dateLabel(ref.date)} · ${ref.start} · ${esc(ref.place)}</span>`:'';
       return `<button class="compat ${ref?'already':''}" onclick="openSession('${o.id}',false,${sm},${em})"><b>${esc(o.title)}</b>${status?'<br>'+status:''}<br><small>${o.start}–${o.end} · ${esc(o.place)} · ${esc(catLabel(o.category))}</small></button>`;
     }).join(''):'<div class="info">Aucune séance ne tient entièrement dans ce créneau.</div>';
-    openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${hh(sm)} → ${hh(em)}</h2><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div><div class="section">SÉANCES COMPATIBLES</div>${cards}`);
+    openModal(`<div class="section">CRÉNEAU LIBRE</div><h2>🟢 ${dateLabel(date)}</h2><div class="freeSlotTime">${hh(sm)} → ${hh(em)}</div><div class="info"><b>${dur(sm,em)} disponibles</b><br>Aucune obligation Jury dans cette plage.</div><div class="section">SÉANCES COMPATIBLES</div>${cards}`);
   };
   const style=document.createElement('style');
-  style.textContent='.plannedWhen{display:block;font-size:9px;color:var(--muted);margin-top:2px;line-height:1.35}.alreadyLabel{display:block;font-size:9px;margin-top:3px}.compat.already{border-left:3px solid var(--green)}';
+  style.textContent='.freeSlotTime{font-size:15px;font-weight:700;margin:-6px 0 12px;color:var(--ink)}.plannedWhen{display:block;font-size:9px;color:var(--muted);margin-top:2px;line-height:1.35}.alreadyLabel{display:block;font-size:9px;margin-top:3px}.compat.already{border-left:3px solid var(--green)}';
   document.head.appendChild(style);
 })();
