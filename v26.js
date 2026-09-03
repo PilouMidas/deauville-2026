@@ -71,5 +71,4 @@
   }
   const style=document.createElement('style');style.textContent='.freeStatus{display:block;font-size:9px;font-weight:700;margin-top:3px}.compat.jury{border-left:3px solid #c9a227}.compat.planned{border-left:3px solid var(--green)}.compat.bad{border-left:3px solid #b94a48}.badge.red{background:#f4dddd;color:#8c2f2f}.badge.gold{font-weight:700}';document.head.appendChild(style);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refreshVersion,{once:true});else refreshVersion();
-  new MutationObserver(refreshVersion).observe(document.body,{childList:true,subtree:true});
 })();
