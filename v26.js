@@ -4,7 +4,7 @@
   const VERSION_LABEL='V2.2.24';
   function titleOf(o){return String(o&&o.title||'')}
   function normFilm(s){return normTitle(canonicalTitle(titleOf(s)))}
-  function jurySessions(){return [...(Array.isArray(DATA?.jury)?DATA.jury:[]),...(Array.isArray(DATA?.juryExtra)?DATA.juryExtra:[])];}
+  function jurySessions(){return [...(Array.isArray(DATA?.jury)?DATA.jury:[]),...(Array.isArray(DATA?.juryExtra)?DATA.juryExtra:[])]}
   function exactFilm(a,b){const aa=normFilm(a),bb=normFilm(b);return !!aa&&!!bb&&aa===bb}
   function exactJury(s){if(!s)return null;return jurySessions().find(j=>exactFilm(j,s)&&String(j.date)===String(s.date)&&String(j.start)===String(s.start))||null}
   function linkedFilmId(event){return event&&event.sessionId?event.sessionId:(event&&event.filmId?event.filmId:null)}
@@ -55,7 +55,7 @@
   window.explorerCard=function(s){
     const status=statusFor(s),star=starsFor(s);
     const badge=status==='JURY · OBLIGATOIRE · DANS MON PLANNING'?'<span class="badge gold">'+status+'</span>':status==='DANS MON PLANNING'?'<span class="badge green">'+status+'</span>':status==='NON COMPATIBLE'?'<span class="badge red">'+status+'</span>':'<span class="badge">'+status+'</span>';
-    return `<button class="exploreCard" data-session="${s.id}"><div class="ecTime">${s.start}</div><div class="ecBody"><div class="ecTitle">${esc(s.title)}</div><div class="ecMeta">${esc(s.place)} · ${esc(catLabel(s.category))}</div><div class="ecBadges">${badge}${star?'<span class="badge star">⭐ SÉANCE ÉTOILE</span>':''}</div></div><div class="ecArrow">›</div></button>`;
+    return `<button class="exploreCard ${status==='JURY · OBLIGATOIRE · DANS MON PLANNING'?'juryRequired':''}" data-session="${s.id}"><div class="ecTime">${s.start}</div><div class="ecBody"><div class="ecTitle">${esc(s.title)}</div><div class="ecMeta">${esc(s.place)} · ${esc(catLabel(s.category))}</div><div class="ecBadges">${badge}${star?'<span class="badge star">⭐ SÉANCE ÉTOILE</span>':''}</div></div><div class="ecArrow">›</div></button>`;
   };
   const oldOpenFree=window.openFree;
   if(typeof oldOpenFree==='function')window.openFree=function(start,end){
@@ -65,10 +65,8 @@
   };
   function refreshVersion(){
     document.querySelectorAll('.version').forEach(el=>{el.textContent=VERSION_LABEL});
-    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-    const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
-    nodes.forEach(n=>{if(/\bV?\d+\.\d+\.\d+\b/.test(n.nodeValue)&&n.nodeValue.trim().length<40)n.nodeValue=n.nodeValue.replace(/\bV?\d+\.\d+\.\d+\b/g,VERSION_LABEL)});
+    // Intentionally no global MutationObserver: observing the whole body while rewriting text can create a mutation loop and prevent the app from settling.
   }
-  const style=document.createElement('style');style.textContent='.freeStatus{display:block;font-size:9px;font-weight:700;margin-top:3px}.compat.jury{border-left:3px solid #c9a227}.compat.planned{border-left:3px solid var(--green)}.compat.bad{border-left:3px solid #b94a48}.badge.red{background:#f4dddd;color:#8c2f2f}.badge.gold{font-weight:700}';document.head.appendChild(style);
+  const style=document.createElement('style');style.textContent='.freeStatus{display:block;font-size:9px;font-weight:700;margin-top:3px}.compat.jury{border-left:3px solid #c9a227}.compat.planned{border-left:3px solid var(--green)}.compat.bad{border-left:3px solid #b94a48}.badge.red{background:#f4dddd;color:#8c2f2f}.badge.gold{font-weight:700}.exploreCard.juryRequired{border-left:3px solid #c9a227}';document.head.appendChild(style);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refreshVersion,{once:true});else refreshVersion();
 })();
