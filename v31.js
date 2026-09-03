@@ -2,8 +2,22 @@
 (function(){
   'use strict';
 
+  const VERSION_LABEL='V3.0.0';
   const NOTES_KEY='deauville2026-session-notes-v300';
   const oldOpenSession=window.openSession;
+
+  function refreshVersion(){
+    document.querySelectorAll('.version').forEach(el=>{el.textContent=VERSION_LABEL});
+  }
+  const oldRender=window.render;
+  if(typeof oldRender==='function'){
+    window.render=function(...args){
+      const result=oldRender.apply(this,args);
+      refreshVersion();
+      return result;
+    };
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refreshVersion,{once:true});else refreshVersion();
 
   function notes(){
     try{return JSON.parse(localStorage.getItem(NOTES_KEY)||'{}')}catch{return {}}
