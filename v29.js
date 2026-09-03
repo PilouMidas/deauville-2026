@@ -36,6 +36,6 @@
   window.explorerCard=function(s){
     const st=statusFor(s),star=starsFor(s);
     const badge=st===STATUS?'<span class="badge gold">'+STATUS+'</span>':st==='DANS MON PLANNING'?'<span class="badge green">'+st+'</span>':st==='NON COMPATIBLE'?'<span class="badge red">'+st+'</span>':'<span class="badge">'+st+'</span>';
-    return `<button class="exploreCard" data-session="${s.id}"><div class="ecTime">${s.start}</div><div class="ecBody"><div class="ecTitle">${esc(s.title)}</div><div class="ecMeta">${esc(s.place)} · ${esc(catLabel(s.category))}</div><div class="ecBadges">${badge}${star?'<span class="badge star">⭐ SÉANCE ÉTOILE</span>':''}</div></div><div class="ecArrow">›</div></button>`;
+    return `<button type="button" class="exploreCard" data-session="${esc(s.id)}" onclick="openSession('${String(s.id).replace(/'/g,"\\'")}')"><div class="ecTime">${s.start}</div><div class="ecBody"><div class="ecTitle">${esc(s.title)}</div><div class="ecMeta">${esc(s.place)} · ${esc(catLabel(s.category))}</div><div class="ecBadges">${badge}${star?'<span class="badge star">⭐ SÉANCE ÉTOILE</span>':''}</div></div><div class="ecArrow">›</div></button>`;
   };
 })();
