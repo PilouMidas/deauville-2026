@@ -1,7 +1,7 @@
-/* Deauville 2026 · V3.0.9 — fiche film + historique complet des notes */
+/* Deauville 2026 · V3.0.14 — fiche film depuis toutes les séances */
 (function(){
   'use strict';
-  const VERSION='V3.0.9';
+  const VERSION='V3.0.14';
   const KEY='deauville2026-session-notes-v301';
   const works=window.DEAUVILLE_DATA&&window.DEAUVILLE_DATA.works;
   if(!Array.isArray(works))return;
@@ -19,7 +19,9 @@
   const save=(id,value)=>{const n=readRaw(),v=String(value||'').trim();if(!v)return false;const current=noteList(n[String(id)]);current.push({text:v,timestamp:new Date().toISOString()});n[String(id)]=current;localStorage.setItem(KEY,JSON.stringify(n));return true;};
   const fmt=iso=>{if(!iso)return '';const d=new Date(iso);return Number.isNaN(d.getTime())?'':d.toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});};
   const escSafe=v=>typeof window.esc==='function'?esc(v):String(v||'');
-  const findSession=id=>{if(window.DATA&&Array.isArray(DATA.sessions)){const direct=DATA.sessions.find(s=>String(s.id)===String(id));if(direct)return direct;}const target=norm(id);for(const w of works){for(const s of sessionsForWork(w)){if(norm(s.title)===target)return s}}return null};
+  const allSessions=()=>{try{return typeof DATA!=='undefined'&&DATA&&Array.isArray(DATA.sessions)?DATA.sessions:[]}catch{return[]}};
+  const sessionById=id=>allSessions().find(s=>String(s.id)===String(id))||null;
+  const findSession=id=>sessionById(id);
 
   function renderFilm(work,returnSessionId){
     let ss=sessionsForWork(work);
@@ -45,15 +47,18 @@
 
   function addLink(id){
     const sheet=document.getElementById('sheet'),h2=sheet&&sheet.querySelector('h2');if(!sheet||!h2)return;
-    const s=window.DATA&&Array.isArray(DATA.sessions)?DATA.sessions.find(x=>String(x.id)===String(id)):null;
-    const w=(s&&findWork(s.title))||findWork(h2.textContent);if(!w||sheet.querySelector('.v309FilmLink'))return;
-    sheet.querySelectorAll('.v3FilmAction,.v303FilmLink,.v303FilmAction,.v3FilmLink,.v305FilmLink,.v306FilmLink,.v307FilmLink,.v308FilmLink').forEach(el=>el.remove());
+    const s=sessionById(id);
+    const w=(s&&(findWorkById(s.workId||s.filmId)||findWork(s.title)))||findWork(h2.textContent);
+    if(!w||sheet.querySelector('.v309FilmLink'))return;
+    sheet.querySelectorAll('[class*="FilmLink"],[class*="FilmAction"]').forEach(el=>el.remove());
     const b=document.createElement('button');b.type='button';b.className='v309FilmLink';b.textContent='Voir la fiche du film';b.setAttribute('aria-label','Voir la fiche du film');b.onclick=e=>{e.preventDefault();e.stopPropagation();renderFilm(w,s?s.id:null)};h2.insertAdjacentElement('afterend',b);
   }
   function addJuryFilmLink(id){
-    const x=window.DATA&&[...(Array.isArray(DATA.jury)?DATA.jury:[]),...(Array.isArray(DATA.juryExtra)?DATA.juryExtra:[])].find(a=>String(a.id)===String(id));
-    if(!x||!x.workId)return;
-    const w=findWorkById(x.workId);const sheet=document.getElementById('sheet');if(!w||!sheet||sheet.querySelector('.v309JuryFilmLink'))return;
+    const s=sessionById(id);
+    if(s)return addLink(id);
+    let x=null;try{x=typeof DATA!=='undefined'&&DATA?[...(Array.isArray(DATA.jury)?DATA.jury:[]),...(Array.isArray(DATA.juryExtra)?DATA.juryExtra:[])].find(a=>String(a.id)===String(id)):null}catch{}
+    if(!x)return;
+    const w=findWorkById(x.workId)||findWork(x.title);const sheet=document.getElementById('sheet');if(!w||!sheet||sheet.querySelector('.v309JuryFilmLink'))return;
     const b=document.createElement('button');b.type='button';b.className='btn v309JuryFilmLink';b.textContent='Voir la fiche du film';b.setAttribute('aria-label','Voir la fiche du film');b.onclick=e=>{e.preventDefault();e.stopPropagation();renderFilm(w)};sheet.appendChild(b);
   }
   const oldOpenSession=window.openSession;
