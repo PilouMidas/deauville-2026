@@ -128,6 +128,51 @@
     .v3NoteSummary{font-size:13px;opacity:.75;margin:-2px 0 10px}
     .v3NotesArea{width:100%;min-height:120px;box-sizing:border-box;resize:vertical;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.04);color:inherit;padding:12px;font:inherit;line-height:1.5}
     .v3SaveNote{margin-top:8px}
+    .v3FilmLink{display:inline-flex;align-items:center;margin-left:10px;padding:4px 9px;border:1px solid rgba(201,162,39,.55);border-radius:999px;background:rgba(201,162,39,.08);color:inherit;font-size:12px;font-weight:700;letter-spacing:.01em;cursor:pointer;vertical-align:middle;white-space:nowrap}
+    .v3FilmLink:hover{background:rgba(201,162,39,.16)}
   `;
   document.head.appendChild(style);
+
+  function addFilmLinkToSessionSheet(s){
+    const sheet=document.getElementById('sheet');
+    if(!sheet)return;
+    const h2=sheet.querySelector('h2');
+    const w=workForSession(s);
+    if(!h2||!w||h2.querySelector('.v3FilmLink'))return;
+    const link=h2.querySelector('.v3FilmLink');
+    if(link)link.remove();
+  }
+
+  function decorateSessionSheetV3(s){
+    const sheet=document.getElementById('sheet');
+    if(!sheet)return;
+    const h2=sheet.querySelector('h2');
+    const w=workForSession(s);
+    if(!h2||!w)return;
+
+    h2.classList.remove('v3ClickableTitle');
+    h2.removeAttribute('role');
+    h2.removeAttribute('tabindex');
+    h2.removeAttribute('title');
+    const oldLink=h2.querySelector('.v3FilmLink');
+    if(oldLink)oldLink.remove();
+
+    const link=document.createElement('button');
+    link.type='button';
+    link.className='v3FilmLink';
+    link.textContent='Voir la fiche du film';
+    link.setAttribute('aria-label','Voir la fiche du film');
+    link.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openFilm(w)});
+    h2.appendChild(document.createTextNode(' '));
+    h2.appendChild(link);
+  }
+
+  if(typeof window.openSession==='function'){
+    const decoratedOpenSession=window.openSession;
+    window.openSession=function(id,...rest){
+      decoratedOpenSession(id,...rest);
+      const s=DATA?.sessions?.find(x=>String(x.id)===String(id));
+      if(s)requestAnimationFrame(()=>decorateSessionSheetV3(s));
+    };
+  }
 })();
