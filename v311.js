@@ -32,7 +32,7 @@
   const oldSession=window.openSession;
   if(typeof oldSession==='function')window.openSession=function(id,...rest){oldSession.apply(this,[id,...rest]);repair(id)};
 
-  /* Explorer : le bouton lui-même porte l'action. Aucun listener global ne vient intercepter le clic. */
+  /* Explorer : chaque carte est une séance et porte directement son action. */
   const oldExplorer=window.explorerCard;
   if(typeof oldExplorer==='function'){
     window.explorerCard=function(s){
@@ -40,8 +40,8 @@
       const id=String(s&&s.id||'').replace(/'/g,"\\'");
       if(!id)return html;
       return html.replace(
-        '<button class="exploreCard" data-session="'+String(s.id)+'">',
-        '<button type="button" class="exploreCard" data-session="'+String(s.id)+'" onclick="openSession(\\''+id+'\\')">'
+        `<button class="exploreCard" data-session="${s.id}">`,
+        `<button type="button" class="exploreCard" data-session="${s.id}" onclick="openSession('${id}')">`
       );
     };
   }
