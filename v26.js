@@ -4,7 +4,7 @@
   const VERSION_LABEL='V2.2.24';
   function titleOf(o){return String(o&&o.title||'')}
   function normFilm(s){return normTitle(canonicalTitle(titleOf(s)))}
-  function jurySessions(){return [...(Array.isArray(DATA?.jury)?DATA.jury:[]),...(Array.isArray(DATA?.juryExtra)?DATA.juryExtra:[])];}
+  function jurySessions(){return [...(Array.isArray(DATA?.jury)?DATA.jury:[]),...(Array.isArray(DATA?.juryExtra)?DATA.juryExtra:[])]}
   function exactFilm(a,b){const aa=normFilm(a),bb=normFilm(b);return !!aa&&!!bb&&aa===bb}
   function exactJury(s){if(!s)return null;return jurySessions().find(j=>exactFilm(j,s)&&String(j.date)===String(s.date)&&String(j.start)===String(s.start))||null}
   function linkedFilmId(event){return event&&event.sessionId?event.sessionId:(event&&event.filmId?event.filmId:null)}
@@ -65,11 +65,9 @@
   };
   function refreshVersion(){
     document.querySelectorAll('.version').forEach(el=>{el.textContent=VERSION_LABEL});
-    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-    const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
-    nodes.forEach(n=>{if(/\bV?\d+\.\d+\.\d+\b/.test(n.nodeValue)&&n.nodeValue.trim().length<40)n.nodeValue=n.nodeValue.replace(/\bV?\d+\.\d+\.\d+\b/g,VERSION_LABEL)});
+    // Intentionally no global MutationObserver: observing the whole body while
+    // rewriting text can create a mutation loop and prevent the app from settling.
   }
   const style=document.createElement('style');style.textContent='.freeStatus{display:block;font-size:9px;font-weight:700;margin-top:3px}.compat.jury{border-left:3px solid #c9a227}.compat.planned{border-left:3px solid var(--green)}.compat.bad{border-left:3px solid #b94a48}.badge.red{background:#f4dddd;color:#8c2f2f}.badge.gold{font-weight:700}';document.head.appendChild(style);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refreshVersion,{once:true});else refreshVersion();
-  new MutationObserver(refreshVersion).observe(document.body,{childList:true,subtree:true});
 })();
